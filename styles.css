@@ -5,6 +5,12 @@
   --yellow: #f9b510;
   --pink: #b865a3;
   --light-blue: #8ecbe8;
+
+  /* Update Shoelace theme colors */
+  --sl-color-primary-500: var(--primary);
+  --sl-color-primary-400: var(--light-blue);
+  --sl-color-secondary-500: var(--secondary);
+  --sl-color-tertiary-500: var(--tertiary);
 }
 
 * {
@@ -26,7 +32,7 @@ body {
 }
 
 header {
-  background-color: #2c3e50;
+  background-color: var(--tertiary);
   color: white;
   padding: 2rem 0;
   text-align: center;
@@ -46,7 +52,7 @@ header .subtitle {
 }
 
 .hero {
-  background-color: #f8f9fa;
+  background-color: var(--light-blue);
   padding: 4rem 0;
   text-align: center;
 }
@@ -67,10 +73,11 @@ header .subtitle {
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--secondary);
 }
 
 .eligibility {
-  background-color: #f8f9fa;
+  background-color: var(--light-blue);
   padding: 4rem 0;
 }
 
@@ -104,7 +111,7 @@ header .subtitle {
 }
 
 footer {
-  background-color: #2c3e50;
+  background-color: var(--tertiary);
   color: white;
   text-align: center;
   padding: 1rem 0;
@@ -142,6 +149,9 @@ sl-card {
 
 sl-button::part(base) {
   margin-top: 1rem;
+  --sl-color-primary-600: var(--primary);
+  --sl-color-primary-500: var(--primary);
+  --sl-color-primary-400: var(--yellow);
 }
 
 sl-button-group {
@@ -150,6 +160,7 @@ sl-button-group {
 }
 
 .info-card sl-icon {
+  color: var(--primary);
   font-size: 2rem;
   margin-bottom: 1rem;
 }
@@ -159,6 +170,14 @@ sl-details::part(base) {
   margin: 0 auto;
 }
 
+sl-details::part(header) {
+  background-color: var(--light-blue);
+}
+
+sl-details::part(content) {
+  border-left: 3px solid var(--secondary);
+}
+
 sl-list {
   margin: 1rem 0;
 }
@@ -166,9 +185,13 @@ sl-list {
 .contact-card {
   max-width: 600px;
   margin: 0 auto;
+  border-color: var(--secondary);
 }
 
-/* Remove default card shadow since Shoelace provides its own */
-.info-card {
-  box-shadow: none;
+sl-button-group sl-button:first-child::part(base) {
+  background-color: var(--primary);
+}
+
+sl-button-group sl-button:last-child::part(base) {
+  background-color: var(--secondary);
 }
