@@ -5,15 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ADVANCE TRAUMA Clinical Trial | ATLS® Training Study</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css" />
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <header>
     <div class="container">
-      <h1>ADVANCE TRAUMA</h1>
-      <p class="subtitle">Effects of Advanced Trauma Life Support® Training Compared to Standard Care on Adult Trauma
-        Patient Outcomes: A Cluster Randomised Trial</p>
+      <sl-card class="header-card">
+        <h1>ADVANCE TRAUMA</h1>
+        <p class="subtitle">Effects of Advanced Trauma Life Support® Training Compared to Standard Care on Adult Trauma
+          Patient Outcomes: A Cluster Randomised Trial</p>
+      </sl-card>
     </div>
   </header>
 
@@ -21,7 +26,10 @@
     <div class="container">
       <h2>Improving Trauma Care Through Evidence-Based Research</h2>
       <p>Cluster Randomised Trial - Currently Recruiting Healthcare Facilities</p>
-      <a href="#contact" class="btn">Learn How to Participate</a>
+      <sl-button variant="primary" href="#contact" size="large">
+        Learn How to Participate
+        <sl-icon slot="suffix" name="arrow-right"></sl-icon>
+      </sl-button>
     </div>
   </section>
 
@@ -29,51 +37,66 @@
     <div class="container">
       <h2>About the Trial</h2>
       <div class="info-grid">
-        <div class="info-card">
-          <h3>Purpose</h3>
+        <sl-card class="info-card">
+          <sl-icon slot="header" name="clipboard2-pulse"></sl-icon>
+          <strong>Purpose</strong>
           <p>This study evaluates the effectiveness of Advanced Trauma Life Support® (ATLS) training compared to
             standard care practices in improving outcomes for adult trauma patients.</p>
-        </div>
-        <div class="info-card">
-          <h3>Study Design</h3>
+        </sl-card>
+        <sl-card class="info-card">
+          <sl-icon slot="header" name="diagram-3"></sl-icon>
+          <strong>Study Design</strong>
           <p>Cluster randomised trial involving multiple healthcare facilities to assess the impact of standardized
             trauma care training protocols.</p>
-        </div>
-        <div class="info-card">
-          <h3>Outcomes</h3>
+        </sl-card>
+        <sl-card class="info-card">
+          <sl-icon slot="header" name="graph-up"></sl-icon>
+          <strong>Outcomes</strong>
           <p>Measuring patient survival rates, treatment efficiency, and overall care quality in trauma cases across
             participating facilities.</p>
-        </div>
+        </sl-card>
       </div>
     </div>
   </section>
 
   <section class="eligibility">
     <div class="container">
-      <h2>Eligibility Criteria</h2>
-      <ul>
-        <li>Age requirement</li>
-        <li>Health condition criteria</li>
-        <li>Other important requirements</li>
-        <li>Exclusion criteria</li>
-      </ul>
+      <sl-details summary="Eligibility Criteria" open>
+        <sl-list>
+          <sl-icon slot="start" name="check-circle"></sl-icon>
+          <sl-list-item>Age requirement</sl-list-item>
+          <sl-list-item>Health condition criteria</sl-list-item>
+          <sl-list-item>Other important requirements</sl-list-item>
+          <sl-list-item>Exclusion criteria</sl-list-item>
+        </sl-list>
+      </sl-details>
     </div>
   </section>
 
   <section id="contact" class="contact">
     <div class="container">
-      <h2>Contact Us</h2>
-      <p>Interested in participating or have questions about the trial?</p>
-      <p>Call us at: (XXX) XXX-XXXX</p>
-      <p>Email: trial@example.com</p>
-      <a href="mailto:trial@example.com" class="btn">Contact the Research Team</a>
+      <sl-card class="contact-card">
+        <h2>Contact Us</h2>
+        <p>Interested in participating or have questions about the trial?</p>
+        <sl-button-group>
+          <sl-button variant="primary">
+            <sl-icon slot="prefix" name="telephone"></sl-icon>
+            (XXX) XXX-XXXX
+          </sl-button>
+          <sl-button variant="primary" href="mailto:trial@example.com">
+            <sl-icon slot="prefix" name="envelope"></sl-icon>
+            Email Us
+          </sl-button>
+        </sl-button-group>
+      </sl-card>
     </div>
   </section>
 
   <footer>
     <div class="container">
+      <sl-divider></sl-divider>
       <p>© 2024 Clinical Trial Research Team. All rights reserved.</p>
-      <p>Trial ID: [Insert Trial ID]</p>
+      <p>Trial ID: ADVANCE TRAUMA</p>
     </div>
   </footer>
 

@@ -119,3 +119,47 @@ p {
     padding: 0 15px;
   }
 }
+
+/* Shoelace-specific styles */
+sl-card {
+  --padding: 2rem;
+}
+
+.header-card {
+  background: transparent;
+  border: none;
+  color: white;
+}
+
+sl-button::part(base) {
+  margin-top: 1rem;
+}
+
+sl-button-group {
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.info-card sl-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+sl-details::part(base) {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+sl-list {
+  margin: 1rem 0;
+}
+
+.contact-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Remove default card shadow since Shoelace provides its own */
+.info-card {
+  box-shadow: none;
+}
