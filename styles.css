@@ -23,6 +23,19 @@ header {
   text-align: center;
 }
 
+header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+header .subtitle {
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
 .hero {
   background-color: #f8f9fa;
   padding: 4rem 0;
