@@ -46,6 +46,31 @@ header .subtitle {
   line-height: 1.5;
 }
 
+main {
+  padding: 3rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.download-section {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.download-section h2 {
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.download-section p {
+  color: white;
+  margin-bottom: 2rem;
+}
+
 footer {
   background-color: var(--tertiary);
   color: white;
