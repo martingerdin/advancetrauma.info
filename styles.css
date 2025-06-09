@@ -25,12 +25,6 @@ body {
   color: #333;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
 header {
   background-color: var(--tertiary);
   color: white;
@@ -51,145 +45,10 @@ header .subtitle {
   line-height: 1.5;
 }
 
-.hero {
-  background-color: var(--light-blue);
-  padding: 4rem 0;
-  text-align: center;
-}
-
-.trial-info {
-  padding: 4rem 0;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.info-card {
-  background: white;
-  padding: 0rem;
-  border-radius: 8px;
-}
-
-.eligibility {
-  background-color: var(--light-blue);
-  padding: 4rem 0;
-}
-
-.eligibility ul {
-  list-style-position: inside;
-  margin: 1rem 0;
-}
-
-.eligibility li {
-  margin: 0.5rem 0;
-}
-
-.contact {
-  padding: 4rem 0;
-  text-align: center;
-}
-
-.btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background-color: #3498db;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  margin-top: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-  background-color: #2980b9;
-}
-
 footer {
   background-color: var(--tertiary);
   color: white;
   text-align: center;
   padding: 1rem 0;
   margin-top: 2rem;
-}
-
-h2 {
-  margin-bottom: 1rem;
-}
-
-p {
-  margin-bottom: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .container {
-    padding: 0 15px;
-  }
-}
-
-/* Shoelace-specific styles */
-sl-card {
-  --padding: 2rem;
-}
-
-.header-card {
-  background: transparent;
-  border: none;
-  color: white;
-}
-
-sl-button::part(base) {
-  margin-top: 1rem;
-  --sl-color-primary-600: var(--primary);
-  --sl-color-primary-500: var(--primary);
-  --sl-color-primary-400: var(--yellow);
-}
-
-sl-button-group {
-  margin-top: 1rem;
-  justify-content: center;
-}
-
-.info-card sl-icon {
-  color: var(--primary);
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-sl-details::part(base) {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-sl-details::part(header) {
-  background-color: var(--light-blue);
-}
-
-sl-details::part(content) {
-  border-left: 3px solid var(--secondary);
-}
-
-sl-list {
-  margin: 1rem 0;
-}
-
-.contact-card {
-  max-width: 600px;
-  margin: 0 auto;
-  border-color: var(--secondary);
-}
-
-sl-button-group sl-button:first-child::part(base) {
-  background-color: var(--primary);
-}
-
-sl-button-group sl-button:last-child::part(base) {
-  background-color: var(--secondary);
 }
