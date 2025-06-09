@@ -11,6 +11,13 @@
   --sl-color-primary-400: var(--light-blue);
   --sl-color-secondary-500: var(--secondary);
   --sl-color-tertiary-500: var(--tertiary);
+
+  /* Spacing variables */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 3rem;
+  --spacing-xl: 4rem;
 }
 
 * {
@@ -29,13 +36,13 @@ body {
 header {
   background-color: var(--tertiary);
   color: white;
-  padding: 2rem 0;
+  padding: var(--spacing-md) 0;
   text-align: center;
 }
 
 header h1 {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-sm);
   letter-spacing: 2px;
 }
 
@@ -58,27 +65,27 @@ main {
 
 .download-section {
   text-align: center;
-  padding: 1rem 0;
+  padding: var(--spacing-sm) 0;
 }
 
 .download-section h2 {
   color: white;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .download-section p {
   color: white;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .download-section sl-button {
-  margin: 0 0.5rem;
+  margin: 0 var(--spacing-xs);
 }
 
 footer {
   background-color: var(--tertiary);
   color: white;
   text-align: center;
-  padding: 1rem 0;
-  margin-top: 2rem;
+  padding: var(--spacing-sm) 0;
+  margin-top: var(--spacing-md);
 }
