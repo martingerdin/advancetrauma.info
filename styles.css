@@ -83,6 +83,22 @@ main {
   margin: var(--spacing-xs);
 }
 
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+sl-icon {
+  position: relative;
+  /* Adjust these values accordingly */
+  top: 3px;
+  left: 3px;
+}
+
 footer {
   background-color: var(--tertiary);
   color: white;
