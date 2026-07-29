@@ -1,10 +1,5 @@
 import { Component } from '@geajs/core'
-
-function scrollToSection(event: Event, id: string) {
-  event.preventDefault()
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  history.replaceState(null, '', `#${id}`)
-}
+import { scrollToSection } from '../lib/scroll-to-section'
 
 export default class SiteHeader extends Component {
   template() {

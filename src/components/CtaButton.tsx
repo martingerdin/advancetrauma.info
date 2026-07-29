@@ -6,12 +6,13 @@ type CtaButtonProps = {
   variant?: 'solid' | 'ghost'
   download?: boolean
   external?: boolean
+  click?: (event: Event) => void
 }
 
 export default class CtaButton extends Component {
   declare props: CtaButtonProps
 
-  template({ href, children, variant = 'solid', download, external }: CtaButtonProps) {
+  template({ href, children, variant = 'solid', download, external, click }: CtaButtonProps) {
     const className = variant === 'ghost' ? 'cta cta--ghost' : 'cta'
     return (
       <a
@@ -20,6 +21,7 @@ export default class CtaButton extends Component {
         download={download ? true : undefined}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
+        click={click}
       >
         {children}
       </a>
