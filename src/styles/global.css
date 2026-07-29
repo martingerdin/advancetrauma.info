@@ -136,7 +136,7 @@ textarea {
 }
 
 .hero__inner {
-  width: min(100%, 40rem);
+  width: min(100%, 52rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -154,10 +154,10 @@ textarea {
 
 .hero__tagline {
   font-family: var(--font-heading);
-  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-size: clamp(1.25rem, 2.4vw, 1.85rem);
   font-weight: 400;
   line-height: 1.35;
-  max-width: 28rem;
+  white-space: nowrap;
 }
 
 .hero__details {
@@ -411,6 +411,11 @@ textarea {
   .hero {
     padding-top: var(--space-lg);
     padding-bottom: var(--space-lg);
+  }
+
+  .hero__tagline {
+    white-space: normal;
+    text-wrap: balance;
   }
 
   .section {
