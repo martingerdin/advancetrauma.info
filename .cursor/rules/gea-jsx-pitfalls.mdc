@@ -1,0 +1,74 @@
+---
+description: Avoid Gea JSX patterns that break the compiler (el0/el1 ReferenceErrors)
+globs: src/**/*.{tsx,jsx}
+alwaysApply: false
+---
+
+# Gea template pitfalls
+
+Gea's JSX compiler has known bugs with several patterns. They show up at runtime as `Uncaught ReferenceError: el0 is not defined` (or `el1`, `first`, etc.).
+
+## Do not `.map()` over nested JSX
+
+Mapping to a single text node or simple element is usually fine. Mapping to an element **with children**, fragments, or conditionals often generates broken list code.
+
+```tsx
+// BAD — nested markup inside map (Resources cards, site rows with multiple children)
+{items.map((item) => (
+  <a href={item.href}>
+    <h3>{item.label}</h3>
+    <p>{item.description}</p>
+  </a>
+))}
+
+// GOOD — unroll fixed lists, or map only a single leaf text/element
+<a href={items[0].href}>
+  <h3>{items[0].label}</h3>
+  <p>{items[0].description}</p>
+</a>
+```
+
+Safe map example (paragraphs of text only):
+
+```tsx
+{about.paragraphs.map((paragraph) => (
+  <p>{paragraph}</p>
+))}
+```
+
+## Do not use locals declared inside `template()`
+
+The compiler does not keep `const` / destructuring from the `template()` body in the generated render path.
+
+```tsx
+// BAD
+template() {
+  const [first] = about.partners
+  return <a href={first.href}>{first.name}</a>
+}
+
+// GOOD — reference imported/module data directly in JSX
+template() {
+  return <a href={about.partners[0].href}>{about.partners[0].name}</a>
+}
+```
+
+Derive arrays **outside** the class if you need `Object.entries` / `.map` prep:
+
+```tsx
+const details = Object.entries(hero.details).map(([label, value]) => ({ label, value }))
+```
+
+## Avoid mixed static text + `{expr}` in one text node
+
+```tsx
+// BAD — city may render blank
+<span> — {site.city}</span>
+
+// GOOD — expression alone; put the dash in CSS or a separate node
+<span class="sites-list__city">{site.city}</span>
+```
+
+## Prefer no fragments in lists
+
+`<>...</>` inside `.map()` has triggered the same `elN is not defined` failures. Unroll or use a single parent element per item.
