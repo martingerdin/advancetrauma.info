@@ -17,10 +17,10 @@ export const links = {
 export const hero = {
   title: 'ADVANCE TRAUMA',
   tagline: 'The clinical trial to determine if ATLS® improves patient outcomes',
-  cta: 'Learn more about the trial',
+  cta: 'Learn more',
   details: {
-    startDate: 'February 2025',
-    endDate: 'December 2029',
+    start: 'February 2025',
+    end: 'December 2029',
     target: "4320 participants",
     status: "Ongoing"
   }

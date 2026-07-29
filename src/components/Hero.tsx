@@ -2,6 +2,8 @@ import { Component } from '@geajs/core'
 import { hero } from '../data/content'
 import { scrollToSection } from '../lib/scroll-to-section'
 
+const details = Object.entries(hero.details).map(([label, value]) => ({ label, value }))
+
 export default class Hero extends Component {
   template() {
     return (
@@ -10,22 +12,12 @@ export default class Hero extends Component {
           <h1 class="hero__title">{hero.title}</h1>
           <p class="hero__tagline">{hero.tagline}</p>
           <dl class="hero__details">
-            <div class="hero__detail">
-              <dt>Start</dt>
-              <dd>{hero.details.startDate}</dd>
-            </div>
-            <div class="hero__detail">
-              <dt>End</dt>
-              <dd>{hero.details.endDate}</dd>
-            </div>
-            <div class="hero__detail">
-              <dt>Target</dt>
-              <dd>{hero.details.target}</dd>
-            </div>
-            <div class="hero__detail">
-              <dt>Status</dt>
-              <dd>{hero.details.status}</dd>
-            </div>
+            {details.map((detail) => (
+              <div class="hero__detail">
+                <dt>{detail.label}</dt>
+                <dd>{detail.value}</dd>
+              </div>
+            ))}
           </dl>
           <a
             class="cta"
