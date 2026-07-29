@@ -2,7 +2,7 @@ import { Component } from '@geajs/core'
 import ContactForm from '../components/ContactForm'
 import Hero from '../components/Hero'
 import SitesMap from '../components/SitesMap'
-import { links, summaryParagraphs } from '../data/content'
+import { aboutParagraphs, links } from '../data/content'
 
 export default class Home extends Component {
   template() {
@@ -10,11 +10,11 @@ export default class Home extends Component {
       <div>
         <Hero />
 
-        <section class="section section--muted" id="summary">
+        <section class="section section--muted" id="about">
           <div class="section__inner">
-            <h2 class="section__heading">Summary</h2>
+            <h2 class="section__heading">About</h2>
             <div class="section__body">
-              {summaryParagraphs.map((paragraph) => (
+              {aboutParagraphs.map((paragraph) => (
                 <p>{paragraph}</p>
               ))}
               <p>
@@ -31,6 +31,19 @@ export default class Home extends Component {
                   University of Birmingham
                 </a>
                 .
+              </p>
+              <p class="section__resources">
+                <a href={links.protocol} download>
+                  Protocol
+                </a>
+                <span aria-hidden="true">·</span>
+                <a href={links.publication} target="_blank" rel="noopener noreferrer">
+                  Publication
+                </a>
+                <span aria-hidden="true">·</span>
+                <a href={links.clinicalTrials} target="_blank" rel="noopener noreferrer">
+                  ClinicalTrials.gov
+                </a>
               </p>
             </div>
           </div>

@@ -12,8 +12,8 @@ export default class SiteHeader extends Component {
         <nav aria-label="Page sections">
           <ul class="site-header__nav">
             <li>
-              <a href="#summary" click={(e: Event) => scrollToSection(e, 'summary')}>
-                Summary
+              <a href="#about" click={(e: Event) => scrollToSection(e, 'about')}>
+                About
               </a>
             </li>
             <li>

@@ -144,12 +144,6 @@ textarea {
   animation: hero-in 700ms ease-out both;
 }
 
-.hero__brandmark {
-  width: min(100%, 16rem);
-  height: auto;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12));
-}
-
 .hero__title {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 6vw, 4rem);
@@ -171,39 +165,6 @@ textarea {
   font-weight: 300;
   opacity: 0.92;
   max-width: 34rem;
-}
-
-.hero__ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  margin-top: var(--space-xs);
-}
-
-.hero__resources {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  margin-top: 0.15rem;
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.hero__resources a {
-  color: rgba(255, 255, 255, 0.88);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-  padding-bottom: 0.1rem;
-  transition: color 180ms ease, border-color 180ms ease;
-}
-
-.hero__resources a:hover {
-  color: white;
-  border-bottom-color: rgba(255, 255, 255, 0.85);
 }
 
 @keyframes hero-in {
@@ -242,16 +203,6 @@ textarea {
 
 .cta:active {
   transform: translateY(1px);
-}
-
-.cta--ghost {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-}
-
-.cta--ghost:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: white;
 }
 
 .section {
@@ -294,6 +245,23 @@ textarea {
 
 .section__body p {
   color: var(--text);
+}
+
+.section__resources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: var(--space-sm);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.section__resources a {
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
+  padding-bottom: 0.1rem;
 }
 
 .sites-map {
@@ -411,10 +379,6 @@ textarea {
   .hero {
     padding-top: var(--space-lg);
     padding-bottom: var(--space-lg);
-  }
-
-  .hero__brandmark {
-    width: min(100%, 11rem);
   }
 
   .section {
