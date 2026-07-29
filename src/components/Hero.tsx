@@ -14,7 +14,7 @@ export default class Hero extends Component {
             href="#about"
             click={(e: Event) => scrollToSection(e, 'about')}
           >
-            Learn more about the trial
+            {hero.cta}
           </a>
         </div>
       </section>
