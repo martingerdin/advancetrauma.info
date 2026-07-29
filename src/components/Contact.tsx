@@ -5,7 +5,7 @@ import ContactForm from './ContactForm'
 export default class Contact extends Component {
   template() {
     return (
-      <section class="section section--muted" id="contact">
+      <section class="section" id="contact">
         <div class="section__inner">
           <h2 class="section__heading">{contact.title}</h2>
           <p class="section__subheading">{contact.subtitle}</p>

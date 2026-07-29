@@ -39,10 +39,30 @@ export const about = {
     { name: 'George Institute for Global Health in India', href: links.georgeInstitute },
     { name: 'University of Birmingham', href: links.birmingham },
   ],
-  resources: [
-    { label: 'Protocol', href: links.protocol, download: true },
-    { label: 'Publication', href: links.publication, external: true },
-    { label: 'ClinicalTrials.gov', href: links.clinicalTrials, external: true },
+}
+
+export const resources = {
+  title: 'Resources',
+  subtitle: 'Read the protocol, the published paper, and the trial registration.',
+  items: [
+    {
+      label: 'Protocol',
+      description: 'Download the full ADVANCE TRAUMA study protocol (PDF).',
+      href: links.protocol,
+      download: true,
+    },
+    {
+      label: 'Publication',
+      description: 'Read the trial protocol paper published in Trials.',
+      href: links.publication,
+      external: true,
+    },
+    {
+      label: 'ClinicalTrials.gov',
+      description: 'View the registered trial record (NCT06321419).',
+      href: links.clinicalTrials,
+      external: true,
+    },
   ],
 }
 

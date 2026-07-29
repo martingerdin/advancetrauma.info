@@ -265,21 +265,44 @@ textarea {
   color: var(--text);
 }
 
-.section__resources {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.65rem;
-  margin-top: var(--space-sm);
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--text-muted);
+.resource-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-md);
 }
 
-.section__resources a {
+.resource-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
   text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
-  padding-bottom: 0.1rem;
+  color: inherit;
+  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.resource-card:hover {
+  border-color: var(--brand);
+  background: var(--surface-muted);
+  color: inherit;
+  transform: translateY(-2px);
+}
+
+.resource-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--brand);
+}
+
+.resource-card__description {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 .sites-map {
@@ -416,6 +439,10 @@ textarea {
   .hero__tagline {
     white-space: normal;
     text-wrap: balance;
+  }
+
+  .resource-cards {
+    grid-template-columns: 1fr;
   }
 
   .section {

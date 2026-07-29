@@ -17,6 +17,11 @@ export default class SiteHeader extends Component {
               </a>
             </li>
             <li>
+              <a href="#resources" click={(e: Event) => scrollToSection(e, 'resources')}>
+                Resources
+              </a>
+            </li>
+            <li>
               <a href="#sites" click={(e: Event) => scrollToSection(e, 'sites')}>
                 Sites
               </a>

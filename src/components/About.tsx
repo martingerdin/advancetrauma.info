@@ -27,19 +27,6 @@ export default class About extends Component {
               </a>
               .
             </p>
-            <p class="section__resources">
-              <a href={about.resources[0].href} download>
-                {about.resources[0].label}
-              </a>
-              <span aria-hidden="true">·</span>
-              <a href={about.resources[1].href} target="_blank" rel="noopener noreferrer">
-                {about.resources[1].label}
-              </a>
-              <span aria-hidden="true">·</span>
-              <a href={about.resources[2].href} target="_blank" rel="noopener noreferrer">
-                {about.resources[2].label}
-              </a>
-            </p>
           </div>
         </div>
       </section>
