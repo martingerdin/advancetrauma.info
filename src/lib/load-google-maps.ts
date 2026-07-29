@@ -18,7 +18,8 @@ export function loadGoogleMaps(apiKey: string): Promise<void> {
     }
 
     const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}`
+    // language=en keeps map UI/controls in English regardless of browser locale
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&language=en`
     script.async = true
     script.defer = true
     script.dataset.googleMaps = 'true'
