@@ -2,7 +2,7 @@ import { Component } from '@geajs/core'
 import ContactForm from '../components/ContactForm'
 import Hero from '../components/Hero'
 import SitesMap from '../components/SitesMap'
-import { aboutParagraphs, links } from '../data/content'
+import { about, links } from '../data/content'
 
 export default class Home extends Component {
   template() {
@@ -12,9 +12,10 @@ export default class Home extends Component {
 
         <section class="section section--muted" id="about">
           <div class="section__inner">
-            <h2 class="section__heading">About</h2>
+            <h2 class="section__heading">{about.title}</h2>
+            <p class="section__subheading">{about.subtitle}</p>
             <div class="section__body">
-              {aboutParagraphs.map((paragraph) => (
+              {about.paragraphs.map((paragraph) => (
                 <p>{paragraph}</p>
               ))}
               <p>

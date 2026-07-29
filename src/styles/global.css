@@ -160,13 +160,6 @@ textarea {
   max-width: 28rem;
 }
 
-.hero__lead {
-  font-size: 1.05rem;
-  font-weight: 300;
-  opacity: 0.92;
-  max-width: 34rem;
-}
-
 @keyframes hero-in {
   from {
     opacity: 0;
