@@ -13,7 +13,7 @@ export default class About extends Component {
               <p>{paragraph}</p>
             ))}
             <p>
-              It is an international collaboration led by researchers at{' '}
+              We are an international collaboration led by researchers at{' '}
               <a href={about.partners[0].href} target="_blank" rel="noopener noreferrer">
                 {about.partners[0].name}
               </a>
