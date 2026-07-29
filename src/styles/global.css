@@ -212,10 +212,6 @@ textarea {
   margin: 0 auto;
 }
 
-.section__inner--wide {
-  width: min(100%, var(--wide-width));
-}
-
 .section__heading {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 4vw, 2.75rem);
