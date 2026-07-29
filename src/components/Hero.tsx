@@ -7,7 +7,10 @@ export default class Hero extends Component {
     return (
       <section class="hero" aria-label="Introduction">
         <div class="hero__inner">
+          {/*
+          Remove brandmark for now
           <img class="hero__brandmark" src="/brandmark.png" alt="ADVANCE TRAUMA brandmark" />
+          */}
           <h1 class="hero__title">{hero.title}</h1>
           <p class="hero__tagline">{hero.tagline}</p>
           <p class="hero__lead">{hero.lead}</p>
