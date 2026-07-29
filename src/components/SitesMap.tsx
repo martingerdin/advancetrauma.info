@@ -99,22 +99,6 @@ export default class SitesMap extends Component {
       <div>
         {this.loadError ? <p class="contact-form__status--error">{this.loadError}</p> : null}
         <div class="sites-map" data-map role="region" aria-label="Participating sites map" />
-        <ul class="sites-list">
-          {participatingSites.map((site) => (
-            <li>
-              <span
-                class={`sites-list__batch sites-list__batch--${site.batch}`}
-                aria-hidden="true"
-              />
-              <div>
-                <a href={site.website} target="_blank" rel="noopener noreferrer">
-                  {site.name}
-                </a>
-                <span> — {site.city}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
     )
   }

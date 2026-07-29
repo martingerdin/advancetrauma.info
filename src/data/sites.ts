@@ -85,3 +85,16 @@ export const participatingSites: ParticipatingSite[] = [
     website: 'https://www.dmch.edu/',
   },
 ]
+
+export const siteBatches: { id: SiteBatch; title: string; sites: ParticipatingSite[] }[] = [
+  {
+    id: '1',
+    title: 'Batch 1',
+    sites: participatingSites.filter((site) => site.batch === '1'),
+  },
+  {
+    id: '2',
+    title: 'Batch 2',
+    sites: participatingSites.filter((site) => site.batch === '2'),
+  },
+]

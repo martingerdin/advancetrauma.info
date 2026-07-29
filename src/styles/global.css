@@ -260,38 +260,52 @@ textarea {
   background: #e8f4f7;
 }
 
+.sites-batches {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.sites-batch__title {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: var(--space-sm);
+}
+
+.sites-batch__title--1 {
+  color: var(--brand);
+}
+
+.sites-batch__title--2 {
+  color: var(--accent);
+}
+
 .sites-list {
   list-style: none;
   display: grid;
   gap: 0.75rem;
-  margin-top: var(--space-lg);
 }
 
 .sites-list li {
   display: flex;
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
   align-items: baseline;
   font-size: 1rem;
 }
 
-.sites-list__batch {
-  flex-shrink: 0;
-  width: 0.65rem;
-  height: 0.65rem;
-  border-radius: 50%;
-  margin-top: 0.4rem;
-}
-
-.sites-list__batch--1 {
-  background: var(--brand);
-}
-
-.sites-list__batch--2 {
-  background: var(--accent);
-}
-
 .sites-list a {
   font-weight: 400;
+}
+
+.sites-list__city {
+  color: var(--text-muted);
+}
+
+.sites-list__city::before {
+  content: "— ";
 }
 
 .contact-form {
