@@ -44,7 +44,7 @@ export default class Hero extends Component {
               <div class="hero__detail hero__detail--live">
                 <dt>{hero.details[3].label}</dt>
                 <dd>
-                  <span class="hero__status-pill">{hero.details[3].value}</span>
+                  <span class="status-pill status-pill--live">{hero.details[3].value}</span>
                 </dd>
               </div>
             </dl>

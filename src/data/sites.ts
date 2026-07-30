@@ -1,11 +1,23 @@
 export type SiteBatch = '1' | '2'
 
+export type BatchStatus = 'upcoming' | 'ongoing' | 'completed'
+
 export type ParticipatingSite = {
   name: string
   city: string
   batch: SiteBatch
   website: string
   location: { lat: number; lng: number }
+}
+
+export type SiteBatchInfo = {
+  id: SiteBatch
+  title: string
+  /** Inclusive start month as YYYY-MM */
+  start: string
+  /** Inclusive end month as YYYY-MM */
+  end: string
+  sites: ParticipatingSite[]
 }
 
 export const batchColors: Record<SiteBatch, string> = {
@@ -86,15 +98,77 @@ export const participatingSites: ParticipatingSite[] = [
   },
 ]
 
-export const siteBatches: { id: SiteBatch; title: string; sites: ParticipatingSite[] }[] = [
+/**
+ * Batch windows follow the protocol: each batch runs 13 months with an
+ * anticipated 6-month overlap, starting from the trial start (Feb 2025).
+ */
+export const siteBatches: SiteBatchInfo[] = [
   {
     id: '1',
     title: 'Batch 1',
+    start: '2025-02',
+    end: '2026-03',
     sites: participatingSites.filter((site) => site.batch === '1'),
   },
   {
     id: '2',
     title: 'Batch 2',
+    start: '2025-08',
+    end: '2026-09',
     sites: participatingSites.filter((site) => site.batch === '2'),
   },
 ]
+
+const monthFormatter = new Intl.DateTimeFormat('en-GB', {
+  month: 'short',
+  year: 'numeric',
+})
+
+function parseYearMonth(value: string): { year: number; month: number } {
+  const [year, month] = value.split('-').map(Number)
+  return { year, month }
+}
+
+export function formatBatchMonth(value: string): string {
+  const { year, month } = parseYearMonth(value)
+  return monthFormatter.format(new Date(year, month - 1, 1))
+}
+
+export function getBatchStatus(batch: Pick<SiteBatchInfo, 'start' | 'end'>, now = new Date()): BatchStatus {
+  const start = parseYearMonth(batch.start)
+  const end = parseYearMonth(batch.end)
+  const startDate = new Date(start.year, start.month - 1, 1)
+  const endDate = new Date(end.year, end.month, 0, 23, 59, 59, 999)
+
+  if (now < startDate) return 'upcoming'
+  if (now > endDate) return 'completed'
+  return 'ongoing'
+}
+
+export const batchStatusLabels: Record<BatchStatus, string> = {
+  upcoming: 'Upcoming',
+  ongoing: 'Ongoing',
+  completed: 'Completed',
+}
+
+export const batchStatusPillClass: Record<BatchStatus, string> = {
+  upcoming: 'status-pill status-pill--upcoming',
+  ongoing: 'status-pill status-pill--live',
+  completed: 'status-pill status-pill--completed',
+}
+
+export const siteBatchViews = siteBatches.map((batch) => {
+  const status = getBatchStatus(batch)
+  const startLabel = formatBatchMonth(batch.start)
+  const endLabel = formatBatchMonth(batch.end)
+  return {
+    ...batch,
+    status,
+    statusLabel: batchStatusLabels[status],
+    statusClass: batchStatusPillClass[status],
+    startLabel,
+    endLabel,
+    startedPill: `${status === 'upcoming' ? 'Starts' : 'Started'} ${startLabel}`,
+    endsPill: `${status === 'completed' ? 'Ended' : 'Ends'} ${endLabel}`,
+  }
+})
