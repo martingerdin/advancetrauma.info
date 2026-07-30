@@ -5,9 +5,11 @@ export default class About extends Component {
   template() {
     return (
       <section class="section section--muted" id="about">
-        <div class="section__inner">
-          <h2 class="section__heading">{about.title}</h2>
-          <p class="section__subheading">{about.subtitle}</p>
+        <div class="section__inner section__inner--split">
+          <header class="section__intro">
+            <h2 class="section__heading">{about.title}</h2>
+            <p class="section__lead">{about.lead}</p>
+          </header>
           <div class="section__body">
             {about.paragraphs.map((paragraph) => (
               <p>{paragraph}</p>

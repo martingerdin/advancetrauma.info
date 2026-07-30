@@ -5,9 +5,11 @@ export default class Resources extends Component {
   template() {
     return (
       <section class="section" id="resources">
-        <div class="section__inner">
-          <h2 class="section__heading">{resources.title}</h2>
-          <p class="section__subheading">{resources.subtitle}</p>
+        <div class="section__inner section__inner--split">
+          <header class="section__intro">
+            <h2 class="section__heading">{resources.title}</h2>
+            <p class="section__lead">{resources.lead}</p>
+          </header>
           <div class="resource-cards">
             <a
               class="resource-card"
