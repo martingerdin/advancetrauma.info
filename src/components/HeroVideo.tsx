@@ -44,7 +44,6 @@ export default class HeroVideo extends Component {
     player.playbackId = playbackId
     player.setAttribute('metadata-video-title', 'ADVANCE TRAUMA animation')
     player.accentColor = '#f6851f'
-    player.playsInline = true
     player.setAttribute('title', 'ADVANCE TRAUMA explainer animation')
     frame.appendChild(player)
   }
