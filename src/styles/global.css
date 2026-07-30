@@ -685,10 +685,10 @@ body.nav-open {
 }
 
 .resource-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
+  display: grid;
+  grid-template-columns: var(--resource-thumb-width) minmax(0, 1fr);
+  align-items: stretch;
+  overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -697,14 +697,36 @@ body.nav-open {
   transition:
     border-color var(--duration-fast) var(--ease-default),
     background-color var(--duration-fast) var(--ease-default),
-    transform var(--duration-fast) var(--ease-default);
+    box-shadow var(--duration-fast) var(--ease-default);
 }
 
 .resource-card:hover {
   border-color: var(--brand);
   background: var(--surface-muted);
   color: inherit;
-  transform: translateY(-2px);
+  box-shadow: 0 var(--space-3xs) var(--space-sm) var(--shadow-ink-soft);
+}
+
+.resource-card__media {
+  overflow: hidden;
+  background: var(--surface-map);
+  border-right: 1px solid var(--border);
+}
+
+.resource-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.resource-card__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-s) var(--space-md);
 }
 
 .resource-card__title {

@@ -99,6 +99,7 @@
   --header-height: 4rem;
   --nav-panel-max-height: 24rem;
   --map-height: min(50vh, 24rem);
+  --resource-thumb-width: 9rem;
 
   /* Horizontal page padding respects iPhone landscape notch / home-indicator insets */
   --page-pad-x: var(--space-md);
