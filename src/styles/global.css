@@ -208,8 +208,8 @@ body.nav-open {
   display: flex;
   flex-direction: column;
   gap: var(--space-s);
-  max-width: 22rem;
-  flex: 1 1 16rem;
+  max-width: var(--form-width);
+  flex: 1 1 var(--form-width);
 }
 
 .site-footer__logo {
@@ -222,7 +222,6 @@ body.nav-open {
 
 .site-footer__logo:hover {
   color: var(--text-inverse);
-  opacity: 0.92;
 }
 
 .site-footer__tagline {
@@ -277,7 +276,7 @@ body.nav-open {
 
 .site-footer__credit {
   margin: 0;
-  max-width: 40rem;
+  max-width: var(--content-width);
   font-size: var(--font-size-sm);
   line-height: var(--leading-normal);
   color: var(--text-on-brand-subtle);
@@ -291,22 +290,11 @@ body.nav-open {
   gap: var(--space-xs) var(--space-md);
 }
 
-.site-footer__copy {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35em;
-  font-size: var(--font-size-xs);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--text-on-brand-subtle);
-}
-
 .site-footer__updated {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.35em;
+  gap: var(--space-3xs);
   font-size: var(--font-size-xs);
   font-weight: 500;
   letter-spacing: var(--tracking-wide);
@@ -321,15 +309,15 @@ body.nav-open {
 .site-footer__source {
   display: inline-flex;
   align-items: center;
-  gap: 0.4em;
+  gap: var(--space-3xs);
   font-size: var(--font-size-sm);
   font-weight: 500;
 }
 
 .site-footer__github-icon {
   flex-shrink: 0;
-  width: 1em;
-  height: 1em;
+  width: var(--font-size-sm);
+  height: var(--font-size-sm);
 }
 
 .hero {

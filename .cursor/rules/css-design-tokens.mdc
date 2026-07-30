@@ -1,0 +1,31 @@
+---
+description: Prefer design tokens from tokens.css; avoid one-off magic numbers in styles
+globs: src/styles/**/*.css
+alwaysApply: false
+---
+
+# CSS design tokens
+
+Use the variables in `src/styles/tokens.css` for spacing, type, color, radius, motion, and layout. Do not invent ad-hoc sizes like `0.35em`, `0.4em`, `22rem`, or one-off opacities when a token already exists (or a nearby token is close enough).
+
+```css
+/* ❌ BAD — magic gaps and widths */
+.site-footer__source {
+  gap: 0.4em;
+}
+.site-footer__credit {
+  max-width: 40rem;
+}
+
+/* ✅ GOOD — tokens from tokens.css */
+.site-footer__source {
+  gap: var(--space-3xs);
+}
+.site-footer__credit {
+  max-width: var(--content-width);
+}
+```
+
+If nothing fits, **add a named token** in `tokens.css` and use that — do not sprinkle a new literal across `global.css`.
+
+Exceptions: `0` / `auto` / `100%` / `none`, `currentColor`, and true one-offs required by the platform (e.g. `1px` hairlines, `env(safe-area-inset-*)`).
