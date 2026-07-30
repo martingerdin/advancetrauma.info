@@ -1,33 +1,74 @@
 import { Component } from '@geajs/core'
 import { scrollToSection } from '../lib/scroll-to-section'
+import navStore from '../stores/nav-store'
+
+function goToSection(event: Event, id: string) {
+  navStore.close()
+  scrollToSection(event, id)
+}
 
 export default class SiteHeader extends Component {
+  onAfterRender() {
+    if (this.el?.dataset.navBound) return
+    this.el!.dataset.navBound = 'true'
+
+    this.onKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') navStore.close()
+    }
+    window.addEventListener('keydown', this.onKeydown)
+  }
+
+  dispose() {
+    if (this.onKeydown) {
+      window.removeEventListener('keydown', this.onKeydown)
+    }
+    navStore.close()
+    super.dispose()
+  }
+
+  private onKeydown?: (event: KeyboardEvent) => void
+
   template() {
     return (
-      <header class="site-header">
-        <a class="site-header__brand" href="/">
-          {/* <img class="site-header__mark" src="/brandmark.png" alt="" /> */}
+      <header class={navStore.open ? 'site-header site-header--open' : 'site-header'}>
+        <a class="site-header__brand" href="/" click={() => navStore.close()}>
           <span>ADVANCE TRAUMA</span>
         </a>
-        <nav aria-label="Page sections">
+
+        <button
+          type="button"
+          class="site-header__menu-btn"
+          aria-expanded={navStore.open ? 'true' : 'false'}
+          aria-controls="site-nav"
+          click={() => navStore.toggle()}
+        >
+          <span class="site-header__menu-icon" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+          <span class="site-header__menu-label">{navStore.open ? 'Close' : 'Menu'}</span>
+        </button>
+
+        <nav id="site-nav" class="site-header__panel" aria-label="Page sections">
           <ul class="site-header__nav">
             <li>
-              <a href="#about" click={(e: Event) => scrollToSection(e, 'about')}>
+              <a href="#about" click={(e: Event) => goToSection(e, 'about')}>
                 About
               </a>
             </li>
             <li>
-              <a href="#resources" click={(e: Event) => scrollToSection(e, 'resources')}>
+              <a href="#resources" click={(e: Event) => goToSection(e, 'resources')}>
                 Resources
               </a>
             </li>
             <li>
-              <a href="#sites" click={(e: Event) => scrollToSection(e, 'sites')}>
+              <a href="#sites" click={(e: Event) => goToSection(e, 'sites')}>
                 Sites
               </a>
             </li>
             <li>
-              <a href="#contact" click={(e: Event) => scrollToSection(e, 'contact')}>
+              <a href="#contact" click={(e: Event) => goToSection(e, 'contact')}>
                 Contact
               </a>
             </li>
