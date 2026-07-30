@@ -1,12 +1,11 @@
 import { Component } from '@geajs/core'
 import { footer } from '../data/content'
 import { scrollToSection } from '../lib/scroll-to-section'
+import { siteRevision } from '../lib/site-revision'
 
 function goToSection(event: Event, id: string) {
   scrollToSection(event, id)
 }
-
-const footerYear = String(new Date().getFullYear())
 
 export default class SiteFooter extends Component {
   template() {
@@ -119,11 +118,18 @@ export default class SiteFooter extends Component {
             .
           </p>
           <div class="site-footer__meta">
-            <p class="site-footer__copy">
-              <span class="site-footer__copy-mark">©</span>
-              <span>{footerYear}</span>
-              <span class="site-footer__copy-brand">{footer.brand}</span>
-            </p>
+            {siteRevision.available ? (
+              <a
+                class="site-footer__updated"
+                href={siteRevision.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={siteRevision.shortSha}
+              >
+                <span>Updated</span>
+                <time datetime={siteRevision.isoDate}>{siteRevision.dateLabel}</time>
+              </a>
+            ) : null}
             <a
               class="site-footer__source"
               href={footer.sourceHref}

@@ -302,6 +302,22 @@ body.nav-open {
   color: var(--text-on-brand-subtle);
 }
 
+.site-footer__updated {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-on-brand-subtle);
+}
+
+.site-footer__updated time {
+  font-variant-numeric: tabular-nums;
+}
+
 .site-footer__source {
   font-size: var(--font-size-sm);
   font-weight: 500;
