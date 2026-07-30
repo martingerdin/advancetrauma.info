@@ -114,8 +114,8 @@ export const siteBatches: SiteBatchInfo[] = [
   {
     id: '2',
     title: 'Batch 2',
-    start: '2025-08',
-    end: '2026-09',
+    start: '2025-12',
+    end: '2027-01',
     sites: participatingSites.filter((site) => site.batch === '2'),
   },
 ]
