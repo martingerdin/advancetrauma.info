@@ -319,8 +319,17 @@ body.nav-open {
 }
 
 .site-footer__source {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   font-size: var(--font-size-sm);
   font-weight: 500;
+}
+
+.site-footer__github-icon {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
 }
 
 .hero {
