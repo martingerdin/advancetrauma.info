@@ -14,7 +14,7 @@ export const hasHeroVideo = Boolean(playbackId)
 export default class HeroVideo extends Component {
   template() {
     return (
-      <div class="hero__video">
+      <div class="hero__video" id="hero-video">
         <iframe
           src={playerSrc}
           title="ADVANCE TRAUMA explainer animation"

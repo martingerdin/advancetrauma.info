@@ -3,7 +3,12 @@ import { hero } from '../data/content'
 import { scrollToSection } from '../lib/scroll-to-section'
 import HeroVideo, { hasHeroVideo } from './HeroVideo'
 
-const details = Object.entries(hero.details).map(([label, value]) => ({ label, value }))
+function focusHeroVideo(event: Event) {
+  event.preventDefault()
+  const video = document.getElementById('hero-video')
+  video?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  video?.querySelector('iframe')?.focus()
+}
 
 export default class Hero extends Component {
   template() {
@@ -11,23 +16,44 @@ export default class Hero extends Component {
       <section class="hero" aria-label="Introduction">
         <div class="hero__inner">
           <div class="hero__copy">
+            <p class="hero__eyebrow">{hero.eyebrow}</p>
             <h1 class="hero__title">{hero.title}</h1>
             <p class="hero__tagline">{hero.tagline}</p>
+            <div class="hero__actions">
+              <a
+                class="cta"
+                href="#about"
+                click={(e: Event) => scrollToSection(e, 'about')}
+              >
+                {hero.cta}
+              </a>
+              {hasHeroVideo ? (
+                <a class="cta cta--ghost" href="#hero-video" click={focusHeroVideo}>
+                  {hero.ctaSecondary}
+                </a>
+              ) : null}
+            </div>
             <dl class="hero__details">
-              {details.map((detail) => (
-                <div class="hero__detail">
-                  <dt>{detail.label}</dt>
-                  <dd>{detail.value}</dd>
-                </div>
-              ))}
+              <div class="hero__detail">
+                <dt>{hero.details[0].label}</dt>
+                <dd>{hero.details[0].value}</dd>
+              </div>
+              <div class="hero__detail">
+                <dt>{hero.details[1].label}</dt>
+                <dd>{hero.details[1].value}</dd>
+              </div>
+              <div class="hero__detail">
+                <dt>{hero.details[2].label}</dt>
+                <dd>
+                  <span class="hero__detail-value">{hero.details[2].value}</span>
+                  <span class="hero__detail-note">{hero.details[2].note}</span>
+                </dd>
+              </div>
+              <div class="hero__detail hero__detail--live">
+                <dt>{hero.details[3].label}</dt>
+                <dd>{hero.details[3].value}</dd>
+              </div>
             </dl>
-            <a
-              class="cta"
-              href="#about"
-              click={(e: Event) => scrollToSection(e, 'about')}
-            >
-              {hero.cta}
-            </a>
           </div>
           {hasHeroVideo ? <HeroVideo /> : null}
         </div>

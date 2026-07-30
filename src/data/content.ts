@@ -15,15 +15,17 @@ export const links = {
 }
 
 export const hero = {
+  eyebrow: 'International clinical trial',
   title: 'ADVANCE TRAUMA',
   tagline: 'The clinical trial to determine if ATLS® improves patient outcomes',
   cta: 'Learn more',
-  details: {
-    start: 'February 2025',
-    end: 'December 2029',
-    target: "4320 participants",
-    status: "Ongoing"
-  }
+  ctaSecondary: 'Watch the film',
+  details: [
+    { label: 'Start', value: 'February 2025' },
+    { label: 'End', value: 'December 2029' },
+    { label: 'Target', value: '4,320', note: 'participants' },
+    { label: 'Status', value: 'Ongoing', live: true },
+  ],
 }
 
 export const about = {
