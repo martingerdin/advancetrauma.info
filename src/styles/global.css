@@ -197,10 +197,11 @@ body.nav-open {
 .site-footer__inner {
   width: min(100%, var(--section-width));
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
-  gap: clamp(var(--space-md), 3vw, var(--space-xl));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: start;
+  gap: clamp(var(--space-md), 3vw, var(--space-xl));
 }
 
 .site-footer__brand {
@@ -208,6 +209,7 @@ body.nav-open {
   flex-direction: column;
   gap: var(--space-s);
   max-width: 22rem;
+  flex: 1 1 16rem;
 }
 
 .site-footer__logo {
@@ -235,8 +237,9 @@ body.nav-open {
 
 .site-footer__columns {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-md);
+  grid-template-columns: repeat(2, max-content);
+  gap: clamp(var(--space-lg), 4vw, var(--space-xxl));
+  margin-left: auto;
 }
 
 .site-footer__heading {
@@ -863,12 +866,14 @@ body.nav-open {
 
 @media (max-width: 900px) {
   .site-footer__inner {
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
+    flex-direction: column;
   }
 
   .site-footer__columns {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-left: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: var(--space-md);
   }
 
   .hero:has(.hero__video) {
