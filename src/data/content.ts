@@ -76,3 +76,26 @@ export const contact = {
   title: 'Contact Us',
   lead: 'If you have any questions about the ADVANCE TRAUMA trial, please contact us.',
 }
+
+export const footer = {
+  brand: 'ADVANCE TRAUMA',
+  tagline: 'The clinical trial to determine if ATLS® improves patient outcomes.',
+  navigateTitle: 'On this page',
+  navigate: [
+    { label: 'About', href: '#about', id: 'about' },
+    { label: 'Resources', href: '#resources', id: 'resources' },
+    { label: 'Sites', href: '#sites', id: 'sites' },
+    { label: 'Contact', href: '#contact', id: 'contact' },
+  ],
+  resourcesTitle: 'Resources',
+  resources: [
+    { label: 'Protocol', href: links.protocol, download: true },
+    { label: 'Publication', href: links.publication, external: true },
+    { label: 'ClinicalTrials.gov', href: links.clinicalTrials, external: true },
+  ],
+  partnersTitle: 'Partners',
+  partners: about.partners,
+  sourceLabel: 'View source on GitHub',
+  sourceHref: links.github,
+  credit: 'An international collaboration led by Karolinska Institutet, the George Institute for Global Health in India, and the University of Birmingham.',
+}
