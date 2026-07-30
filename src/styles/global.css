@@ -58,15 +58,21 @@ textarea {
   top: 0;
   z-index: var(--z-header);
   min-height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
   padding: env(safe-area-inset-top, 0px) var(--page-pad-right) 0 var(--page-pad-left);
   background: var(--header-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--on-brand-border);
   color: var(--text-inverse);
+}
+
+.site-header__inner {
+  width: min(100%, var(--section-width));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-height: var(--header-height);
 }
 
 .site-header__brand {
@@ -335,7 +341,7 @@ body.nav-open {
 }
 
 .hero__inner {
-  width: min(100%, var(--hero-width));
+  width: min(100%, var(--section-width));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -951,6 +957,9 @@ body.nav-open {
 @media (max-width: 720px) {
   .site-header {
     height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+  }
+
+  .site-header__inner {
     flex-wrap: nowrap;
   }
 

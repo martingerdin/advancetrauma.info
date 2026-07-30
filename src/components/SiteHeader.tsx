@@ -31,49 +31,51 @@ export default class SiteHeader extends Component {
   template() {
     return (
       <header class={navStore.open ? 'site-header site-header--open' : 'site-header'}>
-        <a class="site-header__brand" href="/" click={() => navStore.close()}>
-          <span>ADVANCE TRAUMA</span>
-        </a>
+        <div class="site-header__inner">
+          <a class="site-header__brand" href="/" click={() => navStore.close()}>
+            <span>ADVANCE TRAUMA</span>
+          </a>
 
-        <button
-          type="button"
-          class="site-header__menu-btn"
-          aria-expanded={navStore.open ? 'true' : 'false'}
-          aria-controls="site-nav"
-          click={() => navStore.toggle()}
-        >
-          <span class="site-header__menu-icon" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </span>
-          <span class="site-header__menu-label">{navStore.open ? 'Close' : 'Menu'}</span>
-        </button>
+          <button
+            type="button"
+            class="site-header__menu-btn"
+            aria-expanded={navStore.open ? 'true' : 'false'}
+            aria-controls="site-nav"
+            click={() => navStore.toggle()}
+          >
+            <span class="site-header__menu-icon" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+            <span class="site-header__menu-label">{navStore.open ? 'Close' : 'Menu'}</span>
+          </button>
 
-        <nav id="site-nav" class="site-header__panel" aria-label="Page sections">
-          <ul class="site-header__nav">
-            <li>
-              <a href="#about" click={(e: Event) => goToSection(e, 'about')}>
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#resources" click={(e: Event) => goToSection(e, 'resources')}>
-                Resources
-              </a>
-            </li>
-            <li>
-              <a href="#sites" click={(e: Event) => goToSection(e, 'sites')}>
-                Sites
-              </a>
-            </li>
-            <li>
-              <a href="#contact" click={(e: Event) => goToSection(e, 'contact')}>
-                Contact
-              </a>
-            </li>
-          </ul>
-        </nav>
+          <nav id="site-nav" class="site-header__panel" aria-label="Page sections">
+            <ul class="site-header__nav">
+              <li>
+                <a href="#about" click={(e: Event) => goToSection(e, 'about')}>
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#resources" click={(e: Event) => goToSection(e, 'resources')}>
+                  Resources
+                </a>
+              </li>
+              <li>
+                <a href="#sites" click={(e: Event) => goToSection(e, 'sites')}>
+                  Sites
+                </a>
+              </li>
+              <li>
+                <a href="#contact" click={(e: Event) => goToSection(e, 'contact')}>
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </header>
     )
   }
