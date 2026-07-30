@@ -20,9 +20,10 @@ export type SiteBatchInfo = {
   sites: ParticipatingSite[]
 }
 
-export const batchColors: Record<SiteBatch, string> = {
-  '1': '#1a9dbb',
-  '2': '#f6851f',
+/** Batch marker/label colors — resolve from design tokens at call time. */
+export const batchColorTokens: Record<SiteBatch, string> = {
+  '1': '--brand',
+  '2': '--accent',
 }
 
 export const participatingSites: ParticipatingSite[] = [
