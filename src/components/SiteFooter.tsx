@@ -91,7 +91,33 @@ export default class SiteFooter extends Component {
         </div>
 
         <div class="site-footer__bar">
-          <p class="site-footer__credit">{footer.credit}</p>
+          <p class="site-footer__credit">
+            <span>{footer.creditPrefix}</span>{' '}
+            <a
+              href={footer.partners[0].href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {footer.partners[0].name}
+            </a>
+            , the{' '}
+            <a
+              href={footer.partners[1].href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {footer.partners[1].name}
+            </a>
+            , and the{' '}
+            <a
+              href={footer.partners[2].href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {footer.partners[2].name}
+            </a>
+            .
+          </p>
           <div class="site-footer__meta">
             <p class="site-footer__copy">
               <span class="site-footer__copy-mark">©</span>

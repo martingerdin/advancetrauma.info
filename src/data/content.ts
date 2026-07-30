@@ -93,9 +93,8 @@ export const footer = {
     { label: 'Publication', href: links.publication, external: true },
     { label: 'ClinicalTrials.gov', href: links.clinicalTrials, external: true },
   ],
-  partnersTitle: 'Partners',
-  partners: about.partners,
   sourceLabel: 'View source on GitHub',
   sourceHref: links.github,
-  credit: 'An international collaboration led by Karolinska Institutet, the George Institute for Global Health in India, and the University of Birmingham.',
+  creditPrefix: 'An international collaboration led by',
+  partners: about.partners,
 }
