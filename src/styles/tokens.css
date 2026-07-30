@@ -26,4 +26,9 @@
 
   --radius: 2px;
   --header-height: 4rem;
+
+  /* Horizontal page padding respects iPhone landscape notch / home-indicator insets */
+  --page-pad-x: var(--space-md);
+  --page-pad-left: max(var(--page-pad-x), env(safe-area-inset-left, 0px));
+  --page-pad-right: max(var(--page-pad-x), env(safe-area-inset-right, 0px));
 }

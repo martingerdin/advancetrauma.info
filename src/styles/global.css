@@ -57,12 +57,12 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 20;
-  min-height: var(--header-height);
+  min-height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 0 var(--space-md);
+  padding: env(safe-area-inset-top, 0px) var(--page-pad-right) 0 var(--page-pad-left);
   background: rgba(21, 137, 164, 0.94);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -174,7 +174,8 @@ body.nav-open {
 .site-footer {
   background: var(--brand);
   color: rgba(255, 255, 255, 0.9);
-  padding: var(--space-md) var(--space-md);
+  padding: var(--space-md) var(--page-pad-right)
+    max(var(--space-md), env(safe-area-inset-bottom, 0px)) var(--page-pad-left);
   text-align: center;
   font-size: 0.9rem;
 }
@@ -188,7 +189,8 @@ body.nav-open {
   align-items: flex-start;
   justify-content: center;
   text-align: center;
-  padding: clamp(2.5rem, 5vw, 4rem) var(--space-md) clamp(3rem, 6vw, 4.5rem);
+  padding: clamp(2.5rem, 5vw, 4rem) var(--page-pad-right) clamp(3rem, 6vw, 4.5rem)
+    var(--page-pad-left);
   background:
     radial-gradient(ellipse at 18% 0%, rgba(255, 255, 255, 0.16), transparent 48%),
     radial-gradient(ellipse at 88% 100%, rgba(0, 0, 0, 0.12), transparent 42%),
@@ -414,8 +416,9 @@ body.nav-open {
 }
 
 .section {
-  padding: clamp(2.5rem, 4vw, 3.5rem) var(--space-md);
-  scroll-margin-top: calc(var(--header-height) + 0.75rem);
+  padding: clamp(2.5rem, 4vw, 3.5rem) var(--page-pad-right)
+    clamp(2.5rem, 4vw, 3.5rem) var(--page-pad-left);
+  scroll-margin-top: calc(var(--header-height) + env(safe-area-inset-top, 0px) + 0.75rem);
 }
 
 .section--muted {
@@ -720,7 +723,7 @@ body.nav-open {
 
 @media (max-width: 720px) {
   .site-header {
-    height: var(--header-height);
+    height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
     flex-wrap: nowrap;
   }
 
@@ -753,7 +756,7 @@ body.nav-open {
   .site-header__nav {
     flex-direction: column;
     gap: 0;
-    padding: 0.35rem var(--space-md) 1.1rem;
+    padding: 0.35rem var(--page-pad-right) 1.1rem var(--page-pad-left);
   }
 
   .site-header__nav li {
@@ -799,6 +802,7 @@ body.nav-open {
   }
 
   .section {
-    padding: var(--space-lg) var(--space-sm);
+    padding: var(--space-lg) max(var(--space-sm), env(safe-area-inset-right, 0px))
+      var(--space-lg) max(var(--space-sm), env(safe-area-inset-left, 0px));
   }
 }
