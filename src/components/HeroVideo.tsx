@@ -1,5 +1,6 @@
 import { Component } from '@geajs/core'
 import type MuxPlayerElement from '@mux/mux-player'
+import { cssVar } from '../lib/css-var'
 
 const playbackId = (import.meta.env.VITE_MUX_PLAYBACK_ID ?? '').trim()
 
@@ -43,7 +44,7 @@ export default class HeroVideo extends Component {
     const player = document.createElement('mux-player') as MuxPlayerElement
     player.playbackId = playbackId
     player.setAttribute('metadata-video-title', 'ADVANCE TRAUMA animation')
-    player.accentColor = '#f6851f'
+    player.accentColor = cssVar('--accent')
     player.setAttribute('title', 'ADVANCE TRAUMA explainer animation')
     frame.appendChild(player)
   }
