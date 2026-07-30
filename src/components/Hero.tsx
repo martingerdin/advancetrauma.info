@@ -10,8 +10,7 @@ export default class Hero extends Component {
         <div class="hero__inner">
           <div class="hero__copy">
             <p class="hero__eyebrow">{hero.eyebrow}</p>
-            <h1 class="hero__title">{hero.title}</h1>
-            <p class="hero__tagline">{hero.tagline}</p>
+            <h1 class="hero__tagline">{hero.tagline}</h1>
             <div class="hero__actions">
               <a
                 class="cta"
