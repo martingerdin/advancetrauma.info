@@ -1,14 +1,7 @@
 import { Component } from '@geajs/core'
 import { hero } from '../data/content'
 import { scrollToSection } from '../lib/scroll-to-section'
-import HeroVideo, { hasHeroVideo } from './HeroVideo'
-
-function focusHeroVideo(event: Event) {
-  event.preventDefault()
-  const video = document.getElementById('hero-video')
-  video?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  video?.querySelector('iframe')?.focus()
-}
+import HeroVideo, { hasHeroVideo, playHeroVideo } from './HeroVideo'
 
 export default class Hero extends Component {
   template() {
@@ -28,7 +21,7 @@ export default class Hero extends Component {
                 {hero.cta}
               </a>
               {hasHeroVideo ? (
-                <a class="cta cta--ghost" href="#hero-video" click={focusHeroVideo}>
+                <a class="cta cta--ghost" href="#hero-video" click={playHeroVideo}>
                   {hero.ctaSecondary}
                 </a>
               ) : null}
