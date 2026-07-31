@@ -29,17 +29,16 @@ export const batchColorTokens: Record<SiteBatch, string> = {
 }
 
 /**
- * Generate a location image for each site.
- * Uses clean placeholder images with the site's city name.
+ * Generate a screenshot of the hospital website.
+ * Uses a free screenshot API service (no API key required).
  */
-function getLocationMapImage(lat: number, lng: number, city: string): string {
+function getLocationMapImage(lat: number, lng: number, websiteUrl: string): string {
   const width = 400
   const height = 300
   
-  // Create a clean placeholder with the city name
-  // Using brand color background
-  const text = encodeURIComponent(city)
-  return `https://placehold.co/${width}x${height}/1a9dbb/ffffff?text=${text}&font=roboto`
+  // Using thum.io - free screenshot service, no API key required
+  // Simple URL format: https://image.thum.io/get/width/400/crop/300/URL
+  return `https://image.thum.io/get/width/${width}/crop/${height}/${websiteUrl}`
 }
 
 export const participatingSites: ParticipatingSite[] = [
@@ -50,7 +49,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://hbtmc.edu.in/',
     pi: 'Geeta Ghag, Vipul Nandu',
-    image: getLocationMapImage(19.10790971021016, 72.83623768267398, 'Mumbai'),
+    image: getLocationMapImage(19.10790971021016, 72.83623768267398, 'https://hbtmc.edu.in/'),
   },
   {
     name: 'IPGME&R and SSKM Hospital',
@@ -59,7 +58,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'http://www.ipgmer.gov.in/',
     pi: 'Shamita Chatterjee, Maitreyee Mukherjee',
-    image: getLocationMapImage(22.540269944753586, 88.34186296554837, 'Kolkata'),
+    image: getLocationMapImage(22.540269944753586, 88.34186296554837, 'http://www.ipgmer.gov.in/'),
   },
   {
     name: 'Christian Medical College & Hospital',
@@ -68,7 +67,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://www.cmcludhiana.in/',
     pi: 'Parvez Haque, Thejus Varghese',
-    image: getLocationMapImage(30.911165478936997, 75.86348436577856, 'Ludhiana'),
+    image: getLocationMapImage(30.911165478936997, 75.86348436577856, 'https://www.cmcludhiana.in/'),
   },
   {
     name: 'Government Medical College & Hospital',
@@ -77,7 +76,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://www.gmch.gov.in/',
     pi: 'Rajeev Sharma, Zahid Mir',
-    image: getLocationMapImage(30.692216564214863, 76.7551942229613, 'Chandigarh'),
+    image: getLocationMapImage(30.692216564214863, 76.7551942229613, 'https://www.gmch.gov.in/'),
   },
   {
     name: 'Himalayan Institute of Medical Sciences',
@@ -86,7 +85,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://srhu.edu.in/medical-sciences/',
     pi: 'Hemant Nautiyal, Bhaskar Bisht',
-    image: getLocationMapImage(30.193327822632433, 78.16497428998137, 'Dehradun'),
+    image: getLocationMapImage(30.193327822632433, 78.16497428998137, 'https://srhu.edu.in/medical-sciences/'),
   },
   {
     name: 'Seth G.S. Medical College and King Edward Memorial Hospital',
@@ -95,7 +94,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://www.kem.edu/',
     pi: 'Monty Khajanchi',
-    image: getLocationMapImage(19.002633531934915, 72.84142762699638, 'Mumbai'),
+    image: getLocationMapImage(19.002633531934915, 72.84142762699638, 'https://www.kem.edu/'),
   },
   {
     name: 'Lokmanya Tilak Municipal Medical College and General Hospital',
@@ -104,7 +103,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://ltmgh.com/',
     pi: 'Vineet Kumar',
-    image: getLocationMapImage(19.036157387791466, 72.85942328082004, 'Mumbai'),
+    image: getLocationMapImage(19.036157387791466, 72.85942328082004, 'https://ltmgh.com/'),
   },
   {
     name: 'Holy Family Hospital',
@@ -113,7 +112,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://www.hfhdelhi.org/',
     pi: 'Aisvarya Kapoor',
-    image: getLocationMapImage(28.56218828970658, 77.27511129639481, 'New Delhi'),
+    image: getLocationMapImage(28.56218828970658, 77.27511129639481, 'https://www.hfhdelhi.org/'),
   },
   {
     name: 'Assam Medical College & Hospital',
@@ -122,7 +121,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://amch-dibrugarh.assam.gov.in/',
     pi: 'Jishan Ahmed',
-    image: getLocationMapImage(27.483625508772267, 94.94401488101919, 'Dibrugarh'),
+    image: getLocationMapImage(27.483625508772267, 94.94401488101919, 'https://amch-dibrugarh.assam.gov.in/'),
   },
   {
     name: 'Dayanand Medical College & Hospital',
@@ -131,7 +130,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://www.dmch.edu/',
     pi: 'Jaspal Singh',
-    image: getLocationMapImage(30.916655731118574, 75.83081233862086, 'Ludhiana'),
+    image: getLocationMapImage(30.916655731118574, 75.83081233862086, 'https://www.dmch.edu/'),
   },
 ]
 
