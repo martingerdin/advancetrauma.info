@@ -18,7 +18,7 @@ export default class SitesList extends Component {
             {siteBatchViews[0].sites.map((site) => (
               <a href={site.website} target="_blank" rel="noopener noreferrer" class="site-card">
                 <div class="site-card__media">
-                  <img src={site.image} alt={site.name} />
+                  <img src={site.image} alt="" width="640" height="480" loading="lazy" decoding="async" />
                 </div>
                 <div class="site-card__body">
                   <h4 class="site-card__title">{site.name}</h4>
@@ -44,7 +44,7 @@ export default class SitesList extends Component {
             {siteBatchViews[1].sites.map((site) => (
               <a href={site.website} target="_blank" rel="noopener noreferrer" class="site-card">
                 <div class="site-card__media">
-                  <img src={site.image} alt={site.name} />
+                  <img src={site.image} alt="" width="640" height="480" loading="lazy" decoding="async" />
                 </div>
                 <div class="site-card__body">
                   <h4 class="site-card__title">{site.name}</h4>
