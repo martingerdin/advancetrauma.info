@@ -1,5 +1,5 @@
 import { Component } from '@geajs/core'
-import { batchColorTokens, participatingSites } from '../data/sites'
+import { batchColorTokens, getBatchStatus, participatingSites, siteBatches } from '../data/sites'
 import { cssVar } from '../lib/css-var'
 import { loadGoogleMaps } from '../lib/load-google-maps'
 
@@ -80,6 +80,28 @@ export default class SitesMap extends Component {
 
       const batchColor = markerColor
       const batchLabel = `Batch ${site.batch}`
+      
+      // Get batch status to determine if site is currently including patients
+      const batch = siteBatches.find((b) => b.id === site.batch)!
+      const batchStatus = getBatchStatus(batch)
+      
+      // Status pill styling and text
+      let statusPillStyle = ''
+      let statusPillText = ''
+      if (batchStatus === 'ongoing') {
+        const statusLive = cssVar('--status-live')
+        statusPillStyle = `background: ${statusLive}; color: ${textInverse};`
+        statusPillText = 'Currently Including Patients'
+      } else if (batchStatus === 'upcoming') {
+        const lightBlue = cssVar('--light-blue')
+        const brandDeep = cssVar('--brand-deep')
+        statusPillStyle = `background: ${lightBlue}; color: ${brandDeep};`
+        statusPillText = 'Not Yet Including Patients'
+      } else {
+        const border = cssVar('--border')
+        statusPillStyle = `background: ${border}; color: ${textMuted};`
+        statusPillText = 'Enrollment Completed'
+      }
 
       const infoWindow = new google.maps.InfoWindow({
         content: `
@@ -89,7 +111,10 @@ export default class SitesMap extends Component {
               <span style="position: absolute; top: 10px; right: 10px; background: ${batchColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; z-index: 1;">${batchLabel}</span>
             </div>
             <div style="padding: 16px;">
-              <h3 style="margin: 0 0 12px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>
+              <h3 style="margin: 0 0 8px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>
+              <div style="margin-bottom: 12px;">
+                <span style="${statusPillStyle} display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${statusPillText}</span>
+              </div>
               <div style="margin-bottom: 10px;">
                 <p style="margin: 0 0 6px 0; color: ${text}; font-size: 14px; line-height: 1.4;">
                   <strong style="color: ${textMuted};">PI:</strong> ${site.pi}
