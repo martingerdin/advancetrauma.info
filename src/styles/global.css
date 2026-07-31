@@ -819,6 +819,83 @@ body.nav-open {
   content: "— ";
 }
 
+.site-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+}
+
+.site-card {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color var(--duration-fast) var(--ease-default),
+    background-color var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default);
+}
+
+.site-card:hover {
+  border-color: var(--brand);
+  background: var(--surface-muted);
+  color: inherit;
+  box-shadow: 0 var(--space-3xs) var(--space-sm) var(--shadow-ink-soft);
+}
+
+.site-card__media {
+  overflow: hidden;
+  background: var(--surface-map);
+  border-right: 1px solid var(--border);
+}
+
+.site-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.site-card__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-s) var(--space-md);
+}
+
+.site-card__title {
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--brand);
+  margin: 0;
+  line-height: var(--leading-snug);
+}
+
+.site-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  font-size: var(--font-size-sm);
+  line-height: var(--leading-normal);
+}
+
+.site-card__pi {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.site-card__city {
+  color: var(--text-muted);
+}
+
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -954,6 +1031,18 @@ body.nav-open {
   .resource-cards,
   .sites-batches {
     grid-template-columns: 1fr;
+  }
+
+  .site-card {
+    grid-template-columns: 8rem minmax(0, 1fr);
+  }
+
+  .site-card__body {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .site-card__title {
+    font-size: var(--font-size-base);
   }
 }
 

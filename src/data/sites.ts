@@ -8,6 +8,8 @@ export type ParticipatingSite = {
   batch: SiteBatch
   website: string
   location: { lat: number; lng: number }
+  pi: string
+  image: string
 }
 
 export type SiteBatchInfo = {
@@ -26,6 +28,18 @@ export const batchColorTokens: Record<SiteBatch, string> = {
   '2': '--accent',
 }
 
+/**
+ * Generate a Google Street View static image URL for a location.
+ * Falls back to a static map if no API key is configured.
+ */
+function getStreetViewImage(lat: number, lng: number): string {
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  if (!apiKey) {
+    return `https://via.placeholder.com/400x300/1a9dbb/ffffff?text=Site+Image`
+  }
+  return `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${lat},${lng}&fov=90&heading=0&pitch=0&key=${apiKey}`
+}
+
 export const participatingSites: ParticipatingSite[] = [
   {
     name: 'HBT Medical College And Dr. R N Cooper Municipal General Hospital',
@@ -33,6 +47,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Mumbai',
     batch: '1',
     website: 'https://hbtmc.edu.in/',
+    pi: 'Geeta Ghag, Vipul Nandu',
+    image: getStreetViewImage(19.10790971021016, 72.83623768267398),
   },
   {
     name: 'IPGME&R and SSKM Hospital',
@@ -40,6 +56,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Kolkata',
     batch: '1',
     website: 'http://www.ipgmer.gov.in/',
+    pi: 'Shamita Chatterjee, Maitreyee Mukherjee',
+    image: getStreetViewImage(22.540269944753586, 88.34186296554837),
   },
   {
     name: 'Christian Medical College & Hospital',
@@ -47,6 +65,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Ludhiana',
     batch: '1',
     website: 'https://www.cmcludhiana.in/',
+    pi: 'Parvez Haque, Thejus Varghese',
+    image: getStreetViewImage(30.911165478936997, 75.86348436577856),
   },
   {
     name: 'Government Medical College & Hospital',
@@ -54,6 +74,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Chandigarh',
     batch: '1',
     website: 'https://www.gmch.gov.in/',
+    pi: 'Rajeev Sharma, Zahid Mir',
+    image: getStreetViewImage(30.692216564214863, 76.7551942229613),
   },
   {
     name: 'Himalayan Institute of Medical Sciences',
@@ -61,6 +83,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Dehradun',
     batch: '1',
     website: 'https://srhu.edu.in/medical-sciences/',
+    pi: 'Hemant Nautiyal, Bhaskar Bisht',
+    image: getStreetViewImage(30.193327822632433, 78.16497428998137),
   },
   {
     name: 'Seth G.S. Medical College and King Edward Memorial Hospital',
@@ -68,6 +92,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Mumbai',
     batch: '2',
     website: 'https://www.kem.edu/',
+    pi: 'Monty Khajanchi',
+    image: getStreetViewImage(19.002633531934915, 72.84142762699638),
   },
   {
     name: 'Lokmanya Tilak Municipal Medical College and General Hospital',
@@ -75,6 +101,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Mumbai',
     batch: '2',
     website: 'https://ltmgh.com/',
+    pi: 'Vineet Kumar',
+    image: getStreetViewImage(19.036157387791466, 72.85942328082004),
   },
   {
     name: 'Holy Family Hospital',
@@ -82,6 +110,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'New Delhi',
     batch: '2',
     website: 'https://www.hfhdelhi.org/',
+    pi: 'Aisvarya Kapoor',
+    image: getStreetViewImage(28.56218828970658, 77.27511129639481),
   },
   {
     name: 'Assam Medical College & Hospital',
@@ -89,6 +119,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Dibrugarh',
     batch: '2',
     website: 'https://amch-dibrugarh.assam.gov.in/',
+    pi: 'Jishan Ahmed',
+    image: getStreetViewImage(27.483625508772267, 94.94401488101919),
   },
   {
     name: 'Dayanand Medical College & Hospital',
@@ -96,6 +128,8 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Ludhiana',
     batch: '2',
     website: 'https://www.dmch.edu/',
+    pi: 'Jaspal Singh',
+    image: getStreetViewImage(30.916655731118574, 75.83081233862086),
   },
 ]
 

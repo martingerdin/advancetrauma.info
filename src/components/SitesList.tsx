@@ -14,16 +14,22 @@ export default class SitesList extends Component {
               <span class="status-pill status-pill--meta">{siteBatchViews[0].endsPill}</span>
             </div>
           </div>
-          <ul class="sites-list">
+          <div class="site-cards">
             {siteBatchViews[0].sites.map((site) => (
-              <li>
-                <a href={site.website} target="_blank" rel="noopener noreferrer">
-                  {site.name}
-                </a>
-                <span class="sites-list__city">{site.city}</span>
-              </li>
+              <a href={site.website} target="_blank" rel="noopener noreferrer" class="site-card">
+                <div class="site-card__media">
+                  <img src={site.image} alt={site.name} />
+                </div>
+                <div class="site-card__body">
+                  <h4 class="site-card__title">{site.name}</h4>
+                  <div class="site-card__meta">
+                    <span class="site-card__pi">{site.pi}</span>
+                    <span class="site-card__city">{site.city}</span>
+                  </div>
+                </div>
+              </a>
             ))}
-          </ul>
+          </div>
         </div>
         <div class="sites-batch">
           <div class="sites-batch__header">
@@ -34,16 +40,22 @@ export default class SitesList extends Component {
               <span class="status-pill status-pill--meta">{siteBatchViews[1].endsPill}</span>
             </div>
           </div>
-          <ul class="sites-list">
+          <div class="site-cards">
             {siteBatchViews[1].sites.map((site) => (
-              <li>
-                <a href={site.website} target="_blank" rel="noopener noreferrer">
-                  {site.name}
-                </a>
-                <span class="sites-list__city">{site.city}</span>
-              </li>
+              <a href={site.website} target="_blank" rel="noopener noreferrer" class="site-card">
+                <div class="site-card__media">
+                  <img src={site.image} alt={site.name} />
+                </div>
+                <div class="site-card__body">
+                  <h4 class="site-card__title">{site.name}</h4>
+                  <div class="site-card__meta">
+                    <span class="site-card__pi">{site.pi}</span>
+                    <span class="site-card__city">{site.city}</span>
+                  </div>
+                </div>
+              </a>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     )
