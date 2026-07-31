@@ -84,9 +84,9 @@ export default class SitesMap extends Component {
       const infoWindow = new google.maps.InfoWindow({
         content: `
           <div style="padding: 0; max-width: 300px; font-family: system-ui, -apple-system, sans-serif;">
-            <div style="position: relative; height: 150px; overflow: hidden; border-radius: 8px 8px 0 0;">
-              <img src="${site.image}" alt="${site.name}" style="width: 100%; height: 100%; object-fit: cover;" />
-              <span style="position: absolute; top: 10px; right: 10px; background: ${batchColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${batchLabel}</span>
+            <div style="position: relative; height: 150px; overflow: hidden; border-radius: 8px 8px 0 0; background: ${markerColor};">
+              <img src="${site.image}" alt="${site.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" onerror="this.style.display='none'" />
+              <span style="position: absolute; top: 10px; right: 10px; background: ${batchColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; z-index: 1;">${batchLabel}</span>
             </div>
             <div style="padding: 16px;">
               <h3 style="margin: 0 0 12px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>
