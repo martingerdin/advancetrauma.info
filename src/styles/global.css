@@ -513,11 +513,10 @@ body.nav-open {
 }
 
 .hero:has(.hero__video) .hero__inner {
-  width: min(100%, var(--hero-video-width));
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr);
   align-items: center;
-  gap: clamp(var(--space-lg), 4vw, 3.5rem);
+  gap: clamp(var(--space-lg), 4vw, var(--space-xl));
 }
 
 .hero:has(.hero__video) .hero__copy {
@@ -824,7 +823,8 @@ body.nav-open {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  max-width: var(--form-width);
+  width: 100%;
+  min-width: 0;
 }
 
 .contact-form label {
@@ -888,7 +888,6 @@ body.nav-open {
 
 @media (max-width: 1100px) {
   .hero:has(.hero__video) .hero__inner {
-    width: min(100%, var(--hero-video-width-md));
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
   }
 
@@ -923,7 +922,6 @@ body.nav-open {
 
   .hero:has(.hero__video) .hero__inner {
     grid-template-columns: 1fr;
-    width: min(100%, var(--hero-stacked-width));
     gap: var(--space-lg);
   }
 
