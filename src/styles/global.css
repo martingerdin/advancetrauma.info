@@ -755,6 +755,23 @@ body.nav-open {
   background: var(--surface-map);
 }
 
+/* Google Maps InfoWindow improvements */
+.gm-style .gm-style-iw-c {
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+  padding: 0;
+}
+
+.gm-style .gm-style-iw-t::after {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
 .sites-batches {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
