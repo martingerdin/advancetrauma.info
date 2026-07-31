@@ -215,7 +215,7 @@ body.nav-open {
   flex-direction: column;
   gap: var(--space-s);
   max-width: var(--form-width);
-  flex: 1 1 var(--form-width);
+  flex: 1 1 auto;
 }
 
 .site-footer__logo {
@@ -907,6 +907,11 @@ body.nav-open {
 @media (max-width: 900px) {
   .site-footer__inner {
     flex-direction: column;
+  }
+
+  .site-footer__brand {
+    /* Avoid form-width flex-basis becoming a tall empty block in column layout */
+    flex: 0 1 auto;
   }
 
   .site-footer__columns {
