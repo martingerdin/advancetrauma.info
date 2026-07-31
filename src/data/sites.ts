@@ -47,7 +47,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Mumbai',
     batch: '1',
     website: 'https://hbtmc.edu.in/',
-    pi: 'Dr. Satish Dharap',
+    pi: 'Geeta Ghag, Vipul Nandu',
     image: getStreetViewImage(19.10790971021016, 72.83623768267398),
   },
   {
@@ -56,7 +56,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Kolkata',
     batch: '1',
     website: 'http://www.ipgmer.gov.in/',
-    pi: 'Dr. Tapas Kumar Basu',
+    pi: 'Shamita Chatterjee, Maitreyee Mukherjee',
     image: getStreetViewImage(22.540269944753586, 88.34186296554837),
   },
   {
@@ -65,7 +65,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Ludhiana',
     batch: '1',
     website: 'https://www.cmcludhiana.in/',
-    pi: 'Dr. John Victor Peter',
+    pi: 'Parvez Haque, Thejus Varghese',
     image: getStreetViewImage(30.911165478936997, 75.86348436577856),
   },
   {
@@ -74,7 +74,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Chandigarh',
     batch: '1',
     website: 'https://www.gmch.gov.in/',
-    pi: 'Dr. Pramod Kumar Garg',
+    pi: 'Rajeev Sharma, Zahid Mir',
     image: getStreetViewImage(30.692216564214863, 76.7551942229613),
   },
   {
@@ -83,7 +83,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Dehradun',
     batch: '1',
     website: 'https://srhu.edu.in/medical-sciences/',
-    pi: 'Dr. Manoj Gupta',
+    pi: 'Hemant Nautiyal, Bhaskar Bisht',
     image: getStreetViewImage(30.193327822632433, 78.16497428998137),
   },
   {
@@ -92,7 +92,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Mumbai',
     batch: '2',
     website: 'https://www.kem.edu/',
-    pi: 'Dr. Kapil Zirpe',
+    pi: 'Monty Khajanchi',
     image: getStreetViewImage(19.002633531934915, 72.84142762699638),
   },
   {
@@ -101,7 +101,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Mumbai',
     batch: '2',
     website: 'https://ltmgh.com/',
-    pi: 'Dr. Rajesh Chawla',
+    pi: 'Vineet Kumar',
     image: getStreetViewImage(19.036157387791466, 72.85942328082004),
   },
   {
@@ -110,7 +110,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'New Delhi',
     batch: '2',
     website: 'https://www.hfhdelhi.org/',
-    pi: 'Dr. Arvind Kumar',
+    pi: 'Aisvarya Kapoor',
     image: getStreetViewImage(28.56218828970658, 77.27511129639481),
   },
   {
@@ -119,7 +119,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Dibrugarh',
     batch: '2',
     website: 'https://amch-dibrugarh.assam.gov.in/',
-    pi: 'Dr. Indrajit Phukan',
+    pi: 'Jishan Ahmed',
     image: getStreetViewImage(27.483625508772267, 94.94401488101919),
   },
   {
@@ -128,7 +128,7 @@ export const participatingSites: ParticipatingSite[] = [
     city: 'Ludhiana',
     batch: '2',
     website: 'https://www.dmch.edu/',
-    pi: 'Dr. Ashish Bhalla',
+    pi: 'Jaspal Singh',
     image: getStreetViewImage(30.916655731118574, 75.83081233862086),
   },
 ]
