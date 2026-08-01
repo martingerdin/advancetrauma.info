@@ -2,10 +2,21 @@ import { Component } from '@geajs/core'
 import { batchColorTokens, participatingSites } from '../data/sites'
 import { cssVar } from '../lib/css-var'
 import { loadGoogleMaps } from '../lib/load-google-maps'
+import sitesMapStore from '../stores/sites-map-store'
+
+type SiteMarker = {
+  name: string
+  marker: google.maps.Marker
+  infoWindow: google.maps.InfoWindow
+}
 
 export default class SitesMap extends Component {
   private mapInstance: google.maps.Map | null = null
-  private markers: google.maps.Marker[] = []
+  private siteMarkers: SiteMarker[] = []
+  private openInfoWindow: google.maps.InfoWindow | null = null
+  private readonly focusSite = (name: string) => {
+    this.openSite(name)
+  }
   loadError = ''
 
   async onAfterRender() {
@@ -21,15 +32,33 @@ export default class SitesMap extends Component {
     try {
       await loadGoogleMaps(apiKey)
       this.initMap(container)
+      sitesMapStore.register(this.focusSite)
     } catch {
       this.loadError = 'Unable to load the map.'
     }
   }
 
   dispose() {
-    this.markers = []
+    sitesMapStore.unregister(this.focusSite)
+    this.openInfoWindow?.close()
+    this.openInfoWindow = null
+    this.siteMarkers = []
     this.mapInstance = null
     super.dispose()
+  }
+
+  private openSite(name: string) {
+    const entry = this.siteMarkers.find((item) => item.name === name)
+    const map = this.mapInstance
+    if (!entry || !map) return
+
+    this.openInfoWindow?.close()
+    map.panTo(entry.marker.getPosition()!)
+    if ((map.getZoom() ?? 0) < 8) {
+      map.setZoom(8)
+    }
+    entry.infoWindow.open(map, entry.marker)
+    this.openInfoWindow = entry.infoWindow
   }
 
   private initMap(container: HTMLElement) {
@@ -58,7 +87,7 @@ export default class SitesMap extends Component {
 
     const bounds = new google.maps.LatLngBounds()
 
-    this.markers = participatingSites.map((site) => {
+    this.siteMarkers = participatingSites.map((site) => {
       const markerColor = cssVar(batchColorTokens[site.batch])
       const marker = new google.maps.Marker({
         position: site.location,
@@ -89,11 +118,13 @@ export default class SitesMap extends Component {
       })
 
       marker.addListener('click', () => {
+        this.openInfoWindow?.close()
         infoWindow.open(map, marker)
+        this.openInfoWindow = infoWindow
       })
 
       bounds.extend(site.location)
-      return marker
+      return { name: site.name, marker, infoWindow }
     })
 
     map.fitBounds(bounds, { padding: 10 })

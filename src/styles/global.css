@@ -828,46 +828,11 @@ body.nav-open {
 .site-card {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: var(--space-3xs);
+  padding: var(--space-s) var(--space-md);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
-  text-decoration: none;
-  color: inherit;
-  transition:
-    border-color var(--duration-fast) var(--ease-default),
-    background-color var(--duration-fast) var(--ease-default),
-    box-shadow var(--duration-fast) var(--ease-default);
-}
-
-.site-card:hover {
-  border-color: var(--brand);
-  background: var(--surface-muted);
-  color: inherit;
-  box-shadow: 0 var(--space-3xs) var(--space-sm) var(--shadow-ink-soft);
-}
-
-.site-card__media {
-  aspect-ratio: var(--site-map-ratio);
-  overflow: hidden;
-  background: var(--surface-map);
-  border-bottom: 1px solid var(--border);
-}
-
-.site-card__media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.site-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3xs);
-  padding: var(--space-s) var(--space-md) var(--space-md);
-  min-width: 0;
 }
 
 .site-card__title {
@@ -880,13 +845,22 @@ body.nav-open {
   text-wrap: pretty;
 }
 
+.site-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-card__title a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
 .site-card__meta {
   display: flex;
   flex-direction: column;
   gap: var(--space-3xs);
   font-size: var(--font-size-sm);
   line-height: var(--leading-normal);
-  min-width: 0;
 }
 
 .site-card__pi {
@@ -896,6 +870,25 @@ body.nav-open {
 
 .site-card__city {
   color: var(--text-muted);
+}
+
+.site-card__map {
+  align-self: flex-start;
+  margin-top: var(--space-3xs);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--brand);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.site-card__map:hover {
+  color: var(--brand-deep);
 }
 
 .contact-form {
@@ -1033,14 +1026,6 @@ body.nav-open {
   .resource-cards,
   .sites-batches {
     grid-template-columns: 1fr;
-  }
-
-  .site-card__body {
-    padding: var(--space-xs) var(--space-sm) var(--space-sm);
-  }
-
-  .site-card__title {
-    font-size: var(--font-size-base);
   }
 }
 
