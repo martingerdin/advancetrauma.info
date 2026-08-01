@@ -107,14 +107,9 @@ export default class SitesMap extends Component {
         },
       })
 
-      const batchColor = markerColor
-      const batchLabel = `Batch ${site.batch}`
-      
-      // Get batch status to determine if site is currently including patients
       const batch = siteBatches.find((b) => b.id === site.batch)!
       const batchStatus = getBatchStatus(batch)
-      
-      // Status pill styling and text
+
       let statusPillStyle = ''
       let statusPillText = ''
       if (batchStatus === 'ongoing') {
@@ -134,28 +129,21 @@ export default class SitesMap extends Component {
 
       const infoWindow = new google.maps.InfoWindow({
         content: `
-          <div style="padding: 0; max-width: 300px; font-family: system-ui, -apple-system, sans-serif;">
-            <div style="position: relative; height: 150px; overflow: hidden; border-radius: 8px 8px 0 0; background: ${markerColor};">
-              <img src="${site.image}" alt="${site.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" onerror="this.style.display='none'" />
-              <span style="position: absolute; top: 10px; right: 10px; background: ${batchColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; z-index: 1;">${batchLabel}</span>
+          <div style="padding: 16px; max-width: 280px; font-family: system-ui, -apple-system, sans-serif;">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <span style="background: ${markerColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">Batch ${site.batch}</span>
+              <span style="${statusPillStyle} display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${statusPillText}</span>
             </div>
-            <div style="padding: 16px;">
-              <h3 style="margin: 0 0 8px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>
-              <div style="margin-bottom: 12px;">
-                <span style="${statusPillStyle} display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${statusPillText}</span>
-              </div>
-              <div style="margin-bottom: 10px;">
-                <p style="margin: 0 0 6px 0; color: ${text}; font-size: 14px; line-height: 1.4;">
-                  <strong style="color: ${textMuted};">PI:</strong> ${site.pi}
-                </p>
-                <p style="margin: 0 0 6px 0; color: ${text}; font-size: 14px;">
-                  <strong style="color: ${textMuted};">Location:</strong> ${site.city}
-                </p>
-              </div>
-              <a href="${site.website}" target="_blank" rel="noopener noreferrer" style="color: ${brand}; font-size: 14px; text-decoration: none; font-weight: 500; display: inline-block; margin-top: 8px; border-bottom: 1px solid ${brand};">
-                Visit Website →
-              </a>
-            </div>
+            <h3 style="margin: 0 0 10px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>
+            <p style="margin: 0 0 6px 0; color: ${text}; font-size: 14px; line-height: 1.4;">
+              <strong style="color: ${textMuted};">PI:</strong> ${site.pi}
+            </p>
+            <p style="margin: 0 0 12px 0; color: ${text}; font-size: 14px;">
+              <strong style="color: ${textMuted};">Location:</strong> ${site.city}
+            </p>
+            <a href="${site.website}" target="_blank" rel="noopener noreferrer" style="color: ${brand}; font-size: 14px; text-decoration: none; font-weight: 500; border-bottom: 1px solid ${brand};">
+              Visit Website →
+            </a>
           </div>
         `,
       })
