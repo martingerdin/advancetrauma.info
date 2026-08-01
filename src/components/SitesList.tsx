@@ -22,121 +22,136 @@ export default class SitesList extends Component {
             </div>
           </div>
           <div class="site-cards">
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[0].sites[0].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[0].sites[0].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[0].sites[0].pi}</span>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[0].sites[0].name}</span>
                 <span class="site-card__city">{siteBatchViews[0].sites[0].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[0].sites[0].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[0].sites[0].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[0].sites[0].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[0].sites[0].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[0].sites[1].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[0].sites[1].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[0].sites[1].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[0].sites[1].name}</span>
                 <span class="site-card__city">{siteBatchViews[0].sites[1].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[0].sites[1].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[0].sites[1].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[0].sites[1].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[0].sites[1].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[0].sites[2].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[0].sites[2].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[0].sites[2].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[0].sites[2].name}</span>
                 <span class="site-card__city">{siteBatchViews[0].sites[2].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[0].sites[2].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[0].sites[2].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[0].sites[2].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[0].sites[2].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[0].sites[3].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[0].sites[3].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[0].sites[3].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[0].sites[3].name}</span>
                 <span class="site-card__city">{siteBatchViews[0].sites[3].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[0].sites[3].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[0].sites[3].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[0].sites[3].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[0].sites[3].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[0].sites[4].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[0].sites[4].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[0].sites[4].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[0].sites[4].name}</span>
                 <span class="site-card__city">{siteBatchViews[0].sites[4].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[0].sites[4].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[0].sites[4].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[0].sites[4].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[0].sites[4].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
+            </details>
           </div>
         </div>
         <div class="sites-batch">
@@ -149,121 +164,136 @@ export default class SitesList extends Component {
             </div>
           </div>
           <div class="site-cards">
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[1].sites[0].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[1].sites[0].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[1].sites[0].pi}</span>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[1].sites[0].name}</span>
                 <span class="site-card__city">{siteBatchViews[1].sites[0].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[1].sites[0].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[1].sites[0].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[1].sites[0].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[1].sites[0].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[1].sites[1].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[1].sites[1].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[1].sites[1].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[1].sites[1].name}</span>
                 <span class="site-card__city">{siteBatchViews[1].sites[1].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[1].sites[1].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[1].sites[1].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[1].sites[1].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[1].sites[1].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[1].sites[2].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[1].sites[2].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[1].sites[2].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[1].sites[2].name}</span>
                 <span class="site-card__city">{siteBatchViews[1].sites[2].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[1].sites[2].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[1].sites[2].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[1].sites[2].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[1].sites[2].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[1].sites[3].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[1].sites[3].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[1].sites[3].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[1].sites[3].name}</span>
                 <span class="site-card__city">{siteBatchViews[1].sites[3].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[1].sites[3].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[1].sites[3].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[1].sites[3].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[1].sites[3].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
-            <article class="site-card">
-              <h4 class="site-card__title">
-                <a
-                  href={siteBatchViews[1].sites[4].website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {siteBatchViews[1].sites[4].name}
-                </a>
-              </h4>
-              <div class="site-card__meta">
-                <span class="site-card__pi">{siteBatchViews[1].sites[4].pi}</span>
+            </details>
+            <details class="site-card">
+              <summary class="site-card__summary">
+                <span class="site-card__title">{siteBatchViews[1].sites[4].name}</span>
                 <span class="site-card__city">{siteBatchViews[1].sites[4].city}</span>
+              </summary>
+              <div class="site-card__panel">
+                <p class="site-card__pi">{siteBatchViews[1].sites[4].pi}</p>
+                <div class="site-card__actions">
+                  <a
+                    href={siteBatchViews[1].sites[4].website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit website
+                  </a>
+                  <button
+                    type="button"
+                    class="site-card__map"
+                    data-site={siteBatchViews[1].sites[4].name}
+                    click={showOnMap}
+                  >
+                    Show on map
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                class="site-card__map"
-                data-site={siteBatchViews[1].sites[4].name}
-                click={showOnMap}
-              >
-                Show on map
-              </button>
-            </article>
+            </details>
           </div>
         </div>
       </div>
