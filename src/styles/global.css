@@ -760,12 +760,13 @@ body.nav-open {
   padding: 0;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+  max-height: 400px;
 }
 
 .gm-style .gm-style-iw-d {
-  overflow: hidden !important;
+  overflow: auto !important;
   padding: 0;
+  max-height: 400px;
 }
 
 .gm-style .gm-style-iw-t::after {
