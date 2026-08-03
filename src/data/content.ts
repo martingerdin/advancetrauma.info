@@ -78,6 +78,11 @@ export const sites = {
   lead: 'Explore the hospitals participating in the ADVANCE TRAUMA trial across India.',
 }
 
+export const team = {
+  title: 'Team',
+  lead: 'The people leading, collaborating on, and overseeing the ADVANCE TRAUMA trial.',
+}
+
 export const contact = {
   title: 'Contact Us',
   lead: 'If you have any questions about the ADVANCE TRAUMA trial, please contact us.',
@@ -91,6 +96,7 @@ export const footer = {
     { label: 'About', href: '#about', id: 'about' },
     { label: 'Resources', href: '#resources', id: 'resources' },
     { label: 'Sites', href: '#sites', id: 'sites' },
+    { label: 'Team', href: '#team', id: 'team' },
     { label: 'Contact', href: '#contact', id: 'contact' },
   ],
   resourcesTitle: 'Resources',

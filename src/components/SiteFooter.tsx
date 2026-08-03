@@ -55,6 +55,14 @@ export default class SiteFooter extends Component {
                     {footer.navigate[3].label}
                   </a>
                 </li>
+                <li>
+                  <a
+                    href={footer.navigate[4].href}
+                    click={(e: Event) => goToSection(e, footer.navigate[4].id)}
+                  >
+                    {footer.navigate[4].label}
+                  </a>
+                </li>
               </ul>
             </nav>
 

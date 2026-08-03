@@ -69,6 +69,11 @@ export default class SiteHeader extends Component {
                 </a>
               </li>
               <li>
+                <a href="#team" click={(e: Event) => goToSection(e, 'team')}>
+                  Team
+                </a>
+              </li>
+              <li>
                 <a href="#contact" click={(e: Event) => goToSection(e, 'contact')}>
                   Contact
                 </a>
