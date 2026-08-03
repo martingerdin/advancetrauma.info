@@ -115,7 +115,7 @@ export default class SitesMap extends Component {
       if (batchStatus === 'ongoing') {
         const statusLive = cssVar('--status-live')
         statusPillStyle = `background: ${statusLive}; color: ${textInverse};`
-        statusPillText = 'Currently Including Patients'
+        statusPillText = 'Including Patients'
       } else if (batchStatus === 'upcoming') {
         const lightBlue = cssVar('--light-blue')
         const brandDeep = cssVar('--brand-deep')
@@ -124,17 +124,17 @@ export default class SitesMap extends Component {
       } else {
         const border = cssVar('--border')
         statusPillStyle = `background: ${border}; color: ${textMuted};`
-        statusPillText = 'Enrollment Completed'
+        statusPillText = 'Completed'
       }
 
       const infoWindow = new google.maps.InfoWindow({
         content: `
           <div style="padding: 16px; max-width: 280px; font-family: system-ui, -apple-system, sans-serif;">
-            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
+          <h3 style="margin: 0 0 8px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>  
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
               <span style="background: ${markerColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">Batch ${site.batch}</span>
               <span style="${statusPillStyle} display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${statusPillText}</span>
             </div>
-            <h3 style="margin: 0 0 8px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>
             <p style="margin: 0 0 6px 0; color: ${text}; font-size: 14px; line-height: 1.4;">
               <strong style="color: ${textMuted};">PI:</strong> ${site.pi}
             </p>
