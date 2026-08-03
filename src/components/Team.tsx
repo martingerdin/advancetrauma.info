@@ -1,6 +1,7 @@
 import { Component } from '@geajs/core'
 import { team } from '../data/content'
 import { teamGroupViews } from '../data/team'
+import TeamMemberCard from './TeamMemberCard'
 
 export default class Team extends Component {
   template() {
@@ -14,28 +15,28 @@ export default class Team extends Component {
           <div class="team-groups">
             <div class="team-group">
               <h3 class="team-group__title">{teamGroupViews[0].title}</h3>
-              <ul class="team-list">
-                {teamGroupViews[0].lines.map((line) => (
-                  <li>{line}</li>
+              <div class="team-cards">
+                {teamGroupViews[0].members.map((member) => (
+                  <TeamMemberCard member={member} />
                 ))}
-              </ul>
+              </div>
             </div>
             <div class="team-group">
               <h3 class="team-group__title">{teamGroupViews[1].title}</h3>
-              <ul class="team-list">
-                {teamGroupViews[1].lines.map((line) => (
-                  <li>{line}</li>
+              <div class="team-cards">
+                {teamGroupViews[1].members.map((member) => (
+                  <TeamMemberCard member={member} />
                 ))}
-              </ul>
+              </div>
             </div>
-            {teamGroupViews[2].lines.length > 0 ? (
+            {teamGroupViews[2].members.length > 0 ? (
               <div class="team-group">
                 <h3 class="team-group__title">{teamGroupViews[2].title}</h3>
-                <ul class="team-list">
-                  {teamGroupViews[2].lines.map((line) => (
-                    <li>{line}</li>
+                <div class="team-cards">
+                  {teamGroupViews[2].members.map((member) => (
+                    <TeamMemberCard member={member} />
                   ))}
-                </ul>
+                </div>
               </div>
             ) : null}
           </div>

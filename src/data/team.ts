@@ -2,9 +2,10 @@ import { participatingSites } from './sites'
 
 export type TeamMember = {
   name: string
-  /** Affiliation, site, or other secondary line */
-  detail?: string
+  /** Institutional or site affiliation */
+  affiliation?: string
   role?: string
+  email?: string
 }
 
 export type TeamGroup = {
@@ -17,73 +18,73 @@ export type TeamGroup = {
 const trialManagementGroup: TeamMember[] = [
   {
     name: 'Martin Gerdin Wärnberg',
-    detail: 'Karolinska Institutet, Stockholm, Sweden',
+    affiliation: 'Karolinska Institutet, Stockholm, Sweden',
     role: 'Principal investigator and TMG chair',
   },
   {
     name: 'Girish D Bakhshi',
-    detail: 'Grant Govt. Medical College & Sir J. J. Group of Hospitals, Mumbai, India',
+    affiliation: 'Grant Govt. Medical College & Sir J. J. Group of Hospitals, Mumbai, India',
   },
   {
     name: 'Debojit Basak',
-    detail: 'IPGME&R and SSKM Hospital, Kolkata, India',
+    affiliation: 'IPGME&R and SSKM Hospital, Kolkata, India',
   },
   {
     name: 'Abhinav Bassi',
-    detail: 'The George Institute for Global Health, New Delhi, India',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
   },
   {
     name: 'Johanna Berg',
-    detail: 'Karolinska Institutet, Stockholm, Sweden',
+    affiliation: 'Karolinska Institutet, Stockholm, Sweden',
   },
   {
     name: 'Shamita Chatterjee',
-    detail: 'IPGME&R and SSKM Hospital, Kolkata, India',
+    affiliation: 'IPGME&R and SSKM Hospital, Kolkata, India',
   },
   {
     name: 'Kapil Dev Soni',
-    detail: 'All India Institute of Medical Sciences, New Delhi, India',
+    affiliation: 'All India Institute of Medical Sciences, New Delhi, India',
   },
   {
     name: 'Karla Hemming',
-    detail: 'University of Birmingham, Birmingham, UK',
+    affiliation: 'University of Birmingham, Birmingham, UK',
   },
   {
     name: 'Vivekanand Jha',
-    detail: 'The George Institute for Global Health, New Delhi, India',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
   },
   {
     name: 'Monty Khajanchi',
-    detail: 'King Edward Memorial Hospital, Mumbai, India',
+    affiliation: 'King Edward Memorial Hospital, Mumbai, India',
   },
   {
     name: 'Anurag Mishra',
-    detail: 'Maulana Azad Medical College, New Delhi, India',
+    affiliation: 'Maulana Azad Medical College, New Delhi, India',
   },
   {
     name: 'Samriddhi Ranjan',
-    detail: 'The George Institute for Global Health, New Delhi, India',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
   },
   {
     name: 'Anna Olofsson',
-    detail: 'Karolinska Institutet, Stockholm, Sweden',
+    affiliation: 'Karolinska Institutet, Stockholm, Sweden',
     role: 'Trial statistician',
   },
   {
     name: 'Nobhojit Roy',
-    detail: 'The George Institute for Global Health, New Delhi, India',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
   },
   {
     name: 'Rajdeep Singh',
-    detail: 'Maulana Azad Medical College, New Delhi, India',
+    affiliation: 'Maulana Azad Medical College, New Delhi, India',
   },
   {
     name: 'Lovisa Strömmer',
-    detail: 'Karolinska Institutet, Stockholm, Sweden',
+    affiliation: 'Karolinska Institutet, Stockholm, Sweden',
   },
   {
     name: 'Li Felländer-Tsai',
-    detail: 'Karolinska Institutet, Stockholm, Sweden',
+    affiliation: 'Karolinska Institutet, Stockholm, Sweden',
   },
 ]
 
@@ -91,21 +92,21 @@ const trialManagementGroup: TeamMember[] = [
 const collaborators: TeamMember[] = [
   {
     name: 'Jessica Kasza',
-    detail: 'Monash University, Melbourne, Australia',
+    affiliation: 'Monash University, Melbourne, Australia',
     role: 'External statistician',
   },
   {
     name: 'James Martin',
-    detail: 'University of Birmingham, Birmingham, UK',
+    affiliation: 'University of Birmingham, Birmingham, UK',
     role: 'External statistician',
   },
   {
     name: 'Sara Fälth',
-    detail: 'Karolinska Institutet, Stockholm, Sweden',
+    affiliation: 'Karolinska Institutet, Stockholm, Sweden',
   },
   {
     name: 'Prashant Kharat',
-    detail: 'The George Institute for Global Health, New Delhi, India',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
   },
 ]
 
@@ -122,7 +123,8 @@ function siteInvestigators(): TeamMember[] {
     for (const name of names) {
       members.push({
         name,
-        detail: `${site.name}, ${site.city}`,
+        affiliation: `${site.name}, ${site.city}`,
+        role: 'Site investigator',
       })
     }
   }
@@ -131,14 +133,6 @@ function siteInvestigators(): TeamMember[] {
 
 function sortByName(members: TeamMember[]): TeamMember[] {
   return [...members].sort((a, b) => a.name.localeCompare(b.name, 'en'))
-}
-
-function memberLine(member: TeamMember): string {
-  const parts = [member.name]
-  if (member.role) parts.push(member.role)
-  if (member.detail) parts.push(member.detail)
-  if (parts.length === 1) return member.name
-  return `${parts[0]} — ${parts.slice(1).join('; ')}`
 }
 
 export const teamGroups: TeamGroup[] = [
@@ -159,9 +153,8 @@ export const teamGroups: TeamGroup[] = [
   },
 ]
 
-/** Precomputed lines for Gea-safe list rendering (single text child per item). */
 export const teamGroupViews = teamGroups.map((group) => ({
   id: group.id,
   title: group.title,
-  lines: (group.id === 'sdmc' ? sortByName(group.members) : group.members).map(memberLine),
+  members: group.id === 'sdmc' ? sortByName(group.members) : group.members,
 }))
