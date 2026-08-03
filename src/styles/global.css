@@ -469,6 +469,16 @@ body.nav-open {
   color: var(--text-muted);
 }
 
+.status-pill--starting {
+  background: var(--brand);
+  color: var(--text-inverse);
+}
+
+.status-pill--screening {
+  background: var(--light-blue);
+  color: var(--brand-deep);
+}
+
 .status-pill--meta {
   background: var(--surface);
   color: var(--text-muted);
@@ -809,6 +819,22 @@ body.nav-open {
 
 .sites-batch__title--2 {
   color: var(--accent);
+}
+
+.sites-batch__title--3 {
+  color: var(--brand-deep);
+}
+
+.sites-batch__title--4 {
+  color: var(--accent-hover);
+}
+
+.sites-batch__title--5 {
+  color: var(--brand-darker);
+}
+
+.sites-batch__title--6 {
+  color: var(--ink);
 }
 
 .sites-list {

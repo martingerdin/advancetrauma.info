@@ -8,13 +8,14 @@ function showOnMap(event: Event) {
   if (name) sitesMapStore.show(name)
 }
 
+/** Gea cannot safely `.map()` nested JSX — keep site cards unrolled. */
 export default class SitesList extends Component {
   template() {
     return (
       <div class="sites-batches">
         <div class="sites-batch">
           <div class="sites-batch__header">
-            <h3 class="sites-batch__title sites-batch__title--1">{siteBatchViews[0].title}</h3>
+            <h3 class={siteBatchViews[0].titleClass}>{siteBatchViews[0].title}</h3>
             <div class="sites-batch__pills" aria-label="Batch 1 schedule">
               <span class={siteBatchViews[0].statusClass}>{siteBatchViews[0].statusLabel}</span>
               <span class="status-pill status-pill--meta">{siteBatchViews[0].startedPill}</span>
@@ -154,9 +155,10 @@ export default class SitesList extends Component {
             </details>
           </div>
         </div>
+
         <div class="sites-batch">
           <div class="sites-batch__header">
-            <h3 class="sites-batch__title sites-batch__title--2">{siteBatchViews[1].title}</h3>
+            <h3 class={siteBatchViews[1].titleClass}>{siteBatchViews[1].title}</h3>
             <div class="sites-batch__pills" aria-label="Batch 2 schedule">
               <span class={siteBatchViews[1].statusClass}>{siteBatchViews[1].statusLabel}</span>
               <span class="status-pill status-pill--meta">{siteBatchViews[1].startedPill}</span>
@@ -294,6 +296,42 @@ export default class SitesList extends Component {
                 </div>
               </div>
             </details>
+          </div>
+        </div>
+
+        <div class="sites-batch">
+          <div class="sites-batch__header">
+            <h3 class={siteBatchViews[2].titleClass}>{siteBatchViews[2].title}</h3>
+            <div class="sites-batch__pills" aria-label="Batch 3 schedule">
+              <span class={siteBatchViews[2].statusClass}>{siteBatchViews[2].statusLabel}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sites-batch">
+          <div class="sites-batch__header">
+            <h3 class={siteBatchViews[3].titleClass}>{siteBatchViews[3].title}</h3>
+            <div class="sites-batch__pills" aria-label="Batch 4 schedule">
+              <span class={siteBatchViews[3].statusClass}>{siteBatchViews[3].statusLabel}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sites-batch">
+          <div class="sites-batch__header">
+            <h3 class={siteBatchViews[4].titleClass}>{siteBatchViews[4].title}</h3>
+            <div class="sites-batch__pills" aria-label="Batch 5 schedule">
+              <span class={siteBatchViews[4].statusClass}>{siteBatchViews[4].statusLabel}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sites-batch">
+          <div class="sites-batch__header">
+            <h3 class={siteBatchViews[5].titleClass}>{siteBatchViews[5].title}</h3>
+            <div class="sites-batch__pills" aria-label="Batch 6 schedule">
+              <span class={siteBatchViews[5].statusClass}>{siteBatchViews[5].statusLabel}</span>
+            </div>
           </div>
         </div>
       </div>
