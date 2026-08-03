@@ -116,15 +116,24 @@ export default class SitesMap extends Component {
         const statusLive = cssVar('--status-live')
         statusPillStyle = `background: ${statusLive}; color: ${textInverse};`
         statusPillText = 'Including Patients'
-      } else if (batchStatus === 'upcoming') {
+      } else if (batchStatus === 'completed') {
+        const border = cssVar('--border')
+        statusPillStyle = `background: ${border}; color: ${textMuted};`
+        statusPillText = 'Completed'
+      } else if (batchStatus === 'starting') {
+        const brandColor = cssVar('--brand')
+        statusPillStyle = `background: ${brandColor}; color: ${textInverse};`
+        statusPillText = 'Starting'
+      } else if (batchStatus === 'screening') {
+        const lightBlue = cssVar('--light-blue')
+        const brandDeep = cssVar('--brand-deep')
+        statusPillStyle = `background: ${lightBlue}; color: ${brandDeep};`
+        statusPillText = 'Screening clusters'
+      } else {
         const lightBlue = cssVar('--light-blue')
         const brandDeep = cssVar('--brand-deep')
         statusPillStyle = `background: ${lightBlue}; color: ${brandDeep};`
         statusPillText = 'Not Yet Including Patients'
-      } else {
-        const border = cssVar('--border')
-        statusPillStyle = `background: ${border}; color: ${textMuted};`
-        statusPillText = 'Completed'
       }
 
       const infoWindow = new google.maps.InfoWindow({

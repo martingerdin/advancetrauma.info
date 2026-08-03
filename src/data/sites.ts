@@ -1,6 +1,6 @@
-export type SiteBatch = '1' | '2'
+export type SiteBatch = '1' | '2' | '3' | '4' | '5' | '6'
 
-export type BatchStatus = 'upcoming' | 'ongoing' | 'completed'
+export type BatchStatus = 'upcoming' | 'ongoing' | 'completed' | 'starting' | 'screening'
 
 export type ParticipatingSite = {
   name: string
@@ -15,9 +15,11 @@ export type SiteBatchInfo = {
   id: SiteBatch
   title: string
   /** Inclusive start month as YYYY-MM */
-  start: string
+  start?: string
   /** Inclusive end month as YYYY-MM */
-  end: string
+  end?: string
+  /** Explicit status; when set, overrides date-derived status */
+  status?: BatchStatus
   sites: ParticipatingSite[]
 }
 
@@ -25,6 +27,10 @@ export type SiteBatchInfo = {
 export const batchColorTokens: Record<SiteBatch, string> = {
   '1': '--brand',
   '2': '--accent',
+  '3': '--brand-deep',
+  '4': '--accent-hover',
+  '5': '--brand-darker',
+  '6': '--ink',
 }
 
 export const participatingSites: ParticipatingSite[] = [
@@ -113,6 +119,7 @@ export const participatingSites: ParticipatingSite[] = [
 /**
  * Batch windows follow the protocol: each batch runs 13 months with an
  * anticipated 6-month overlap, starting from the trial start (Feb 2025).
+ * Batches 3–6 are listed before sites are confirmed; status is set explicitly.
  */
 export const siteBatches: SiteBatchInfo[] = [
   {
@@ -128,6 +135,30 @@ export const siteBatches: SiteBatchInfo[] = [
     start: '2025-12',
     end: '2027-01',
     sites: participatingSites.filter((site) => site.batch === '2'),
+  },
+  {
+    id: '3',
+    title: 'Batch 3',
+    status: 'starting',
+    sites: [],
+  },
+  {
+    id: '4',
+    title: 'Batch 4',
+    status: 'screening',
+    sites: [],
+  },
+  {
+    id: '5',
+    title: 'Batch 5',
+    status: 'screening',
+    sites: [],
+  },
+  {
+    id: '6',
+    title: 'Batch 6',
+    status: 'screening',
+    sites: [],
   },
 ]
 
@@ -146,7 +177,13 @@ export function formatBatchMonth(value: string): string {
   return monthFormatter.format(new Date(year, month - 1, 1))
 }
 
-export function getBatchStatus(batch: Pick<SiteBatchInfo, 'start' | 'end'>, now = new Date()): BatchStatus {
+export function getBatchStatus(
+  batch: Pick<SiteBatchInfo, 'start' | 'end' | 'status'>,
+  now = new Date(),
+): BatchStatus {
+  if (batch.status) return batch.status
+  if (!batch.start || !batch.end) return 'upcoming'
+
   const start = parseYearMonth(batch.start)
   const end = parseYearMonth(batch.end)
   const startDate = new Date(start.year, start.month - 1, 1)
@@ -161,26 +198,32 @@ export const batchStatusLabels: Record<BatchStatus, string> = {
   upcoming: 'Upcoming',
   ongoing: 'Ongoing',
   completed: 'Completed',
+  starting: 'Starting',
+  screening: 'Screening clusters',
 }
 
 export const batchStatusPillClass: Record<BatchStatus, string> = {
   upcoming: 'status-pill status-pill--upcoming',
   ongoing: 'status-pill status-pill--live',
   completed: 'status-pill status-pill--completed',
+  starting: 'status-pill status-pill--starting',
+  screening: 'status-pill status-pill--screening',
 }
 
 export const siteBatchViews = siteBatches.map((batch) => {
   const status = getBatchStatus(batch)
-  const startLabel = formatBatchMonth(batch.start)
-  const endLabel = formatBatchMonth(batch.end)
+  const startLabel = batch.start ? formatBatchMonth(batch.start) : null
+  const endLabel = batch.end ? formatBatchMonth(batch.end) : null
+  const notYetStarted = status === 'upcoming' || status === 'starting' || status === 'screening'
   return {
     ...batch,
     status,
     statusLabel: batchStatusLabels[status],
     statusClass: batchStatusPillClass[status],
+    titleClass: `sites-batch__title sites-batch__title--${batch.id}`,
     startLabel,
     endLabel,
-    startedPill: `${status === 'upcoming' ? 'Starts' : 'Started'} ${startLabel}`,
-    endsPill: `${status === 'completed' ? 'Ended' : 'Ends'} ${endLabel}`,
+    startedPill: startLabel ? `${notYetStarted ? 'Starts' : 'Started'} ${startLabel}` : null,
+    endsPill: endLabel ? `${status === 'completed' ? 'Ended' : 'Ends'} ${endLabel}` : null,
   }
 })
