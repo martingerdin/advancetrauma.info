@@ -827,6 +827,16 @@ body.nav-open {
   text-wrap: pretty;
 }
 
+.team-card__profile {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.team-card__profile:hover {
+  color: var(--brand-deep);
+}
+
 .team-card__role {
   margin: 0;
   font-size: var(--font-size-sm);

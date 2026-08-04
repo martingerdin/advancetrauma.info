@@ -18,8 +18,23 @@ export default class TeamMemberCard extends Component {
   template({ member }: this['props']) {
     return (
       <article class="team-card">
-        <h4 class="team-card__name">{member.name}</h4>
-        {member.role ? <p class="team-card__role">{member.role}</p> : null}
+        {member.profile ? (
+          <h4 class="team-card__name">
+            <a
+              class="team-card__profile"
+              href={member.profile}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {member.name}
+            </a>
+          </h4>
+        ) : (
+          <h4 class="team-card__name">{member.name}</h4>
+        )}
+        {member.roles
+          ? member.roles.map((role) => <p class="team-card__role">{role}</p>)
+          : null}
         {member.affiliation ? (
           <p class="team-card__affiliation">{member.affiliation}</p>
         ) : null}
