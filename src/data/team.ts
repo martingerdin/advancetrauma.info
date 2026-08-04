@@ -26,6 +26,19 @@ const contributors: TeamMember[] = [
     affiliation: 'Karolinska Institutet, Stockholm, Sweden',
     role: 'Principal Investigator, TMG chair and TT member',
     orcid: '0000-0001-6069-4794',
+    contact: 'martin.gerdin@ki.se',
+  },
+  {
+    name: 'Vivekanand Jha',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
+    role: 'Co-principal investigator, TMG member',
+    orcid: '0000-0002-8015-9470',
+  },
+  {
+    name: 'Nobhojit Roy',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
+    role: 'TMG member',
+    orcid: '0000-0003-2022-7416',
   },
   {
     name: 'Girish D Bakhshi',
@@ -38,13 +51,13 @@ const contributors: TeamMember[] = [
     name: 'Debojit Basak',
     affiliation:
       'Institute of Post Graduate Medical Education & Research and Seth Sukhlal Karnani Memorial Hospital, Kolkata, India',
-    role: 'TMG member',
+    role: 'Associate Project Manager, TMG member',
     orcid: '0000-0002-8378-9689',
   },
   {
     name: 'Abhinav Bassi',
     affiliation: 'The George Institute for Global Health, New Delhi, India',
-    role: 'TMG and TT member',
+    role: 'TMG member',
     orcid: '0000-0003-0750-9179',
   },
   {
@@ -57,7 +70,7 @@ const contributors: TeamMember[] = [
     name: 'Shamita Chatterjee',
     affiliation:
       'Institute of Post Graduate Medical Education & Research and Seth Sukhlal Karnani Memorial Hospital, Kolkata, India',
-    role: 'TMG member',
+    role: 'TMG member, site investigator',
     orcid: '0000-0002-9460-108X',
   },
   {
@@ -73,27 +86,21 @@ const contributors: TeamMember[] = [
     orcid: '0000-0002-2226-6550',
   },
   {
-    name: 'Vivekanand Jha',
-    affiliation: 'The George Institute for Global Health, New Delhi, India',
-    role: 'TMG member',
-    orcid: '0000-0002-8015-9470',
-  },
-  {
     name: 'Jessica Kasza',
     affiliation: 'Monash University, Melbourne, Australia',
-    role: 'External statistician',
+    role: 'Collaborator, External statistician',
     orcid: '0000-0002-8940-0136',
   },
   {
     name: 'Monty Khajanchi',
     affiliation: 'King Edward Memorial Hospital, Mumbai, India',
-    role: 'TMG and TT member',
+    role: 'TMG member, site investigator',
     orcid: '0000-0002-0898-6391',
   },
   {
     name: 'James Martin',
     affiliation: 'University of Birmingham, Birmingham, UK',
-    role: 'External statistician',
+    role: 'Collaborator, External statistician',
     orcid: '0000-0002-6949-4200',
   },
   {
@@ -103,21 +110,9 @@ const contributors: TeamMember[] = [
     orcid: '0000-0002-2302-0632',
   },
   {
-    name: 'Samriddhi Ranjan',
-    affiliation: 'The George Institute for Global Health, New Delhi, India',
-    role: 'TMG and TT member',
-    orcid: '0000-0002-4277-6662',
-  },
-  {
     name: 'Anna Olofsson',
     affiliation: 'Karolinska Institutet, Stockholm, Sweden',
     role: 'Trial Statistician, TMG member',
-  },
-  {
-    name: 'Nobhojit Roy',
-    affiliation: 'The George Institute for Global Health, New Delhi, India',
-    role: 'TMG and TT member',
-    orcid: '0000-0003-2022-7416',
   },
   {
     name: 'Rajdeep Singh',
@@ -136,6 +131,16 @@ const contributors: TeamMember[] = [
     affiliation: 'Karolinska Institutet, Stockholm, Sweden',
     role: 'TMG member',
     orcid: '0000-0003-0693-6080',
+  },
+  {
+    name: 'Sara Fälth',
+    affiliation: 'Karolinska Institutet, Stockholm, Sweden',
+    role: "Collaborator",
+  },
+  {
+    name: 'Prashant Kharat',
+    affiliation: 'The George Institute for Global Health, New Delhi, India',
+    role: "Clinical Research Associate, TMG member",
   },
 ]
 
@@ -167,7 +172,7 @@ function sortByName(members: TeamMember[]): TeamMember[] {
 export const teamGroups: TeamGroup[] = [
   {
     id: 'contributors',
-    title: 'Trial management group, collaborators, and site investigators',
+    title: 'Management, collaborators, and investigators',
     members: [...contributors, ...siteInvestigators()],
   },
   {
