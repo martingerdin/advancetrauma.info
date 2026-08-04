@@ -6,6 +6,8 @@ export type TeamMember = {
   affiliation?: string
   role?: string
   email?: string
+  /** ORCID iD, e.g. 0000-0002-1825-0097 (with or without https://orcid.org/) */
+  orcid?: string
 }
 
 export type TeamGroup = {
@@ -138,13 +140,8 @@ function sortByName(members: TeamMember[]): TeamMember[] {
 export const teamGroups: TeamGroup[] = [
   {
     id: 'tmg',
-    title: 'Trial management group and collaborators',
-    members: [...trialManagementGroup, ...collaborators],
-  },
-  {
-    id: 'investigators',
-    title: 'Site investigators',
-    members: siteInvestigators(),
+    title: 'Trial management group, collaborators and investigators',
+    members: [...trialManagementGroup, ...collaborators, ...siteInvestigators()],
   },
   {
     id: 'sdmc',

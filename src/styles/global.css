@@ -843,8 +843,15 @@ body.nav-open {
   text-wrap: pretty;
 }
 
-.team-card__email {
+.team-card__links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3xs);
   margin-top: var(--space-3xs);
+}
+
+.team-card__email {
   font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--brand);
@@ -855,6 +862,27 @@ body.nav-open {
 
 .team-card__email:hover {
   color: var(--brand-deep);
+}
+
+.team-card__orcid {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.team-card__orcid:hover {
+  color: var(--text);
+}
+
+.team-card__orcid-icon {
+  flex-shrink: 0;
+  width: var(--font-size-sm);
+  height: var(--font-size-sm);
+  color: var(--orcid);
 }
 
 .sites-batches {

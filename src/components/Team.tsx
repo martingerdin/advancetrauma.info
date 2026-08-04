@@ -29,16 +29,6 @@ export default class Team extends Component {
                 ))}
               </div>
             </div>
-            {teamGroupViews[2].members.length > 0 ? (
-              <div class="team-group">
-                <h3 class="team-group__title">{teamGroupViews[2].title}</h3>
-                <div class="team-cards">
-                  {teamGroupViews[2].members.map((member) => (
-                    <TeamMemberCard member={member} />
-                  ))}
-                </div>
-              </div>
-            ) : null}
           </div>
         </div>
       </section>
