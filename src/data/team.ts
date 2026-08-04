@@ -8,6 +8,8 @@ export type TeamMember = {
   email?: string
   /** ORCID iD, e.g. 0000-0002-1825-0097 (with or without https://orcid.org/) */
   orcid?: string
+  /** Link to institutional profile */
+  profile?: string
 }
 
 export type TeamGroup = {
@@ -26,19 +28,22 @@ const contributors: TeamMember[] = [
     affiliation: 'Karolinska Institutet, Stockholm, Sweden',
     role: 'Principal Investigator, TMG chair and TT member',
     orcid: '0000-0001-6069-4794',
-    contact: 'martin.gerdin@ki.se',
+    email: 'martin.gerdin@ki.se',
+    profile: 'https://ki.se/en/people/martin-gerdin',
   },
   {
     name: 'Vivekanand Jha',
     affiliation: 'The George Institute for Global Health, New Delhi, India',
     role: 'Co-principal investigator, TMG member',
     orcid: '0000-0002-8015-9470',
+    profile: 'https://www.georgeinstitute.org/about-us/our-people/people-at-the-george-institute/vivekanand-jha',
   },
   {
     name: 'Nobhojit Roy',
     affiliation: 'The George Institute for Global Health, New Delhi, India',
     role: 'TMG member',
     orcid: '0000-0003-2022-7416',
+    profile: 'https://www.georgeinstitute.org/about-us/our-people/people-at-the-george-institute/nobhojit-roy',
   },
   {
     name: 'Girish D Bakhshi',
