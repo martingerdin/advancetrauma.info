@@ -21,14 +21,16 @@ export default class Team extends Component {
                 ))}
               </div>
             </div>
-            <div class="team-group">
-              <h3 class="team-group__title">{teamGroupViews[1].title}</h3>
-              <div class="team-cards">
-                {teamGroupViews[1].members.map((member) => (
-                  <TeamMemberCard member={member} />
-                ))}
+            {teamGroupViews[1].members.length > 0 ? (
+              <div class="team-group">
+                <h3 class="team-group__title">{teamGroupViews[1].title}</h3>
+                <div class="team-cards">
+                  {teamGroupViews[1].members.map((member) => (
+                    <TeamMemberCard member={member} />
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </section>
