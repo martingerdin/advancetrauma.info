@@ -10,15 +10,8 @@ function orcidLabel(orcid: string): string {
   return orcid.replace(/^https?:\/\/orcid\.org\//i, '').trim()
 }
 
-const committeeAbbrevs: Record<string, string> = {
-  'Trial Management Group chair': 'TMG chair',
-  'Trial Management Group member': 'TMG',
-  'Trial Team member': 'TT',
-  'Trial Team Member': 'TT',
-}
-
-function committeeAbbrev(item: string): string {
-  return committeeAbbrevs[item] ?? item
+function stopSummaryToggle(event: Event) {
+  event.stopPropagation()
 }
 
 export default class TeamMemberCard extends Component {
@@ -28,39 +21,32 @@ export default class TeamMemberCard extends Component {
 
   template({ member }: this['props']) {
     return (
-      <article class="team-card">
-        {member.profile ? (
-          <h4 class="team-card__name">
-            <a
-              class="team-card__profile"
-              href={member.profile}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {member.name}
-            </a>
-          </h4>
-        ) : (
+      <details class="team-card">
+        <summary class="team-card__summary">
           <h4 class="team-card__name">{member.name}</h4>
-        )}
-        {member.role ? <p class="team-card__role">{member.role}</p> : null}
-        {member.affiliation ? (
-          <p class="team-card__affiliation">{member.affiliation}</p>
-        ) : null}
-        {member.email || member.orcid ? (
-          <div class="team-card__links">
-            {member.email ? (
-              <a class="team-card__email" href={'mailto:' + member.email}>
+          {member.roles ? (
+            <p class="team-card__role">{member.roles[0]}</p>
+          ) : null}
+        </summary>
+        <div class="team-card__panel">
+          {member.affiliation ? (
+            <p class="team-card__affiliation">{member.affiliation}</p>
+          ) : null}
+          {member.email ? (
+            <p class="team-card__email">
+              <a href={'mailto:' + member.email} click={stopSummaryToggle}>
                 {member.email}
               </a>
-            ) : null}
-            {member.orcid ? (
+            </p>
+          ) : null}
+          {member.orcid ? (
+            <p class="team-card__orcid">
               <a
-                class="team-card__orcid"
                 href={orcidUrl(member.orcid)}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={'ORCID profile for ' + member.name}
+                click={stopSummaryToggle}
               >
                 <svg
                   class="team-card__orcid-icon"
@@ -81,19 +67,29 @@ export default class TeamMemberCard extends Component {
                 </svg>
                 <span>{orcidLabel(member.orcid)}</span>
               </a>
-            ) : null}
-          </div>
-        ) : null}
-        {member.committee ? (
-          <p class="team-card__committee">
-            {member.committee.map((item) => (
-              <span class="team-card__committee-item" title={item}>
-                {committeeAbbrev(item)}
-              </span>
-            ))}
-          </p>
-        ) : null}
-      </article>
+            </p>
+          ) : null}
+          {member.profile ? (
+            <p class="team-card__profile-link">
+              <a
+                href={member.profile}
+                target="_blank"
+                rel="noopener noreferrer"
+                click={stopSummaryToggle}
+              >
+                Institutional profile
+              </a>
+            </p>
+          ) : null}
+          {member.roles?.[1] ? (
+            <ul class="team-card__roles">
+              {member.roles[1] ? <li>{member.roles[1]}</li> : null}
+              {member.roles[2] ? <li>{member.roles[2]}</li> : null}
+              {member.roles[3] ? <li>{member.roles[3]}</li> : null}
+            </ul>
+          ) : null}
+        </div>
+      </details>
     )
   }
 }
