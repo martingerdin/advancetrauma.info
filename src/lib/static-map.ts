@@ -129,7 +129,7 @@ export type SitePopupColors = {
   statusPillText: string
 }
 
-/** Shared site popup markup for interactive InfoWindows and the static fallback. */
+/** Shared site popup body markup for interactive and static map popups. */
 export function buildSitePopupHtml(site: ParticipatingSite, colors: SitePopupColors): string {
   const coordinators = site.coordinators
     ? `<p class="sites-map-popup__row" style="color: ${colors.text};">
@@ -159,4 +159,24 @@ export function buildSitePopupHtml(site: ParticipatingSite, colors: SitePopupCol
       </a>
     </div>
   `
+}
+
+/** Shared popup shell (close control + body) used by interactive and static maps. */
+export function createSitePopupElement(bodyHtml: string, onClose: () => void): HTMLElement {
+  const popup = document.createElement('div')
+  popup.className = 'sites-map__popup'
+  popup.setAttribute('role', 'dialog')
+  popup.innerHTML = `
+    <button type="button" class="sites-map__popup-close" aria-label="Close">×</button>
+    ${bodyHtml}
+  `
+
+  const closeBtn = popup.querySelector('.sites-map__popup-close')
+  closeBtn?.addEventListener('click', (event) => {
+    event.stopPropagation()
+    onClose()
+  })
+  popup.addEventListener('click', (event) => event.stopPropagation())
+
+  return popup
 }

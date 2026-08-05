@@ -875,6 +875,29 @@ body.nav-open {
   box-shadow: 0 4px 12px var(--shadow-ink-soft);
 }
 
+/* Interactive map: anchor sits on the marker pixel; popup floats above/below. */
+.sites-map__popup-anchor {
+  position: absolute;
+  z-index: 4;
+  width: 0;
+  height: 0;
+  overflow: visible;
+}
+
+.sites-map__popup-anchor .sites-map__popup {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-s);
+  transform: translateX(-50%);
+  z-index: auto;
+  pointer-events: auto;
+}
+
+.sites-map__popup-anchor--below .sites-map__popup {
+  bottom: auto;
+  top: var(--space-s);
+}
+
 .sites-map__popup-close {
   position: absolute;
   top: var(--space-3xs);
@@ -942,24 +965,6 @@ body.nav-open {
   font-weight: 500;
   text-decoration: none;
   border-bottom: 1px solid currentColor;
-}
-
-/* Google Maps InfoWindow improvements */
-.gm-style .gm-style-iw-c {
-  padding: 0;
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 12px var(--shadow-ink-soft);
-  max-height: var(--map-popup-max-height);
-}
-
-.gm-style .gm-style-iw-d {
-  overflow: auto !important;
-  padding: 0;
-  max-height: var(--map-popup-max-height);
-}
-
-.gm-style .gm-style-iw-t::after {
-  box-shadow: 0 2px 6px var(--shadow-ink-soft);
 }
 
 .team-groups {

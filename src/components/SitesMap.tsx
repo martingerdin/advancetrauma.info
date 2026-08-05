@@ -6,6 +6,7 @@ import { loadGoogleMaps, mapContainerHasGoogleError } from '../lib/load-google-m
 import {
   buildSitePopupHtml,
   buildStaticMapUrl,
+  createSitePopupElement,
   fitViewport,
   latLngToPixel,
   loadStaticMapImage,
@@ -16,13 +17,62 @@ import sitesMapStore from '../stores/sites-map-store'
 type InteractiveSiteMarker = {
   name: string
   marker: google.maps.marker.AdvancedMarkerElement
-  infoWindow: google.maps.InfoWindow
+  popupHtml: string
+  position: google.maps.LatLngLiteral
 }
 
 type StaticSiteMarker = {
   name: string
   button: HTMLButtonElement
   popupHtml: string
+}
+
+/** Positions the shared `.sites-map__popup` shell over an interactive map marker. */
+function createSitePopupOverlay(
+  position: google.maps.LatLngLiteral,
+  popup: HTMLElement,
+): google.maps.OverlayView {
+  const overlay = new google.maps.OverlayView()
+  let anchor: HTMLDivElement | null = null
+
+  overlay.onAdd = () => {
+    anchor = document.createElement('div')
+    anchor.className = 'sites-map__popup-anchor'
+    anchor.appendChild(popup)
+    overlay.getPanes()?.floatPane.appendChild(anchor)
+  }
+
+  overlay.draw = () => {
+    if (!anchor) return
+    const projection = overlay.getProjection()
+    const point = projection.fromLatLngToDivPixel(
+      new google.maps.LatLng(position.lat, position.lng),
+    )
+    if (!point) return
+
+    anchor.style.left = `${point.x}px`
+    anchor.style.top = `${point.y}px`
+
+    // Prefer above the marker; flip below when there isn't room (same idea as static).
+    const map = overlay.getMap()
+    if (!(map instanceof google.maps.Map)) return
+    const popupHeight = popup.offsetHeight
+    // Match `.sites-map__popup-anchor` gap (`--space-s` = 0.75rem ≈ 12px).
+    const gap = 12
+    const spaceAbove = point.y - gap
+    const spaceBelow = map.getDiv().clientHeight - point.y - gap
+    anchor.classList.toggle(
+      'sites-map__popup-anchor--below',
+      spaceAbove < popupHeight && spaceBelow >= popupHeight,
+    )
+  }
+
+  overlay.onRemove = () => {
+    anchor?.remove()
+    anchor = null
+  }
+
+  return overlay
 }
 
 function markerPosition(
@@ -52,7 +102,8 @@ function createMarkerContent(color: string, stroke: string): HTMLElement {
 export default class SitesMap extends Component {
   private mapInstance: google.maps.Map | null = null
   private siteMarkers: InteractiveSiteMarker[] = []
-  private openInfoWindow: google.maps.InfoWindow | null = null
+  private interactivePopupOverlay: google.maps.OverlayView | null = null
+  private mapClickListener: google.maps.MapsEventListener | null = null
   private staticMarkers: StaticSiteMarker[] = []
   private staticPopup: HTMLElement | null = null
   private staticLayer: HTMLElement | null = null
@@ -221,8 +272,9 @@ export default class SitesMap extends Component {
   }
 
   private teardownInteractiveMap() {
-    this.openInfoWindow?.close()
-    this.openInfoWindow = null
+    this.closeInteractivePopup()
+    this.mapClickListener?.remove()
+    this.mapClickListener = null
     for (const entry of this.siteMarkers) {
       entry.marker.map = null
     }
@@ -240,16 +292,28 @@ export default class SitesMap extends Component {
     const map = this.mapInstance
     if (!entry || !map) return
 
-    const position = markerPosition(entry.marker)
-    if (!position) return
-
-    this.openInfoWindow?.close()
+    const position = markerPosition(entry.marker) ?? entry.position
     map.panTo(position)
     if ((map.getZoom() ?? 0) < 8) {
       map.setZoom(8)
     }
-    entry.infoWindow.open({ map, anchor: entry.marker })
-    this.openInfoWindow = entry.infoWindow
+    this.openInteractivePopup(position, entry.popupHtml)
+  }
+
+  private openInteractivePopup(position: google.maps.LatLngLiteral, html: string) {
+    this.closeInteractivePopup()
+    const map = this.mapInstance
+    if (!map) return
+
+    const popup = createSitePopupElement(html, () => this.closeInteractivePopup())
+    const overlay = createSitePopupOverlay(position, popup)
+    overlay.setMap(map)
+    this.interactivePopupOverlay = overlay
+  }
+
+  private closeInteractivePopup() {
+    this.interactivePopupOverlay?.setMap(null)
+    this.interactivePopupOverlay = null
   }
 
   private statusPill(site: ParticipatingSite): { style: string; text: string } {
@@ -323,20 +387,16 @@ export default class SitesMap extends Component {
         gmpClickable: true,
       })
 
-      const infoWindow = new google.maps.InfoWindow({
-        content: this.popupHtmlFor(site),
-      })
-
+      const popupHtml = this.popupHtmlFor(site)
       marker.addEventListener('gmp-click', () => {
-        this.openInfoWindow?.close()
-        infoWindow.open({ map, anchor: marker })
-        this.openInfoWindow = infoWindow
+        this.openInteractivePopup(site.location, popupHtml)
       })
 
       bounds.extend(site.location)
-      return { name: site.name, marker, infoWindow }
+      return { name: site.name, marker, popupHtml, position: site.location }
     })
 
+    this.mapClickListener = map.addListener('click', () => this.closeInteractivePopup())
     map.fitBounds(bounds, 10)
     this.mapInstance = map
   }
@@ -395,20 +455,7 @@ export default class SitesMap extends Component {
     this.closeStaticPopup()
     if (!this.staticLayer) return
 
-    const popup = document.createElement('div')
-    popup.className = 'sites-map__popup'
-    popup.setAttribute('role', 'dialog')
-    popup.innerHTML = `
-      <button type="button" class="sites-map__popup-close" aria-label="Close">×</button>
-      ${html}
-    `
-
-    const closeBtn = popup.querySelector('.sites-map__popup-close')
-    closeBtn?.addEventListener('click', (event) => {
-      event.stopPropagation()
-      this.closeStaticPopup()
-    })
-    popup.addEventListener('click', (event) => event.stopPropagation())
+    const popup = createSitePopupElement(html, () => this.closeStaticPopup())
 
     this.staticLayer.appendChild(popup)
     this.staticPopup = popup
