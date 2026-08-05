@@ -801,16 +801,20 @@ body.nav-open {
 }
 
 .team-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--team-card-min), 1fr));
-  gap: var(--space-sm);
+  columns: var(--team-card-min);
+  column-gap: var(--space-sm);
 }
 
 .team-card {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  margin-bottom: var(--space-sm);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
   min-width: 0;
+  vertical-align: top;
 }
 
 .team-card--static {
