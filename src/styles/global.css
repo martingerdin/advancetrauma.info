@@ -607,6 +607,18 @@ body.nav-open {
   color: var(--text-inverse);
 }
 
+.cta--secondary {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.cta--secondary:hover {
+  background: var(--surface-muted);
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
 .section {
   padding: clamp(var(--space-lg), 4vw, var(--space-xl)) var(--page-pad-right)
     clamp(var(--space-lg), 4vw, var(--space-xl)) var(--page-pad-left);
@@ -763,6 +775,59 @@ body.nav-open {
   height: var(--map-height);
   border: 1px solid var(--border);
   background: var(--surface-map);
+}
+
+.sites-map--consent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.sites-map__consent-text {
+  max-width: var(--content-width);
+  font-size: var(--font-size-base);
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: var(--leading-normal);
+}
+
+.cookie-banner {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: var(--z-cookie-banner);
+  padding: var(--space-sm) var(--page-pad-right) max(var(--space-sm), env(safe-area-inset-bottom, 0px))
+    var(--page-pad-left);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -12px 32px var(--shadow-ink-soft);
+}
+
+.cookie-banner__inner {
+  width: min(100%, var(--section-width));
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.cookie-banner__text {
+  flex: 1 1 16rem;
+  font-size: var(--font-size-sm);
+  font-weight: 300;
+  color: var(--text);
+  line-height: var(--leading-normal);
+}
+
+.cookie-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
 }
 
 /* Google Maps InfoWindow improvements */

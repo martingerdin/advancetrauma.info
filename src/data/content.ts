@@ -78,6 +78,17 @@ export const sites = {
   lead: 'Explore the hospitals participating in the ADVANCE TRAUMA trial across India.',
 }
 
+export const cookieConsent = {
+  title: 'Cookie consent',
+  message:
+    'This site uses Google Maps to show participating hospitals. Loading the map may set cookies and send your IP address to Google. We only load the map after you accept.',
+  accept: 'Accept',
+  decline: 'Decline',
+  mapPrompt:
+    'The interactive map uses Google Maps and is shown only after you accept cookies.',
+  mapLoad: 'Accept and load map',
+}
+
 export const team = {
   title: 'Team',
   lead: 'The people leading, collaborating on, and overseeing the ADVANCE TRAUMA trial.',

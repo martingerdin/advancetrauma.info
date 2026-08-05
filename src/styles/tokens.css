@@ -118,4 +118,5 @@
 
   /* ── Elevation / stacking ────────────────────────────────── */
   --z-header: 20;
+  --z-cookie-banner: 30;
 }

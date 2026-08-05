@@ -1,4 +1,5 @@
 import { Component, RouterView } from '@geajs/core'
+import CookieBanner from './components/CookieBanner'
 import SiteFooter from './components/SiteFooter'
 import SiteHeader from './components/SiteHeader'
 import { router } from './router'
@@ -16,6 +17,7 @@ export default class App extends Component {
           <RouteOutlet router={router} />
         </main>
         <SiteFooter />
+        <CookieBanner />
       </div>
     )
   }

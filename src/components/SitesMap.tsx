@@ -1,7 +1,9 @@
 import { Component } from '@geajs/core'
+import { cookieConsent } from '../data/content'
 import { batchColorTokens, getBatchStatus, participatingSites, siteBatches } from '../data/sites'
 import { cssVar } from '../lib/css-var'
 import { loadGoogleMaps } from '../lib/load-google-maps'
+import cookieConsentStore from '../stores/cookie-consent-store'
 import sitesMapStore from '../stores/sites-map-store'
 
 type SiteMarker = {
@@ -38,12 +40,16 @@ export default class SitesMap extends Component {
   private mapInstance: google.maps.Map | null = null
   private siteMarkers: SiteMarker[] = []
   private openInfoWindow: google.maps.InfoWindow | null = null
+  private mapInitStarted = false
   private readonly focusSite = (name: string) => {
     this.openSite(name)
   }
   loadError = ''
 
   async onAfterRender() {
+    if (cookieConsentStore.status !== 'accepted') return
+    if (this.mapInitStarted || this.mapInstance) return
+
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
     const mapId = (import.meta.env.VITE_GOOGLE_MAPS_MAP_ID ?? '').trim() || 'DEMO_MAP_ID'
     const container = this.el?.querySelector<HTMLElement>('[data-map]')
@@ -54,11 +60,14 @@ export default class SitesMap extends Component {
       return
     }
 
+    this.mapInitStarted = true
+
     try {
       await loadGoogleMaps(apiKey)
       this.initMap(container, mapId)
       sitesMapStore.register(this.focusSite)
     } catch {
+      this.mapInitStarted = false
       this.loadError = 'Unable to load the map.'
     }
   }
@@ -72,6 +81,7 @@ export default class SitesMap extends Component {
     }
     this.siteMarkers = []
     this.mapInstance = null
+    this.mapInitStarted = false
     super.dispose()
   }
 
@@ -192,10 +202,26 @@ export default class SitesMap extends Component {
   }
 
   template() {
-    return (
+    return cookieConsentStore.status === 'accepted' ? (
       <div>
         {this.loadError ? <p class="contact-form__status--error">{this.loadError}</p> : null}
         <div class="sites-map" data-map role="region" aria-label="Participating sites map" />
+      </div>
+    ) : (
+      <div
+        class="sites-map sites-map--consent"
+        data-map
+        role="region"
+        aria-label="Participating sites map"
+      >
+        <p class="sites-map__consent-text">{cookieConsent.mapPrompt}</p>
+        <button
+          type="button"
+          class="cta"
+          click={() => cookieConsentStore.accept()}
+        >
+          {cookieConsent.mapLoad}
+        </button>
       </div>
     )
   }
