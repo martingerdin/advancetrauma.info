@@ -8,6 +8,26 @@ alwaysApply: false
 
 Gea's JSX compiler has known bugs with several patterns. They show up at runtime as `Uncaught ReferenceError: el0 is not defined` (or `el1`, `first`, etc.).
 
+## Do not return a root-level ternary from `template()`
+
+Gea's static compiler needs a stable root element. A ternary as the sole `return` value often falls back to the JSX runtime and the component mounts with no DOM (`this.el` stays empty).
+
+```tsx
+// BAD — root ternary; CookieBanner / SitesMap failed to render
+template() {
+  return store.open ? <div class="banner">...</div> : null
+}
+
+// GOOD — stable root; conditional as a child
+template() {
+  return (
+    <div class="banner-slot">
+      {store.open ? <div class="banner">...</div> : null}
+    </div>
+  )
+}
+```
+
 ## Do not `.map()` over nested JSX
 
 Mapping to a single text node or simple element is usually fine. Mapping to an element **with children**, fragments, or conditionals often generates broken list code.

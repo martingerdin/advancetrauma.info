@@ -795,6 +795,10 @@ body.nav-open {
   line-height: var(--leading-normal);
 }
 
+.cookie-banner-slot:empty {
+  display: none;
+}
+
 .cookie-banner {
   position: fixed;
   inset: auto 0 0 0;
