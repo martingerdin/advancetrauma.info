@@ -21,7 +21,12 @@ Mapping to a single text node or simple element is usually fine. Mapping to an e
   </a>
 ))}
 
-// GOOD — unroll fixed lists, or map only a single leaf text/element
+// GOOD — extract a child Component and map to that (TeamMemberCard, SiteCard)
+{items.map((item) => (
+  <ItemCard item={item} />
+))}
+
+// ALSO GOOD — unroll fixed lists, or map only a single leaf text/element
 <a href={items[0].href}>
   <h3>{items[0].label}</h3>
   <p>{items[0].description}</p>

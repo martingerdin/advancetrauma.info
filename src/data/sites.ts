@@ -239,3 +239,6 @@ export const siteBatchViews = siteBatches.map((batch) => {
     endsPill: endLabel ? `${status === 'completed' ? 'Ended' : 'Ends'} ${endLabel}` : null,
   }
 })
+
+export type SiteBatchView = (typeof siteBatchViews)[number]
+
