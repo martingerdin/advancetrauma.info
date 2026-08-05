@@ -24,3 +24,13 @@ export function loadGoogleMaps(apiKey: string): Promise<void> {
 
   return mapsReady
 }
+
+/** True when Google has painted its “Oops! Something went wrong.” overlay. */
+export function mapContainerHasGoogleError(container: HTMLElement): boolean {
+  if (container.querySelector('.gm-err-container, .gm-error')) return true
+  const text = container.textContent ?? ''
+  return (
+    text.includes("didn't load Google Maps correctly") ||
+    text.includes('Oops! Something went wrong')
+  )
+}

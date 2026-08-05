@@ -2,7 +2,7 @@ import { Component } from '@geajs/core'
 import { batchColorTokens, getBatchStatus, participatingSites, siteBatches } from '../data/sites'
 import type { ParticipatingSite } from '../data/sites'
 import { cssVar } from '../lib/css-var'
-import { loadGoogleMaps } from '../lib/load-google-maps'
+import { loadGoogleMaps, mapContainerHasGoogleError } from '../lib/load-google-maps'
 import {
   buildSitePopupHtml,
   buildStaticMapUrl,
@@ -56,6 +56,7 @@ export default class SitesMap extends Component {
   private staticMarkers: StaticSiteMarker[] = []
   private staticPopup: HTMLElement | null = null
   private staticLayer: HTMLElement | null = null
+  private mapWatchCleanup: (() => void) | null = null
   private readonly focusSite = (name: string) => {
     this.openSite(name)
   }
@@ -76,18 +77,111 @@ export default class SitesMap extends Component {
       await loadGoogleMaps(apiKey)
       this.initMap(container, mapId)
       sitesMapStore.register(this.focusSite)
+      // Libraries can load while the map still paints Google's error overlay
+      // (invalid key, referrer, billing, Map ID). Fall back when that happens.
+      void this.watchInteractiveMapOrFallback(container, apiKey)
     } catch {
-      try {
-        await this.initStaticFallback(container, apiKey)
-        sitesMapStore.register(this.focusSite)
-      } catch {
-        this.loadError = 'Unable to load the map.'
-      }
+      await this.useStaticFallback(container, apiKey)
     }
   }
 
   dispose() {
+    this.mapWatchCleanup?.()
+    this.mapWatchCleanup = null
     sitesMapStore.unregister(this.focusSite)
+    this.teardownInteractiveMap()
+    this.closeStaticPopup()
+    this.staticMarkers = []
+    this.staticLayer = null
+    this.staticPopup = null
+    super.dispose()
+  }
+
+  private async useStaticFallback(container: HTMLElement, apiKey: string) {
+    try {
+      // Detach the node Google Maps owns so its error UI cannot repaint over the fallback.
+      const fresh = container.cloneNode(false) as HTMLElement
+      container.replaceWith(fresh)
+      await this.initStaticFallback(fresh, apiKey)
+      sitesMapStore.register(this.focusSite)
+    } catch {
+      this.loadError = 'Unable to load the map.'
+    }
+  }
+
+  private async watchInteractiveMapOrFallback(container: HTMLElement, apiKey: string) {
+    try {
+      await this.waitForInteractiveMapHealthy(container)
+    } catch {
+      if (this.staticLayer || !this.el?.contains(container)) return
+      this.mapWatchCleanup?.()
+      this.mapWatchCleanup = null
+      this.teardownInteractiveMap()
+      await this.useStaticFallback(container, apiKey)
+    }
+  }
+
+  /**
+   * Resolves once the map looks healthy; rejects if Google shows its error UI
+   * or calls gm_authFailure.
+   */
+  private waitForInteractiveMapHealthy(container: HTMLElement): Promise<void> {
+    return new Promise((resolve, reject) => {
+      let settled = false
+
+      const finish = (error?: Error) => {
+        if (settled) return
+        settled = true
+        this.mapWatchCleanup?.()
+        this.mapWatchCleanup = null
+        if (error) reject(error)
+        else resolve()
+      }
+
+      const fail = () => finish(new Error('Google Maps failed to render'))
+
+      if (mapContainerHasGoogleError(container)) {
+        fail()
+        return
+      }
+
+      const previousAuthFailure = window.gm_authFailure
+      window.gm_authFailure = () => {
+        previousAuthFailure?.()
+        fail()
+      }
+
+      const observer = new MutationObserver(() => {
+        if (mapContainerHasGoogleError(container)) fail()
+      })
+      observer.observe(container, { childList: true, subtree: true, characterData: true })
+
+      const poll = window.setInterval(() => {
+        if (mapContainerHasGoogleError(container)) fail()
+      }, 250)
+
+      // Watch long enough for Google's error overlay / auth failure to appear.
+      // Do not treat an early `idle` as success — Oops often paints after first layout.
+      const healthyTimer = window.setTimeout(() => {
+        if (mapContainerHasGoogleError(container)) {
+          fail()
+          return
+        }
+        finish()
+      }, 6000)
+
+      this.mapWatchCleanup = () => {
+        observer.disconnect()
+        window.clearInterval(poll)
+        window.clearTimeout(healthyTimer)
+        if (window.gm_authFailure) {
+          window.gm_authFailure = previousAuthFailure
+        }
+      }
+    })
+  }
+
+  private teardownInteractiveMap() {
     this.openInfoWindow?.close()
     this.openInfoWindow = null
     for (const entry of this.siteMarkers) {
@@ -95,11 +189,6 @@ export default class SitesMap extends Component {
     }
     this.siteMarkers = []
     this.mapInstance = null
-    this.closeStaticPopup()
-    this.staticMarkers = []
-    this.staticLayer = null
-    this.staticPopup = null
-    super.dispose()
   }
 
   private openSite(name: string) {

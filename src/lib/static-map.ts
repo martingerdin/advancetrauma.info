@@ -106,7 +106,14 @@ export function loadStaticMapImage(url: string): Promise<HTMLImageElement> {
     const img = new Image()
     img.decoding = 'async'
     img.alt = 'Map of participating trial sites'
-    img.onload = () => resolve(img)
+    img.onload = () => {
+      // Static Maps error payloads are usually small placeholder bitmaps.
+      if (img.naturalWidth < 10 || img.naturalHeight < 10) {
+        reject(new Error('Static map returned an empty image'))
+        return
+      }
+      resolve(img)
+    }
     img.onerror = () => reject(new Error('Failed to load static map image'))
     img.src = url
   })
