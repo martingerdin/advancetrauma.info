@@ -6,8 +6,32 @@ import sitesMapStore from '../stores/sites-map-store'
 
 type SiteMarker = {
   name: string
-  marker: google.maps.Marker
+  marker: google.maps.marker.AdvancedMarkerElement
   infoWindow: google.maps.InfoWindow
+}
+
+function markerPosition(
+  marker: google.maps.marker.AdvancedMarkerElement,
+): google.maps.LatLngLiteral | null {
+  const position = marker.position
+  if (!position) return null
+  if (typeof (position as google.maps.LatLng).lat === 'function') {
+    const latLng = position as google.maps.LatLng
+    return { lat: latLng.lat(), lng: latLng.lng() }
+  }
+  const literal = position as google.maps.LatLngLiteral | google.maps.LatLngAltitudeLiteral
+  return { lat: literal.lat, lng: literal.lng }
+}
+
+function createMarkerContent(color: string, stroke: string): HTMLElement {
+  const root = document.createElement('div')
+  root.innerHTML = `
+    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="16" cy="16" r="12" fill="${color}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="16" cy="16" r="6" fill="${stroke}"/>
+    </svg>
+  `
+  return root.firstElementChild as HTMLElement
 }
 
 export default class SitesMap extends Component {
@@ -21,6 +45,7 @@ export default class SitesMap extends Component {
 
   async onAfterRender() {
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+    const mapId = (import.meta.env.VITE_GOOGLE_MAPS_MAP_ID ?? '').trim() || 'DEMO_MAP_ID'
     const container = this.el?.querySelector<HTMLElement>('[data-map]')
     if (!container) return
 
@@ -31,7 +56,7 @@ export default class SitesMap extends Component {
 
     try {
       await loadGoogleMaps(apiKey)
-      this.initMap(container)
+      this.initMap(container, mapId)
       sitesMapStore.register(this.focusSite)
     } catch {
       this.loadError = 'Unable to load the map.'
@@ -42,6 +67,9 @@ export default class SitesMap extends Component {
     sitesMapStore.unregister(this.focusSite)
     this.openInfoWindow?.close()
     this.openInfoWindow = null
+    for (const entry of this.siteMarkers) {
+      entry.marker.map = null
+    }
     this.siteMarkers = []
     this.mapInstance = null
     super.dispose()
@@ -52,16 +80,19 @@ export default class SitesMap extends Component {
     const map = this.mapInstance
     if (!entry || !map) return
 
+    const position = markerPosition(entry.marker)
+    if (!position) return
+
     this.openInfoWindow?.close()
-    map.panTo(entry.marker.getPosition()!)
+    map.panTo(position)
     if ((map.getZoom() ?? 0) < 8) {
       map.setZoom(8)
     }
-    entry.infoWindow.open(map, entry.marker)
+    entry.infoWindow.open({ map, anchor: entry.marker })
     this.openInfoWindow = entry.infoWindow
   }
 
-  private initMap(container: HTMLElement) {
+  private initMap(container: HTMLElement, mapId: string) {
     const brand = cssVar('--brand')
     const text = cssVar('--text')
     const textMuted = cssVar('--text-muted')
@@ -70,41 +101,20 @@ export default class SitesMap extends Component {
     const map = new google.maps.Map(container, {
       zoom: 5,
       center: { lat: 20.5937, lng: 78.9629 },
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      styles: [
-        {
-          featureType: 'all',
-          elementType: 'labels.text.fill',
-          stylers: [{ color: text }],
-        },
-        {
-          featureType: 'water',
-          elementType: 'geometry',
-          stylers: [{ color: brand }],
-        },
-      ],
+      mapId,
+      // Advanced markers require a map ID; cloud styles replace MapOptions.styles.
     })
 
     const bounds = new google.maps.LatLngBounds()
 
     this.siteMarkers = participatingSites.map((site) => {
       const markerColor = cssVar(batchColorTokens[site.batch])
-      const marker = new google.maps.Marker({
-        position: site.location,
+      const marker = new google.maps.marker.AdvancedMarkerElement({
         map,
+        position: site.location,
         title: site.name,
-        icon: {
-          url:
-            'data:image/svg+xml;charset=UTF-8,' +
-            encodeURIComponent(`
-              <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="16" cy="16" r="12" fill="${markerColor}" stroke="${textInverse}" stroke-width="2"/>
-                <circle cx="16" cy="16" r="6" fill="${textInverse}"/>
-              </svg>
-            `),
-          scaledSize: new google.maps.Size(32, 32),
-          anchor: new google.maps.Point(16, 16),
-        },
+        content: createMarkerContent(markerColor, textInverse),
+        gmpClickable: true,
       })
 
       const batch = siteBatches.find((b) => b.id === site.batch)!
@@ -167,9 +177,9 @@ export default class SitesMap extends Component {
         `,
       })
 
-      marker.addListener('click', () => {
+      marker.addEventListener('gmp-click', () => {
         this.openInfoWindow?.close()
-        infoWindow.open(map, marker)
+        infoWindow.open({ map, anchor: marker })
         this.openInfoWindow = infoWindow
       })
 
@@ -177,7 +187,7 @@ export default class SitesMap extends Component {
       return { name: site.name, marker, infoWindow }
     })
 
-    map.fitBounds(bounds, { padding: 10 })
+    map.fitBounds(bounds, 10)
     this.mapInstance = map
   }
 
