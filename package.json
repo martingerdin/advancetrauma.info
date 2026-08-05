@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@geajs/core": "^1.0.0",
+    "@googlemaps/js-api-loader": "^2.1.1",
     "@mux/mux-player": "^3.13.2"
   },
   "devDependencies": {
     "@geajs/vite-plugin": "^1.0.0",
+    "@types/google.maps": "^3.65.4",
     "typescript": "^6.0.3",
     "vite": "^8.0.0"
   }
