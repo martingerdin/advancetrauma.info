@@ -765,15 +765,44 @@ body.nav-open {
   background: var(--surface-map);
 }
 
+.sites-map__fallback-notice {
+  margin: 0 0 var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--leading-normal);
+}
+
+.sites-map__fallback-reload {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  cursor: pointer;
+}
+
+.sites-map__fallback-reload:hover,
+.sites-map__fallback-reload:focus-visible {
+  color: var(--brand-deep);
+}
+
 .sites-map--static {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .sites-map__static {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: visible;
 }
 
 .sites-map__image {
@@ -838,7 +867,7 @@ body.nav-open {
 
 .sites-map__popup {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   max-width: min(var(--map-popup-width), calc(100% - var(--space-sm)));
   background: var(--surface);
   border: 1px solid var(--border);

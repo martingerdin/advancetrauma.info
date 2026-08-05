@@ -56,6 +56,7 @@ export default class SitesMap extends Component {
   private staticMarkers: StaticSiteMarker[] = []
   private staticPopup: HTMLElement | null = null
   private staticLayer: HTMLElement | null = null
+  private fallbackNotice: HTMLElement | null = null
   private mapWatchCleanup: (() => void) | null = null
   private readonly focusSite = (name: string) => {
     this.openSite(name)
@@ -74,6 +75,8 @@ export default class SitesMap extends Component {
     }
 
     try {
+      // TEMP: uncomment to force static fallback for local testing.
+      // throw new Error('force static fallback')
       await loadGoogleMaps(apiKey)
       this.initMap(container, mapId)
       sitesMapStore.register(this.focusSite)
@@ -91,6 +94,7 @@ export default class SitesMap extends Component {
     sitesMapStore.unregister(this.focusSite)
     this.teardownInteractiveMap()
     this.closeStaticPopup()
+    this.clearFallbackNotice()
     this.staticMarkers = []
     this.staticLayer = null
     this.staticPopup = null
@@ -103,10 +107,45 @@ export default class SitesMap extends Component {
       const fresh = container.cloneNode(false) as HTMLElement
       container.replaceWith(fresh)
       await this.initStaticFallback(fresh, apiKey)
+      this.showFallbackNotice(fresh)
       sitesMapStore.register(this.focusSite)
     } catch {
+      this.clearFallbackNotice()
       this.loadError = 'Unable to load the map.'
     }
+  }
+
+  private showFallbackNotice(mapContainer: HTMLElement) {
+    this.clearFallbackNotice()
+
+    const notice = document.createElement('p')
+    notice.className = 'sites-map__fallback-notice'
+    notice.setAttribute('role', 'status')
+
+    notice.append(
+      document.createTextNode(
+        'Showing a static map because the interactive map could not load. ',
+      ),
+    )
+
+    const reload = document.createElement('button')
+    reload.type = 'button'
+    reload.className = 'sites-map__fallback-reload'
+    reload.textContent = 'Reload the page'
+    reload.addEventListener('click', () => {
+      window.location.reload()
+    })
+    notice.append(reload)
+
+    notice.append(document.createTextNode(' to try the interactive map again.'))
+
+    mapContainer.before(notice)
+    this.fallbackNotice = notice
+  }
+
+  private clearFallbackNotice() {
+    this.fallbackNotice?.remove()
+    this.fallbackNotice = null
   }
 
   private async watchInteractiveMapOrFallback(container: HTMLElement, apiKey: string) {
@@ -379,13 +418,17 @@ export default class SitesMap extends Component {
     const anchorRect = anchor.getBoundingClientRect()
     const popupRect = popup.getBoundingClientRect()
 
+    // Prefer above the marker; allow the popup to spill outside the map bounds.
     let left = anchorRect.left - layerRect.left + anchorRect.width / 2 - popupRect.width / 2
     let top = anchorRect.top - layerRect.top - popupRect.height - 12
 
-    left = Math.min(Math.max(8, left), layerRect.width - popupRect.width - 8)
-    if (top < 8) {
+    if (top < -popupRect.height + 24) {
       top = anchorRect.bottom - layerRect.top + 12
     }
+
+    const minLeft = 8 - popupRect.width * 0.4
+    const maxLeft = layerRect.width - popupRect.width * 0.6
+    left = Math.min(Math.max(minLeft, left), maxLeft)
 
     popup.style.left = `${left}px`
     popup.style.top = `${top}px`
