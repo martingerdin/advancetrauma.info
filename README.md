@@ -11,7 +11,7 @@ cp .env.example .env
 
 Fill in `.env`:
 
-- `VITE_GOOGLE_MAPS_API_KEY` — Google Maps JavaScript API key
+- `VITE_GOOGLE_MAPS_API_KEY` — Google Maps API key with **Maps JavaScript API** enabled (and **Maps Static API** for the offline/fallback map)
 - `VITE_WEB3FORMS_ACCESS_KEY` — [Web3Forms](https://web3forms.com) access key
 - `VITE_MUX_PLAYBACK_ID` — [Mux](https://www.mux.com) public playback ID for the hero video (optional; omit to keep the centered hero without video)
 

@@ -14,14 +14,19 @@ declare namespace google.maps {
   class Map {
     constructor(el: HTMLElement, opts?: object)
     fitBounds(bounds: LatLngBounds, padding?: number | object): void
+    panTo(latLng: { lat: number; lng: number }): void
+    getZoom(): number | undefined
+    setZoom(zoom: number): void
   }
   class Marker {
     constructor(opts?: object)
     addListener(event: string, handler: () => void): void
+    getPosition(): { lat: number; lng: number } | null
   }
   class InfoWindow {
     constructor(opts?: object)
     open(map: Map, marker: Marker): void
+    close(): void
   }
   class LatLngBounds {
     extend(point: { lat: number; lng: number }): void
@@ -43,4 +48,5 @@ declare const google: {
 
 interface Window {
   google?: typeof google
+  gm_authFailure?: () => void
 }

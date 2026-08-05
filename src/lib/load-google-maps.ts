@@ -10,10 +10,31 @@ export function loadGoogleMaps(apiKey: string): Promise<void> {
   }
 
   mapsLoader = new Promise((resolve, reject) => {
+    let settled = false
+
+    const fail = (error: Error) => {
+      if (settled) return
+      settled = true
+      mapsLoader = null
+      reject(error)
+    }
+
+    const succeed = () => {
+      if (settled) return
+      settled = true
+      resolve()
+    }
+
+    const previousAuthFailure = window.gm_authFailure
+    window.gm_authFailure = () => {
+      previousAuthFailure?.()
+      fail(new Error('Google Maps authentication failed'))
+    }
+
     const existing = document.querySelector<HTMLScriptElement>('script[data-google-maps]')
     if (existing) {
-      existing.addEventListener('load', () => resolve())
-      existing.addEventListener('error', () => reject(new Error('Failed to load Google Maps')))
+      existing.addEventListener('load', () => queueMicrotask(finishLoad))
+      existing.addEventListener('error', () => fail(new Error('Failed to load Google Maps')))
       return
     }
 
@@ -23,9 +44,17 @@ export function loadGoogleMaps(apiKey: string): Promise<void> {
     script.async = true
     script.defer = true
     script.dataset.googleMaps = 'true'
-    script.onload = () => resolve()
-    script.onerror = () => reject(new Error('Failed to load Google Maps'))
+    script.onload = () => queueMicrotask(finishLoad)
+    script.onerror = () => fail(new Error('Failed to load Google Maps'))
     document.head.appendChild(script)
+
+    function finishLoad() {
+      if (!window.google?.maps) {
+        fail(new Error('Google Maps failed to initialize'))
+        return
+      }
+      succeed()
+    }
   })
 
   return mapsLoader

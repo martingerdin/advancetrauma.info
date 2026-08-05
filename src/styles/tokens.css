@@ -96,6 +96,9 @@
   --header-height: 4rem;
   --nav-panel-max-height: 24rem;
   --map-height: min(50vh, 24rem);
+  --map-marker-size: 1.75rem;
+  --map-popup-width: 17.5rem;
+  --map-popup-max-height: 25rem;
   --resource-thumb-width: 9rem;
   --team-card-min: 14rem;
 

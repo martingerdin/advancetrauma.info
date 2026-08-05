@@ -1,19 +1,37 @@
 import { Component } from '@geajs/core'
 import { batchColorTokens, getBatchStatus, participatingSites, siteBatches } from '../data/sites'
+import type { ParticipatingSite } from '../data/sites'
 import { cssVar } from '../lib/css-var'
 import { loadGoogleMaps } from '../lib/load-google-maps'
+import {
+  buildSitePopupHtml,
+  buildStaticMapUrl,
+  fitViewport,
+  latLngToPixel,
+  loadStaticMapImage,
+  staticMapSize,
+} from '../lib/static-map'
 import sitesMapStore from '../stores/sites-map-store'
 
-type SiteMarker = {
+type InteractiveSiteMarker = {
   name: string
   marker: google.maps.Marker
   infoWindow: google.maps.InfoWindow
 }
 
+type StaticSiteMarker = {
+  name: string
+  button: HTMLButtonElement
+  popupHtml: string
+}
+
 export default class SitesMap extends Component {
   private mapInstance: google.maps.Map | null = null
-  private siteMarkers: SiteMarker[] = []
+  private siteMarkers: InteractiveSiteMarker[] = []
   private openInfoWindow: google.maps.InfoWindow | null = null
+  private staticMarkers: StaticSiteMarker[] = []
+  private staticPopup: HTMLElement | null = null
+  private staticLayer: HTMLElement | null = null
   private readonly focusSite = (name: string) => {
     this.openSite(name)
   }
@@ -34,7 +52,12 @@ export default class SitesMap extends Component {
       this.initMap(container)
       sitesMapStore.register(this.focusSite)
     } catch {
-      this.loadError = 'Unable to load the map.'
+      try {
+        await this.initStaticFallback(container, apiKey)
+        sitesMapStore.register(this.focusSite)
+      } catch {
+        this.loadError = 'Unable to load the map.'
+      }
     }
   }
 
@@ -44,10 +67,19 @@ export default class SitesMap extends Component {
     this.openInfoWindow = null
     this.siteMarkers = []
     this.mapInstance = null
+    this.closeStaticPopup()
+    this.staticMarkers = []
+    this.staticLayer = null
+    this.staticPopup = null
     super.dispose()
   }
 
   private openSite(name: string) {
+    if (this.staticLayer) {
+      this.openStaticSite(name)
+      return
+    }
+
     const entry = this.siteMarkers.find((item) => item.name === name)
     const map = this.mapInstance
     if (!entry || !map) return
@@ -61,10 +93,58 @@ export default class SitesMap extends Component {
     this.openInfoWindow = entry.infoWindow
   }
 
+  private statusPill(site: ParticipatingSite): { style: string; text: string } {
+    const batch = siteBatches.find((b) => b.id === site.batch)!
+    const batchStatus = getBatchStatus(batch)
+    const textInverse = cssVar('--text-inverse')
+    const textMuted = cssVar('--text-muted')
+
+    if (batchStatus === 'ongoing') {
+      return {
+        style: `background: ${cssVar('--status-live')}; color: ${textInverse};`,
+        text: 'Including Patients',
+      }
+    }
+    if (batchStatus === 'completed') {
+      return {
+        style: `background: ${cssVar('--border')}; color: ${textMuted};`,
+        text: 'Completed',
+      }
+    }
+    if (batchStatus === 'starting') {
+      return {
+        style: `background: ${cssVar('--brand')}; color: ${textInverse};`,
+        text: 'Starting',
+      }
+    }
+    if (batchStatus === 'screening') {
+      return {
+        style: `background: ${cssVar('--light-blue')}; color: ${cssVar('--brand-deep')};`,
+        text: 'Screening clusters',
+      }
+    }
+    return {
+      style: `background: ${cssVar('--light-blue')}; color: ${cssVar('--brand-deep')};`,
+      text: 'Not Yet Including Patients',
+    }
+  }
+
+  private popupHtmlFor(site: ParticipatingSite): string {
+    const status = this.statusPill(site)
+    return buildSitePopupHtml(site, {
+      brand: cssVar('--brand'),
+      text: cssVar('--text'),
+      textMuted: cssVar('--text-muted'),
+      textInverse: cssVar('--text-inverse'),
+      markerColor: cssVar(batchColorTokens[site.batch]),
+      statusPillStyle: status.style,
+      statusPillText: status.text,
+    })
+  }
+
   private initMap(container: HTMLElement) {
     const brand = cssVar('--brand')
     const text = cssVar('--text')
-    const textMuted = cssVar('--text-muted')
     const textInverse = cssVar('--text-inverse')
 
     const map = new google.maps.Map(container, {
@@ -107,64 +187,8 @@ export default class SitesMap extends Component {
         },
       })
 
-      const batch = siteBatches.find((b) => b.id === site.batch)!
-      const batchStatus = getBatchStatus(batch)
-
-      let statusPillStyle = ''
-      let statusPillText = ''
-      if (batchStatus === 'ongoing') {
-        const statusLive = cssVar('--status-live')
-        statusPillStyle = `background: ${statusLive}; color: ${textInverse};`
-        statusPillText = 'Including Patients'
-      } else if (batchStatus === 'completed') {
-        const border = cssVar('--border')
-        statusPillStyle = `background: ${border}; color: ${textMuted};`
-        statusPillText = 'Completed'
-      } else if (batchStatus === 'starting') {
-        const brandColor = cssVar('--brand')
-        statusPillStyle = `background: ${brandColor}; color: ${textInverse};`
-        statusPillText = 'Starting'
-      } else if (batchStatus === 'screening') {
-        const lightBlue = cssVar('--light-blue')
-        const brandDeep = cssVar('--brand-deep')
-        statusPillStyle = `background: ${lightBlue}; color: ${brandDeep};`
-        statusPillText = 'Screening clusters'
-      } else {
-        const lightBlue = cssVar('--light-blue')
-        const brandDeep = cssVar('--brand-deep')
-        statusPillStyle = `background: ${lightBlue}; color: ${brandDeep};`
-        statusPillText = 'Not Yet Including Patients'
-      }
-
       const infoWindow = new google.maps.InfoWindow({
-        content: `
-          <div style="padding: 16px; max-width: 280px; font-family: system-ui, -apple-system, sans-serif;">
-          <h3 style="margin: 0 0 8px 0; color: ${brand}; font-size: 16px; font-weight: 600; line-height: 1.3;">${site.name}</h3>  
-          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
-              <span style="background: ${markerColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">Batch ${site.batch}</span>
-              <span style="${statusPillStyle} display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${statusPillText}</span>
-            </div>
-            <p style="margin: 0 0 8px 0; color: ${text}; font-size: 14px; font-weight: 400; line-height: 1.4;">
-              <span style="display: block; margin-bottom: 2px; font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: ${textMuted};">Investigator</span>
-              ${site.pi}
-            </p>
-            ${
-              site.coordinators
-                ? `<p style="margin: 0 0 8px 0; color: ${text}; font-size: 14px; font-weight: 400; line-height: 1.4;">
-              <span style="display: block; margin-bottom: 2px; font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: ${textMuted};">Clinical research coordinator</span>
-              ${site.coordinators}
-            </p>`
-                : ''
-            }
-            <p style="margin: 0 0 8px 0; color: ${text}; font-size: 14px; font-weight: 400;">
-              <span style="display: block; margin-bottom: 2px; font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: ${textMuted};">Location</span>
-              ${site.city}
-            </p>
-            <a href="${site.website}" target="_blank" rel="noopener noreferrer" style="color: ${brand}; font-size: 14px; text-decoration: none; font-weight: 500; border-bottom: 1px solid ${brand};">
-              Visit Website →
-            </a>
-          </div>
-        `,
+        content: this.popupHtmlFor(site),
       })
 
       marker.addListener('click', () => {
@@ -179,6 +203,103 @@ export default class SitesMap extends Component {
 
     map.fitBounds(bounds, { padding: 10 })
     this.mapInstance = map
+  }
+
+  private async initStaticFallback(container: HTMLElement, apiKey: string) {
+    const displayWidth = Math.max(container.clientWidth, 320)
+    const displayHeight = Math.max(container.clientHeight, 200)
+    const size = staticMapSize(displayWidth, displayHeight)
+    const viewport = fitViewport(
+      participatingSites.map((site) => site.location),
+      size.width,
+      size.height,
+    )
+    const url = buildStaticMapUrl(viewport, apiKey)
+    const img = await loadStaticMapImage(url)
+    img.className = 'sites-map__image'
+
+    const layer = document.createElement('div')
+    layer.className = 'sites-map__static'
+    layer.appendChild(img)
+
+    this.staticMarkers = participatingSites.map((site) => {
+      const point = latLngToPixel(site.location, viewport)
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = `sites-map__marker sites-map__marker--${site.batch}`
+      button.style.left = `${(point.x / viewport.width) * 100}%`
+      button.style.top = `${(point.y / viewport.height) * 100}%`
+      button.setAttribute('aria-label', site.name)
+      button.title = site.name
+
+      const popupHtml = this.popupHtmlFor(site)
+      button.addEventListener('click', (event) => {
+        event.stopPropagation()
+        this.openStaticPopup(button, popupHtml)
+      })
+
+      layer.appendChild(button)
+      return { name: site.name, button, popupHtml }
+    })
+
+    layer.addEventListener('click', () => this.closeStaticPopup())
+
+    container.replaceChildren(layer)
+    container.classList.add('sites-map--static')
+    this.staticLayer = layer
+  }
+
+  private openStaticSite(name: string) {
+    const entry = this.staticMarkers.find((item) => item.name === name)
+    if (!entry) return
+    this.openStaticPopup(entry.button, entry.popupHtml)
+  }
+
+  private openStaticPopup(anchor: HTMLButtonElement, html: string) {
+    this.closeStaticPopup()
+    if (!this.staticLayer) return
+
+    const popup = document.createElement('div')
+    popup.className = 'sites-map__popup'
+    popup.setAttribute('role', 'dialog')
+    popup.innerHTML = `
+      <button type="button" class="sites-map__popup-close" aria-label="Close">×</button>
+      ${html}
+    `
+
+    const closeBtn = popup.querySelector('.sites-map__popup-close')
+    closeBtn?.addEventListener('click', (event) => {
+      event.stopPropagation()
+      this.closeStaticPopup()
+    })
+    popup.addEventListener('click', (event) => event.stopPropagation())
+
+    this.staticLayer.appendChild(popup)
+    this.staticPopup = popup
+    anchor.classList.add('sites-map__marker--active')
+
+    const layerRect = this.staticLayer.getBoundingClientRect()
+    const anchorRect = anchor.getBoundingClientRect()
+    const popupRect = popup.getBoundingClientRect()
+
+    let left = anchorRect.left - layerRect.left + anchorRect.width / 2 - popupRect.width / 2
+    let top = anchorRect.top - layerRect.top - popupRect.height - 12
+
+    left = Math.min(Math.max(8, left), layerRect.width - popupRect.width - 8)
+    if (top < 8) {
+      top = anchorRect.bottom - layerRect.top + 12
+    }
+
+    popup.style.left = `${left}px`
+    popup.style.top = `${top}px`
+  }
+
+  private closeStaticPopup() {
+    this.staticPopup?.remove()
+    this.staticPopup = null
+    for (const entry of this.staticMarkers) {
+      entry.button.classList.remove('sites-map__marker--active')
+    }
   }
 
   template() {
