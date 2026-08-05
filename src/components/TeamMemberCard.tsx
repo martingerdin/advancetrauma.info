@@ -10,6 +10,17 @@ function orcidLabel(orcid: string): string {
   return orcid.replace(/^https?:\/\/orcid\.org\//i, '').trim()
 }
 
+const committeeAbbrevs: Record<string, string> = {
+  'Trial Management Group chair': 'TMG chair',
+  'Trial Management Group member': 'TMG',
+  'Trial Team member': 'TT',
+  'Trial Team Member': 'TT',
+}
+
+function committeeAbbrev(item: string): string {
+  return committeeAbbrevs[item] ?? item
+}
+
 export default class TeamMemberCard extends Component {
   declare props: {
     member: TeamMember
@@ -32,9 +43,7 @@ export default class TeamMemberCard extends Component {
         ) : (
           <h4 class="team-card__name">{member.name}</h4>
         )}
-        {member.roles
-          ? member.roles.map((role) => <p class="team-card__role">{role}</p>)
-          : null}
+        {member.role ? <p class="team-card__role">{member.role}</p> : null}
         {member.affiliation ? (
           <p class="team-card__affiliation">{member.affiliation}</p>
         ) : null}
@@ -74,6 +83,15 @@ export default class TeamMemberCard extends Component {
               </a>
             ) : null}
           </div>
+        ) : null}
+        {member.committee ? (
+          <p class="team-card__committee">
+            {member.committee.map((item) => (
+              <span class="team-card__committee-item" title={item}>
+                {committeeAbbrev(item)}
+              </span>
+            ))}
+          </p>
         ) : null}
       </article>
     )

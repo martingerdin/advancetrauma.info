@@ -144,11 +144,21 @@ export default class SitesMap extends Component {
               <span style="background: ${markerColor}; color: ${textInverse}; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">Batch ${site.batch}</span>
               <span style="${statusPillStyle} display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${statusPillText}</span>
             </div>
-            <p style="margin: 0 0 6px 0; color: ${text}; font-size: 14px; line-height: 1.4;">
-              <strong style="color: ${textMuted};">PI:</strong> ${site.pi}
+            <p style="margin: 0 0 8px 0; color: ${text}; font-size: 14px; font-weight: 400; line-height: 1.4;">
+              <span style="display: block; margin-bottom: 2px; font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: ${textMuted};">Investigator</span>
+              ${site.pi}
             </p>
-            <p style="margin: 0 0 8px 0; color: ${text}; font-size: 14px;">
-              <strong style="color: ${textMuted};">Location:</strong> ${site.city}
+            ${
+              site.coordinators
+                ? `<p style="margin: 0 0 8px 0; color: ${text}; font-size: 14px; font-weight: 400; line-height: 1.4;">
+              <span style="display: block; margin-bottom: 2px; font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: ${textMuted};">Clinical research coordinator</span>
+              ${site.coordinators}
+            </p>`
+                : ''
+            }
+            <p style="margin: 0 0 8px 0; color: ${text}; font-size: 14px; font-weight: 400;">
+              <span style="display: block; margin-bottom: 2px; font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: ${textMuted};">Location</span>
+              ${site.city}
             </p>
             <a href="${site.website}" target="_blank" rel="noopener noreferrer" style="color: ${brand}; font-size: 14px; text-decoration: none; font-weight: 500; border-bottom: 1px solid ${brand};">
               Visit Website →

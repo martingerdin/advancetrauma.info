@@ -895,6 +895,26 @@ body.nav-open {
   color: var(--orcid);
 }
 
+.team-card__committee {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: var(--space-3xs) 0 0;
+  font-size: var(--font-size-2xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
+
+.team-card__committee-item {
+  cursor: help;
+}
+
+.team-card__committee-item + .team-card__committee-item::before {
+  content: "·";
+  margin: 0 0.35em;
+  color: var(--border);
+}
+
 .sites-batches {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1043,12 +1063,33 @@ body.nav-open {
   border-top: 1px solid var(--border);
 }
 
-.site-card__pi {
+.site-card__pi,
+.site-card__coordinators {
   margin: 0;
   font-size: var(--font-size-sm);
-  font-weight: 500;
+  font-weight: 400;
   line-height: var(--leading-normal);
   color: var(--text);
+}
+
+.site-card__pi::before,
+.site-card__coordinators::before {
+  display: block;
+  margin-bottom: 0.15em;
+  font-size: 0.625rem;
+  font-weight: 300;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
+
+.site-card__pi::before {
+  content: "Investigator";
+}
+
+.site-card__coordinators::before {
+  content: "Clinical research coordinator";
 }
 
 .site-card__actions {

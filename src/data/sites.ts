@@ -9,6 +9,8 @@ export type ParticipatingSite = {
   website: string
   location: { lat: number; lng: number }
   pi: string
+  /** Clinical research coordinators (comma-separated), shown separately from PIs */
+  coordinators?: string
 }
 
 export type SiteBatchInfo = {
@@ -41,6 +43,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://hbtmc.edu.in/',
     pi: 'Geeta Ghag, Vipul Nandu',
+    coordinators: 'Snehal Jadhav',
   },
   {
     name: 'IPGME&R and SSKM Hospital',
@@ -49,6 +52,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'http://www.ipgmer.gov.in/',
     pi: 'Shamita Chatterjee, Maitreyee Mukherjee',
+    coordinators: 'Sayeli Das',
   },
   {
     name: 'Christian Medical College & Hospital',
@@ -57,6 +61,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://www.cmcludhiana.in/',
     pi: 'Parvez Haque, Thejus Varghese',
+    coordinators: 'Amandeep Kaur',
   },
   {
     name: 'Government Medical College & Hospital',
@@ -65,6 +70,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://www.gmch.gov.in/',
     pi: 'Rajeev Sharma',
+    coordinators: 'Divya Sharma',
   },
   {
     name: 'Himalayan Institute of Medical Sciences',
@@ -73,6 +79,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '1',
     website: 'https://srhu.edu.in/medical-sciences/',
     pi: 'Hemant Nautiyal',
+    coordinators: 'Anju Paliyal',
   },
   {
     name: 'Seth G.S. Medical College and King Edward Memorial Hospital',
@@ -81,6 +88,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://www.kem.edu/',
     pi: 'Monty Khajanchi',
+    coordinators: 'Snehal Jadhav',
   },
   {
     name: 'Lokmanya Tilak Municipal Medical College and General Hospital',
@@ -89,6 +97,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://ltmgh.com/',
     pi: 'Vineet Kumar',
+    coordinators: 'Snehal Jadhav',
   },
   {
     name: 'Holy Family Hospital',
@@ -97,6 +106,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://www.hfhdelhi.org/',
     pi: 'Aisvarya Kapoor',
+    coordinators: 'Himanshu Kumar',
   },
   {
     name: 'Assam Medical College & Hospital',
@@ -105,6 +115,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://amch-dibrugarh.assam.gov.in/',
     pi: 'Jishan Ahmed',
+    coordinators: 'Noireeta Chetiapatra',
   },
   {
     name: 'Dayanand Medical College & Hospital',
@@ -113,6 +124,7 @@ export const participatingSites: ParticipatingSite[] = [
     batch: '2',
     website: 'https://www.dmch.edu/',
     pi: 'Jaspal Singh',
+    coordinators: 'Muskaan Katyal',
   },
 ]
 

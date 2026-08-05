@@ -30,6 +30,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[0].sites[0].pi}</p>
+                {siteBatchViews[0].sites[0].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[0].sites[0].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[0].sites[0].website}
@@ -56,6 +59,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[0].sites[1].pi}</p>
+                {siteBatchViews[0].sites[1].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[0].sites[1].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[0].sites[1].website}
@@ -82,6 +88,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[0].sites[2].pi}</p>
+                {siteBatchViews[0].sites[2].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[0].sites[2].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[0].sites[2].website}
@@ -108,6 +117,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[0].sites[3].pi}</p>
+                {siteBatchViews[0].sites[3].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[0].sites[3].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[0].sites[3].website}
@@ -134,6 +146,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[0].sites[4].pi}</p>
+                {siteBatchViews[0].sites[4].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[0].sites[4].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[0].sites[4].website}
@@ -173,6 +188,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[1].sites[0].pi}</p>
+                {siteBatchViews[1].sites[0].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[1].sites[0].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[1].sites[0].website}
@@ -199,6 +217,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[1].sites[1].pi}</p>
+                {siteBatchViews[1].sites[1].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[1].sites[1].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[1].sites[1].website}
@@ -225,6 +246,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[1].sites[2].pi}</p>
+                {siteBatchViews[1].sites[2].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[1].sites[2].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[1].sites[2].website}
@@ -251,6 +275,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[1].sites[3].pi}</p>
+                {siteBatchViews[1].sites[3].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[1].sites[3].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[1].sites[3].website}
@@ -277,6 +304,9 @@ export default class SitesList extends Component {
               </summary>
               <div class="site-card__panel">
                 <p class="site-card__pi">{siteBatchViews[1].sites[4].pi}</p>
+                {siteBatchViews[1].sites[4].coordinators ? (
+                  <p class="site-card__coordinators">{siteBatchViews[1].sites[4].coordinators}</p>
+                ) : null}
                 <div class="site-card__actions">
                   <a
                     href={siteBatchViews[1].sites[4].website}
