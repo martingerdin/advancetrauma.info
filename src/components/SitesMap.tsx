@@ -1,255 +1,70 @@
 import { Component } from '@geajs/core'
+import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet'
 import { batchColorTokens, getBatchStatus, participatingSites, siteBatches } from '../data/sites'
 import type { ParticipatingSite } from '../data/sites'
 import { cssVar } from '../lib/css-var'
-import { loadGoogleMaps, mapContainerHasGoogleError } from '../lib/load-google-maps'
-import {
-  buildSitePopupHtml,
-  buildStaticMapUrl,
-  fitViewport,
-  latLngToPixel,
-  loadStaticMapImage,
-  staticMapSize,
-} from '../lib/static-map'
+import { buildSitePopupHtml } from '../lib/site-map-popup'
 import sitesMapStore from '../stores/sites-map-store'
 
-type InteractiveSiteMarker = {
+type SiteMarker = {
   name: string
-  marker: google.maps.marker.AdvancedMarkerElement
-  infoWindow: google.maps.InfoWindow
+  marker: LeafletMarker
 }
 
-type StaticSiteMarker = {
-  name: string
-  button: HTMLButtonElement
-  popupHtml: string
-}
-
-function markerPosition(
-  marker: google.maps.marker.AdvancedMarkerElement,
-): google.maps.LatLngLiteral | null {
-  const position = marker.position
-  if (!position) return null
-  if (typeof (position as google.maps.LatLng).lat === 'function') {
-    const latLng = position as google.maps.LatLng
-    return { lat: latLng.lat(), lng: latLng.lng() }
-  }
-  const literal = position as google.maps.LatLngLiteral | google.maps.LatLngAltitudeLiteral
-  return { lat: literal.lat, lng: literal.lng }
-}
-
-function createMarkerContent(color: string, stroke: string): HTMLElement {
-  const root = document.createElement('div')
-  root.innerHTML = `
-    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="16" cy="16" r="12" fill="${color}" stroke="${stroke}" stroke-width="2"/>
-      <circle cx="16" cy="16" r="6" fill="${stroke}"/>
-    </svg>
-  `
-  return root.firstElementChild as HTMLElement
-}
+/**
+ * CARTO Positron tiles (OSM data) — free for low-traffic public sites with
+ * attribution. Avoids Google Maps cookies/API keys; tile requests still send
+ * the visitor IP to the tile host (disclose in a privacy policy if needed).
+ * OSMF’s public tile servers discourage heavy production use, so we do not
+ * point Leaflet at tile.openstreetmap.org.
+ */
+const TILE_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+const TILE_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
 export default class SitesMap extends Component {
-  private mapInstance: google.maps.Map | null = null
-  private siteMarkers: InteractiveSiteMarker[] = []
-  private openInfoWindow: google.maps.InfoWindow | null = null
-  private staticMarkers: StaticSiteMarker[] = []
-  private staticPopup: HTMLElement | null = null
-  private staticLayer: HTMLElement | null = null
-  private fallbackNotice: HTMLElement | null = null
-  private mapWatchCleanup: (() => void) | null = null
+  private mapInstance: LeafletMap | null = null
+  private siteMarkers: SiteMarker[] = []
+  private mapInitStarted = false
   private readonly focusSite = (name: string) => {
     this.openSite(name)
   }
   loadError = ''
 
   async onAfterRender() {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-    const mapId = (import.meta.env.VITE_GOOGLE_MAPS_MAP_ID ?? '').trim() || 'DEMO_MAP_ID'
+    if (this.mapInitStarted || this.mapInstance) return
+
     const container = this.el?.querySelector<HTMLElement>('[data-map]')
     if (!container) return
 
-    if (!apiKey) {
-      this.loadError = 'Map is not configured. Set VITE_GOOGLE_MAPS_API_KEY.'
-      return
-    }
+    this.mapInitStarted = true
 
     try {
-      // TEMP: uncomment to force static fallback for local testing.
-      // throw new Error('force static fallback')
-      await loadGoogleMaps(apiKey)
-      this.initMap(container, mapId)
-      sitesMapStore.register(this.focusSite)
-      // Libraries can load while the map still paints Google's error overlay
-      // (invalid key, referrer, billing, Map ID). Fall back when that happens.
-      void this.watchInteractiveMapOrFallback(container, apiKey)
-    } catch {
-      await this.useStaticFallback(container, apiKey)
-    }
-  }
-
-  dispose() {
-    this.mapWatchCleanup?.()
-    this.mapWatchCleanup = null
-    sitesMapStore.unregister(this.focusSite)
-    this.teardownInteractiveMap()
-    this.closeStaticPopup()
-    this.clearFallbackNotice()
-    this.staticMarkers = []
-    this.staticLayer = null
-    this.staticPopup = null
-    super.dispose()
-  }
-
-  private async useStaticFallback(container: HTMLElement, apiKey: string) {
-    try {
-      // Detach the node Google Maps owns so its error UI cannot repaint over the fallback.
-      const fresh = container.cloneNode(false) as HTMLElement
-      container.replaceWith(fresh)
-      await this.initStaticFallback(fresh, apiKey)
-      this.showFallbackNotice(fresh)
+      await this.initMap(container)
       sitesMapStore.register(this.focusSite)
     } catch {
-      this.clearFallbackNotice()
+      this.mapInitStarted = false
       this.loadError = 'Unable to load the map.'
     }
   }
 
-  private showFallbackNotice(mapContainer: HTMLElement) {
-    this.clearFallbackNotice()
-
-    const notice = document.createElement('p')
-    notice.className = 'sites-map__fallback-notice'
-    notice.setAttribute('role', 'status')
-
-    notice.append(
-      document.createTextNode(
-        'Showing a static map because the interactive map could not load. ',
-      ),
-    )
-
-    const reload = document.createElement('button')
-    reload.type = 'button'
-    reload.className = 'sites-map__fallback-reload'
-    reload.textContent = 'Reload the page'
-    reload.addEventListener('click', () => {
-      window.location.reload()
-    })
-    notice.append(reload)
-
-    notice.append(document.createTextNode(' to try the interactive map again.'))
-
-    mapContainer.before(notice)
-    this.fallbackNotice = notice
-  }
-
-  private clearFallbackNotice() {
-    this.fallbackNotice?.remove()
-    this.fallbackNotice = null
-  }
-
-  private async watchInteractiveMapOrFallback(container: HTMLElement, apiKey: string) {
-    try {
-      await this.waitForInteractiveMapHealthy(container)
-    } catch {
-      if (this.staticLayer || !this.el?.contains(container)) return
-      this.mapWatchCleanup?.()
-      this.mapWatchCleanup = null
-      this.teardownInteractiveMap()
-      await this.useStaticFallback(container, apiKey)
-    }
-  }
-
-  /**
-   * Resolves once the map looks healthy; rejects if Google shows its error UI
-   * or calls gm_authFailure.
-   */
-  private waitForInteractiveMapHealthy(container: HTMLElement): Promise<void> {
-    return new Promise((resolve, reject) => {
-      let settled = false
-
-      const finish = (error?: Error) => {
-        if (settled) return
-        settled = true
-        this.mapWatchCleanup?.()
-        this.mapWatchCleanup = null
-        if (error) reject(error)
-        else resolve()
-      }
-
-      const fail = () => finish(new Error('Google Maps failed to render'))
-
-      if (mapContainerHasGoogleError(container)) {
-        fail()
-        return
-      }
-
-      const previousAuthFailure = window.gm_authFailure
-      window.gm_authFailure = () => {
-        previousAuthFailure?.()
-        fail()
-      }
-
-      const observer = new MutationObserver(() => {
-        if (mapContainerHasGoogleError(container)) fail()
-      })
-      observer.observe(container, { childList: true, subtree: true, characterData: true })
-
-      const poll = window.setInterval(() => {
-        if (mapContainerHasGoogleError(container)) fail()
-      }, 250)
-
-      // Watch long enough for Google's error overlay / auth failure to appear.
-      // Do not treat an early `idle` as success — Oops often paints after first layout.
-      const healthyTimer = window.setTimeout(() => {
-        if (mapContainerHasGoogleError(container)) {
-          fail()
-          return
-        }
-        finish()
-      }, 6000)
-
-      this.mapWatchCleanup = () => {
-        observer.disconnect()
-        window.clearInterval(poll)
-        window.clearTimeout(healthyTimer)
-        if (window.gm_authFailure) {
-          window.gm_authFailure = previousAuthFailure
-        }
-      }
-    })
-  }
-
-  private teardownInteractiveMap() {
-    this.openInfoWindow?.close()
-    this.openInfoWindow = null
-    for (const entry of this.siteMarkers) {
-      entry.marker.map = null
-    }
-    this.siteMarkers = []
+  dispose() {
+    sitesMapStore.unregister(this.focusSite)
+    this.mapInstance?.remove()
     this.mapInstance = null
+    this.siteMarkers = []
+    this.mapInitStarted = false
+    super.dispose()
   }
 
   private openSite(name: string) {
-    if (this.staticLayer) {
-      this.openStaticSite(name)
-      return
-    }
-
     const entry = this.siteMarkers.find((item) => item.name === name)
     const map = this.mapInstance
     if (!entry || !map) return
 
-    const position = markerPosition(entry.marker)
-    if (!position) return
-
-    this.openInfoWindow?.close()
-    map.panTo(position)
-    if ((map.getZoom() ?? 0) < 8) {
-      map.setZoom(8)
-    }
-    entry.infoWindow.open({ map, anchor: entry.marker })
-    this.openInfoWindow = entry.infoWindow
+    const latLng = entry.marker.getLatLng()
+    map.setView(latLng, Math.max(map.getZoom(), 8), { animate: true })
+    entry.marker.openPopup()
   }
 
   private statusPill(site: ParticipatingSite): { style: string; text: string } {
@@ -301,145 +116,66 @@ export default class SitesMap extends Component {
     })
   }
 
-  private initMap(container: HTMLElement, mapId: string) {
+  private async initMap(container: HTMLElement) {
+    const [{ default: L }] = await Promise.all([
+      import('leaflet'),
+      import('leaflet/dist/leaflet.css'),
+    ])
     const textInverse = cssVar('--text-inverse')
 
-    const map = new google.maps.Map(container, {
-      zoom: 5,
-      center: { lat: 20.5937, lng: 78.9629 },
-      mapId,
-      // Advanced markers require a map ID; cloud styles replace MapOptions.styles.
+    const map = L.map(container, {
+      scrollWheelZoom: false,
+      attributionControl: true,
     })
 
-    const bounds = new google.maps.LatLngBounds()
+    L.tileLayer(TILE_URL, {
+      attribution: TILE_ATTRIBUTION,
+      subdomains: 'abcd',
+      maxZoom: 20,
+    }).addTo(map)
+
+    const bounds = L.latLngBounds([])
 
     this.siteMarkers = participatingSites.map((site) => {
       const markerColor = cssVar(batchColorTokens[site.batch])
-      const marker = new google.maps.marker.AdvancedMarkerElement({
-        map,
-        position: site.location,
+      const icon = L.divIcon({
+        className: 'sites-map__leaflet-marker',
+        html: `
+          <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="16" cy="16" r="12" fill="${markerColor}" stroke="${textInverse}" stroke-width="2"/>
+            <circle cx="16" cy="16" r="6" fill="${textInverse}"/>
+          </svg>
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -14],
+      })
+      const marker = L.marker([site.location.lat, site.location.lng], {
         title: site.name,
-        content: createMarkerContent(markerColor, textInverse),
-        gmpClickable: true,
+        icon,
       })
+        .bindPopup(this.popupHtmlFor(site), {
+          maxWidth: 280,
+          className: 'sites-map__leaflet-popup',
+        })
+        .addTo(map)
 
-      const infoWindow = new google.maps.InfoWindow({
-        content: this.popupHtmlFor(site),
-      })
-
-      marker.addEventListener('gmp-click', () => {
-        this.openInfoWindow?.close()
-        infoWindow.open({ map, anchor: marker })
-        this.openInfoWindow = infoWindow
-      })
-
-      bounds.extend(site.location)
-      return { name: site.name, marker, infoWindow }
+      bounds.extend([site.location.lat, site.location.lng])
+      return { name: site.name, marker }
     })
 
-    map.fitBounds(bounds, 10)
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, { padding: [16, 16] })
+    } else {
+      map.setView([20.5937, 78.9629], 5)
+    }
+
     this.mapInstance = map
-  }
 
-  private async initStaticFallback(container: HTMLElement, apiKey: string) {
-    const displayWidth = Math.max(container.clientWidth, 320)
-    const displayHeight = Math.max(container.clientHeight, 200)
-    const size = staticMapSize(displayWidth, displayHeight)
-    const viewport = fitViewport(
-      participatingSites.map((site) => site.location),
-      size.width,
-      size.height,
-    )
-    const url = buildStaticMapUrl(viewport, apiKey)
-    const img = await loadStaticMapImage(url)
-    img.className = 'sites-map__image'
-
-    const layer = document.createElement('div')
-    layer.className = 'sites-map__static'
-    layer.appendChild(img)
-
-    this.staticMarkers = participatingSites.map((site) => {
-      const point = latLngToPixel(site.location, viewport)
-      const button = document.createElement('button')
-      button.type = 'button'
-      button.className = `sites-map__marker sites-map__marker--${site.batch}`
-      button.style.left = `${(point.x / viewport.width) * 100}%`
-      button.style.top = `${(point.y / viewport.height) * 100}%`
-      button.setAttribute('aria-label', site.name)
-      button.title = site.name
-
-      const popupHtml = this.popupHtmlFor(site)
-      button.addEventListener('click', (event) => {
-        event.stopPropagation()
-        this.openStaticPopup(button, popupHtml)
-      })
-
-      layer.appendChild(button)
-      return { name: site.name, button, popupHtml }
+    // Leaflet measures the container after paint; fix size once layout settles.
+    requestAnimationFrame(() => {
+      map.invalidateSize()
     })
-
-    layer.addEventListener('click', () => this.closeStaticPopup())
-
-    container.replaceChildren(layer)
-    container.classList.add('sites-map--static')
-    this.staticLayer = layer
-  }
-
-  private openStaticSite(name: string) {
-    const entry = this.staticMarkers.find((item) => item.name === name)
-    if (!entry) return
-    this.openStaticPopup(entry.button, entry.popupHtml)
-  }
-
-  private openStaticPopup(anchor: HTMLButtonElement, html: string) {
-    this.closeStaticPopup()
-    if (!this.staticLayer) return
-
-    const popup = document.createElement('div')
-    popup.className = 'sites-map__popup'
-    popup.setAttribute('role', 'dialog')
-    popup.innerHTML = `
-      <button type="button" class="sites-map__popup-close" aria-label="Close">×</button>
-      ${html}
-    `
-
-    const closeBtn = popup.querySelector('.sites-map__popup-close')
-    closeBtn?.addEventListener('click', (event) => {
-      event.stopPropagation()
-      this.closeStaticPopup()
-    })
-    popup.addEventListener('click', (event) => event.stopPropagation())
-
-    this.staticLayer.appendChild(popup)
-    this.staticPopup = popup
-    anchor.classList.add('sites-map__marker--active')
-
-    const layerRect = this.staticLayer.getBoundingClientRect()
-    const anchorRect = anchor.getBoundingClientRect()
-    const popupRect = popup.getBoundingClientRect()
-
-    // Prefer above the marker; allow the popup to spill outside the map bounds.
-    let left = anchorRect.left - layerRect.left + anchorRect.width / 2 - popupRect.width / 2
-    let top = anchorRect.top - layerRect.top - popupRect.height - 12
-
-    if (top < -popupRect.height + 24) {
-      top = anchorRect.bottom - layerRect.top + 12
-    }
-
-    const minLeft = 8 - popupRect.width * 0.4
-    const maxLeft = layerRect.width - popupRect.width * 0.6
-    left = Math.min(Math.max(minLeft, left), maxLeft)
-
-    popup.style.left = `${left}px`
-    popup.style.top = `${top}px`
-  }
-
-  private closeStaticPopup() {
-    this.staticPopup?.remove()
-    this.staticPopup = null
-    for (const entry of this.staticMarkers) {
-      entry.button.classList.remove('sites-map__marker--active')
-    }
   }
 
   template() {
