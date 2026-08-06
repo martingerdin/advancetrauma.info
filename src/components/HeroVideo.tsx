@@ -42,6 +42,9 @@ export default class HeroVideo extends Component {
     if (frame.querySelector('mux-player')) return
 
     const player = document.createElement('mux-player') as MuxPlayerElement
+    // Must be set before playbackId so Mux Data cookies/beacons never start.
+    player.disableCookies = true
+    player.disableTracking = true
     player.playbackId = playbackId
     player.setAttribute('metadata-video-title', 'ADVANCE TRAUMA animation')
     player.accentColor = cssVar('--accent')
