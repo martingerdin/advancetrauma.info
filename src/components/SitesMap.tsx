@@ -3,7 +3,7 @@ import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet'
 import { batchColorTokens, getBatchStatus, participatingSites, siteBatches } from '../data/sites'
 import type { ParticipatingSite } from '../data/sites'
 import { cssVar } from '../lib/css-var'
-import { buildSitePopupHtml } from '../lib/site-map-popup'
+import { buildSitePopupHtml, createSitePopupElement } from '../lib/site-map-popup'
 import sitesMapStore from '../stores/sites-map-store'
 
 type SiteMarker = {
@@ -150,14 +150,19 @@ export default class SitesMap extends Component {
         iconAnchor: [16, 16],
         popupAnchor: [0, -14],
       })
+      const popupHtml = this.popupHtmlFor(site)
       const marker = L.marker([site.location.lat, site.location.lng], {
         title: site.name,
         icon,
       })
-        .bindPopup(this.popupHtmlFor(site), {
-          maxWidth: 280,
-          className: 'sites-map__leaflet-popup',
-        })
+        .bindPopup(
+          () => createSitePopupElement(popupHtml, () => marker.closePopup()),
+          {
+            maxWidth: 280,
+            className: 'sites-map__leaflet-popup',
+            closeButton: false,
+          },
+        )
         .addTo(map)
 
       bounds.extend([site.location.lat, site.location.lng])

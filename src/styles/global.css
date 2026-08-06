@@ -775,22 +775,50 @@ body.nav-open {
   border: 0;
 }
 
+/* Neutralize Leaflet chrome so the shared `.sites-map__popup` shell is the visible frame. */
 .sites-map__leaflet-popup .leaflet-popup-content-wrapper {
   padding: 0;
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 12px var(--shadow-ink-soft);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .sites-map__leaflet-popup .leaflet-popup-content {
   margin: 0;
   min-width: 0;
-  max-height: var(--map-popup-max-height);
-  overflow: auto;
 }
 
-.sites-map__leaflet-popup .leaflet-popup-tip {
-  box-shadow: 0 2px 6px var(--shadow-ink-soft);
+.sites-map__leaflet-popup .leaflet-popup-tip-container {
+  display: none;
+}
+
+.sites-map__popup {
+  position: relative;
+  max-width: min(var(--map-popup-width), calc(100% - var(--space-sm)));
+  max-height: var(--map-popup-max-height);
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px var(--shadow-ink-soft);
+}
+
+.sites-map__popup-close {
+  position: absolute;
+  top: var(--space-3xs);
+  right: var(--space-3xs);
+  z-index: 1;
+  width: var(--map-marker-size);
+  height: var(--map-marker-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  cursor: pointer;
 }
 
 .sites-map-popup__body {
