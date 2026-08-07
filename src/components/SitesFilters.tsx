@@ -12,13 +12,14 @@ export default class SitesFilters extends Component {
       const currentVersion = sitesFilterStore.version
       const hasActiveFilters = sitesFilterStore.hasActiveFilters()
       
+      this.update()
+      
       if (currentVersion !== this.lastVersion && !hasActiveFilters) {
-        // clearAll was called - manually reset all checkboxes
-        this.resetCheckboxes()
+        // clearAll was called - manually reset all checkboxes after update
+        requestAnimationFrame(() => this.resetCheckboxes())
       }
       
       this.lastVersion = currentVersion
-      this.update()
     })
     this.lastVersion = sitesFilterStore.version
   }
