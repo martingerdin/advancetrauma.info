@@ -89,13 +89,15 @@ export default class TeamMemberCard extends Component {
               ))}
             </div>
           ) : null}
-          {member.roles?.[1] ? (
+          {Array.isArray(member.roles) && member.roles.length > 1 ? (
             <ul class="team-card__roles">
-              {member.roles[1] ? <li>{member.roles[1]}</li> : null}
-              {member.roles[2] ? <li>{member.roles[2]}</li> : null}
-              {member.roles[3] ? <li>{member.roles[3]}</li> : null}
+              {member.roles.map(
+                (role, idx) =>
+                  role ? <li key={idx + 1}>{role}</li> : null
+              )}
             </ul>
           ) : null}
+     
         </div>
       </details>
     )
