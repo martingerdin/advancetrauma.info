@@ -43,3 +43,23 @@ export function buildSitePopupHtml(site: ParticipatingSite, colors: SitePopupCol
     </div>
   `
 }
+
+/** Shared popup shell (custom close control + body) for map site popups. */
+export function createSitePopupElement(bodyHtml: string, onClose: () => void): HTMLElement {
+  const popup = document.createElement('div')
+  popup.className = 'sites-map__popup'
+  popup.setAttribute('role', 'dialog')
+  popup.innerHTML = `
+    <button type="button" class="sites-map__popup-close" aria-label="Close">×</button>
+    ${bodyHtml}
+  `
+
+  const closeBtn = popup.querySelector('.sites-map__popup-close')
+  closeBtn?.addEventListener('click', (event) => {
+    event.stopPropagation()
+    onClose()
+  })
+  popup.addEventListener('click', (event) => event.stopPropagation())
+
+  return popup
+}
