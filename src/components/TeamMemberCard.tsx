@@ -1,5 +1,6 @@
 import { Component } from '@geajs/core'
 import type { TeamMember } from '../data/team'
+import TeamSiteLink from './TeamSiteLink'
 
 function orcidUrl(orcid: string): string {
   const id = orcid.replace(/^https?:\/\/orcid\.org\//i, '').trim()
@@ -21,7 +22,7 @@ export default class TeamMemberCard extends Component {
 
   template({ member }: this['props']) {
     return (
-      <details class="team-card">
+      <details class="team-card" data-member={member.name}>
         <summary class="team-card__summary">
           <h4 class="team-card__name">{member.name}</h4>
           {member.roles ? (
@@ -80,6 +81,13 @@ export default class TeamMemberCard extends Component {
                 Institutional profile
               </a>
             </p>
+          ) : null}
+          {member.linkedSites ? (
+            <div class="team-card__sites">
+              {member.linkedSites.map((site) => (
+                <TeamSiteLink siteName={site.name} siteCity={site.city} />
+              ))}
+            </div>
           ) : null}
           {member.roles?.[1] ? (
             <ul class="team-card__roles">

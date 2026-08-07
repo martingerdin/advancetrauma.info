@@ -1,4 +1,11 @@
+import { splitPeopleNames } from '../lib/people-names'
+import { sitesForMember } from '../lib/site-team-links'
 import { participatingSites } from './sites'
+
+export type LinkedSite = {
+  name: string
+  city: string
+}
 
 export type TeamMember = {
   name: string
@@ -11,6 +18,8 @@ export type TeamMember = {
   orcid?: string
   /** Link to institutional profile */
   profile?: string
+  /** Participating sites where this person is PI or coordinator */
+  linkedSites?: LinkedSite[]
 }
 
 export type TeamGroup = {
@@ -172,11 +181,14 @@ const contributors: TeamMember[] = [
  */
 const steeringAndDataMonitoring: TeamMember[] = []
 
-function splitNames(value: string | undefined): string[] {
-  return (value ?? '')
-    .split(',')
-    .map((name) => name.trim())
-    .filter(Boolean)
+function linkedSitesFor(name: string): LinkedSite[] {
+  return sitesForMember(name).map((site) => ({ name: site.name, city: site.city }))
+}
+
+function withLinkedSites(member: TeamMember): TeamMember {
+  const linkedSites = linkedSitesFor(member.name)
+  if (linkedSites.length === 0) return member
+  return { ...member, linkedSites }
 }
 
 function addSiteMember(
@@ -202,10 +214,10 @@ function siteTeamMembers(excludeNames: ReadonlySet<string>): TeamMember[] {
   const byName = new Map<string, TeamMember>()
   for (const site of participatingSites) {
     const affiliation = `${site.name}, ${site.city}`
-    for (const name of splitNames(site.pi)) {
+    for (const name of splitPeopleNames(site.pi)) {
       addSiteMember(byName, excludeNames, name, affiliation, 'Site investigator')
     }
-    for (const name of splitNames(site.coordinators)) {
+    for (const name of splitPeopleNames(site.coordinators)) {
       addSiteMember(
         byName,
         excludeNames,
@@ -230,12 +242,12 @@ export const teamGroups: TeamGroup[] = [
   {
     id: 'contributors',
     title: 'Management, collaborators, and investigators',
-    members: [...contributors, ...siteTeamMembers(contributorNames)],
+    members: [...contributors, ...siteTeamMembers(contributorNames)].map(withLinkedSites),
   },
   {
     id: 'sdmc',
     title: 'Joint trial steering and data monitoring committee',
-    members: steeringAndDataMonitoring,
+    members: steeringAndDataMonitoring.map(withLinkedSites),
   },
 ]
 

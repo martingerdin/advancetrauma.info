@@ -1,8 +1,10 @@
+import { splitPeopleNames } from '../lib/people-names'
+
 export type SiteBatch = '1' | '2' | '3' | '4' | '5' | '6'
 
 export type BatchStatus = 'upcoming' | 'ongoing' | 'completed' | 'starting' | 'screening'
 
-export type ParticipatingSite = {
+type SiteInput = {
   name: string
   city: string
   batch: SiteBatch
@@ -11,6 +13,21 @@ export type ParticipatingSite = {
   pi: string
   /** Clinical research coordinators (comma-separated), shown separately from PIs */
   coordinators?: string
+}
+
+export type ParticipatingSite = SiteInput & {
+  /** Parsed from `pi` for linked person UI */
+  investigatorNames: string[]
+  /** Parsed from `coordinators` for linked person UI */
+  coordinatorNames: string[]
+}
+
+function withPeople(site: SiteInput): ParticipatingSite {
+  return {
+    ...site,
+    investigatorNames: splitPeopleNames(site.pi),
+    coordinatorNames: splitPeopleNames(site.coordinators),
+  }
 }
 
 export type SiteBatchInfo = {
@@ -35,7 +52,7 @@ export const batchColorTokens: Record<SiteBatch, string> = {
   '6': '--ink',
 }
 
-export const participatingSites: ParticipatingSite[] = [
+const siteInputs: SiteInput[] = [
   {
     name: 'HBT Medical College And Dr. R N Cooper Municipal General Hospital',
     location: { lat: 19.10790971021016, lng: 72.83623768267398 },
@@ -127,6 +144,8 @@ export const participatingSites: ParticipatingSite[] = [
     coordinators: 'Muskaan Katyal',
   },
 ]
+
+export const participatingSites: ParticipatingSite[] = siteInputs.map(withPeople)
 
 /**
  * Batch windows follow the protocol: each batch runs 13 months with an
@@ -241,4 +260,3 @@ export const siteBatchViews = siteBatches.map((batch) => {
 })
 
 export type SiteBatchView = (typeof siteBatchViews)[number]
-

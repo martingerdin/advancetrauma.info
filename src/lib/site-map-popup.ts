@@ -1,4 +1,5 @@
 import type { ParticipatingSite } from '../data/sites'
+import { linkedPeopleHtml } from './site-team-links'
 
 export type SitePopupColors = {
   brand: string
@@ -12,10 +13,11 @@ export type SitePopupColors = {
 
 /** Shared site popup markup for map markers. */
 export function buildSitePopupHtml(site: ParticipatingSite, colors: SitePopupColors): string {
+  const investigators = linkedPeopleHtml(site.pi, 'sites-map-popup__person')
   const coordinators = site.coordinators
     ? `<p class="sites-map-popup__row" style="color: ${colors.text};">
         <span class="sites-map-popup__label" style="color: ${colors.textMuted};">Clinical research coordinator</span>
-        ${site.coordinators}
+        ${linkedPeopleHtml(site.coordinators, 'sites-map-popup__person')}
       </p>`
     : ''
 
@@ -28,7 +30,7 @@ export function buildSitePopupHtml(site: ParticipatingSite, colors: SitePopupCol
       </div>
       <p class="sites-map-popup__row" style="color: ${colors.text};">
         <span class="sites-map-popup__label" style="color: ${colors.textMuted};">Investigator</span>
-        ${site.pi}
+        ${investigators}
       </p>
       ${coordinators}
       <p class="sites-map-popup__row" style="color: ${colors.text};">
