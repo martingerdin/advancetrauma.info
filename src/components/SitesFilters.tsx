@@ -4,38 +4,15 @@ import { participatingSites, batchStatusLabels, type SiteBatch, type BatchStatus
 
 export default class SitesFilters extends Component {
   private unsubscribe?: () => void
-  private lastVersion = 0
 
   mounted() {
     this.unsubscribe = sitesFilterStore.subscribe(() => {
-      // Check if we need to manually reset checkboxes after clearAll
-      const currentVersion = sitesFilterStore.version
-      const hasActiveFilters = sitesFilterStore.hasActiveFilters()
-      
       this.update()
-      
-      if (currentVersion !== this.lastVersion && !hasActiveFilters) {
-        // clearAll was called - manually reset all checkboxes after update
-        requestAnimationFrame(() => this.resetCheckboxes())
-      }
-      
-      this.lastVersion = currentVersion
     })
-    this.lastVersion = sitesFilterStore.version
   }
 
   unmounted() {
     this.unsubscribe?.()
-  }
-
-  resetCheckboxes() {
-    // Manually uncheck all checkboxes in the DOM
-    const checkboxes = this.element?.querySelectorAll<HTMLInputElement>(
-      '.sites-filters input[type="checkbox"]'
-    )
-    checkboxes?.forEach((checkbox) => {
-      checkbox.checked = false
-    })
   }
 
   handleSearchInput = (e: Event) => {
@@ -105,9 +82,10 @@ export default class SitesFilters extends Component {
                 return (
                   <label class="sites-filters__checkbox-label">
                     <input
-                      key={`batch-${batch}-${state.version}`}
+                      ref={(el: HTMLInputElement | null) => {
+                        if (el) el.checked = isChecked
+                      }}
                       type="checkbox"
-                      checked={isChecked}
                       onChange={this.handleBatchToggle(batch)}
                     />
                     <span>Batch {batch}</span>
@@ -126,9 +104,10 @@ export default class SitesFilters extends Component {
                 return (
                   <label class="sites-filters__checkbox-label">
                     <input
-                      key={`status-${status}-${state.version}`}
+                      ref={(el: HTMLInputElement | null) => {
+                        if (el) el.checked = isChecked
+                      }}
                       type="checkbox"
-                      checked={isChecked}
                       onChange={this.handleStatusToggle(status)}
                     />
                     <span>{batchStatusLabels[status]}</span>
@@ -147,9 +126,10 @@ export default class SitesFilters extends Component {
                 return (
                   <label class="sites-filters__checkbox-label">
                     <input
-                      key={`city-${city}-${state.version}`}
+                      ref={(el: HTMLInputElement | null) => {
+                        if (el) el.checked = isChecked
+                      }}
                       type="checkbox"
-                      checked={isChecked}
                       onChange={this.handleCityToggle(city)}
                     />
                     <span>{city}</span>
