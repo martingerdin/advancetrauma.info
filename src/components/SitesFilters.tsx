@@ -77,21 +77,18 @@ export default class SitesFilters extends Component {
           <div class="sites-filters__group">
             <label class="sites-filters__label">Batch</label>
             <div class="sites-filters__options">
-              {batches.map((batch) => {
-                const isChecked = state.batches.has(batch)
-                return (
-                  <label class="sites-filters__checkbox-label">
-                    <input
-                      ref={(el: HTMLInputElement | null) => {
-                        if (el) el.checked = isChecked
-                      }}
-                      type="checkbox"
-                      onChange={this.handleBatchToggle(batch)}
-                    />
-                    <span>Batch {batch}</span>
-                  </label>
-                )
-              })}
+              {batches.map((batch) => (
+                <label class="sites-filters__checkbox-label">
+                  <input
+                    ref={(el: HTMLInputElement | null) => {
+                      if (el) el.checked = sitesFilterStore.batches.has(batch)
+                    }}
+                    type="checkbox"
+                    onChange={this.handleBatchToggle(batch)}
+                  />
+                  <span>Batch {batch}</span>
+                </label>
+              ))}
             </div>
           </div>
 
@@ -99,21 +96,18 @@ export default class SitesFilters extends Component {
           <div class="sites-filters__group">
             <label class="sites-filters__label">Status</label>
             <div class="sites-filters__options">
-              {statuses.map((status) => {
-                const isChecked = state.statuses.has(status)
-                return (
-                  <label class="sites-filters__checkbox-label">
-                    <input
-                      ref={(el: HTMLInputElement | null) => {
-                        if (el) el.checked = isChecked
-                      }}
-                      type="checkbox"
-                      onChange={this.handleStatusToggle(status)}
-                    />
-                    <span>{batchStatusLabels[status]}</span>
-                  </label>
-                )
-              })}
+              {statuses.map((status) => (
+                <label class="sites-filters__checkbox-label">
+                  <input
+                    ref={(el: HTMLInputElement | null) => {
+                      if (el) el.checked = sitesFilterStore.statuses.has(status)
+                    }}
+                    type="checkbox"
+                    onChange={this.handleStatusToggle(status)}
+                  />
+                  <span>{batchStatusLabels[status]}</span>
+                </label>
+              ))}
             </div>
           </div>
 
@@ -121,21 +115,18 @@ export default class SitesFilters extends Component {
           <div class="sites-filters__group">
             <label class="sites-filters__label">City</label>
             <div class="sites-filters__options">
-              {cities.map((city) => {
-                const isChecked = state.cities.has(city)
-                return (
-                  <label class="sites-filters__checkbox-label">
-                    <input
-                      ref={(el: HTMLInputElement | null) => {
-                        if (el) el.checked = isChecked
-                      }}
-                      type="checkbox"
-                      onChange={this.handleCityToggle(city)}
-                    />
-                    <span>{city}</span>
-                  </label>
-                )
-              })}
+              {cities.map((city) => (
+                <label class="sites-filters__checkbox-label">
+                  <input
+                    ref={(el: HTMLInputElement | null) => {
+                      if (el) el.checked = sitesFilterStore.cities.has(city)
+                    }}
+                    type="checkbox"
+                    onChange={this.handleCityToggle(city)}
+                  />
+                  <span>{city}</span>
+                </label>
+              ))}
             </div>
           </div>
         </div>
