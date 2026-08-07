@@ -1,5 +1,6 @@
 import { Component } from '@geajs/core'
 import { sites } from '../data/content'
+import SitesFilters from './SitesFilters'
 import SitesList from './SitesList'
 import SitesMap from './SitesMap'
 
@@ -14,6 +15,7 @@ export default class Sites extends Component {
           </header>
           <div class="section__main">
             <SitesMap />
+            <SitesFilters />
             <SitesList />
           </div>
         </div>
