@@ -18,7 +18,7 @@ export default class SitesList extends Component {
   }
 
   getFilteredBatches(): SiteBatchView[] {
-    const state = sitesFilterStore.state
+    const state = sitesFilterStore
     const hasActiveFilters = sitesFilterStore.hasActiveFilters()
 
     if (!hasActiveFilters) {

@@ -1,72 +1,59 @@
 import { Store } from '@geajs/core'
 import type { SiteBatch, BatchStatus } from '../data/sites'
 
-export type SitesFilterState = {
-  search: string
-  batches: Set<SiteBatch>
-  statuses: Set<BatchStatus>
-  cities: Set<string>
-}
-
-class SitesFilterStore extends Store<SitesFilterState> {
-  constructor() {
-    super({
-      search: '',
-      batches: new Set(),
-      statuses: new Set(),
-      cities: new Set(),
-    })
-  }
+class SitesFilterStore extends Store {
+  search = ''
+  batches = new Set<SiteBatch>()
+  statuses = new Set<BatchStatus>()
+  cities = new Set<string>()
 
   setSearch(search: string) {
-    this.setState({ search })
+    this.search = search
   }
 
   toggleBatch(batch: SiteBatch) {
-    const batches = new Set(this.state.batches)
-    if (batches.has(batch)) {
-      batches.delete(batch)
+    if (this.batches.has(batch)) {
+      this.batches.delete(batch)
     } else {
-      batches.add(batch)
+      this.batches.add(batch)
     }
-    this.setState({ batches })
+    // Trigger update
+    this.batches = new Set(this.batches)
   }
 
   toggleStatus(status: BatchStatus) {
-    const statuses = new Set(this.state.statuses)
-    if (statuses.has(status)) {
-      statuses.delete(status)
+    if (this.statuses.has(status)) {
+      this.statuses.delete(status)
     } else {
-      statuses.add(status)
+      this.statuses.add(status)
     }
-    this.setState({ statuses })
+    // Trigger update
+    this.statuses = new Set(this.statuses)
   }
 
   toggleCity(city: string) {
-    const cities = new Set(this.state.cities)
-    if (cities.has(city)) {
-      cities.delete(city)
+    if (this.cities.has(city)) {
+      this.cities.delete(city)
     } else {
-      cities.add(city)
+      this.cities.add(city)
     }
-    this.setState({ cities })
+    // Trigger update
+    this.cities = new Set(this.cities)
   }
 
   clearAll() {
-    this.setState({
-      search: '',
-      batches: new Set(),
-      statuses: new Set(),
-      cities: new Set(),
-    })
+    this.search = ''
+    this.batches = new Set()
+    this.statuses = new Set()
+    this.cities = new Set()
   }
 
   hasActiveFilters(): boolean {
     return (
-      this.state.search !== '' ||
-      this.state.batches.size > 0 ||
-      this.state.statuses.size > 0 ||
-      this.state.cities.size > 0
+      this.search !== '' ||
+      this.batches.size > 0 ||
+      this.statuses.size > 0 ||
+      this.cities.size > 0
     )
   }
 }
