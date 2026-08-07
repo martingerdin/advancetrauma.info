@@ -80,7 +80,10 @@ export default class SitesFilters extends Component {
               {batches.map((batch) => {
                 const isChecked = state.batches.has(batch)
                 return (
-                  <label class="sites-filters__checkbox-label" key={`batch-${batch}-${isChecked}`}>
+                  <label
+                    class="sites-filters__checkbox-label"
+                    key={`batch-${batch}-${state.version}`}
+                  >
                     <input
                       type="checkbox"
                       checked={isChecked}
@@ -102,7 +105,7 @@ export default class SitesFilters extends Component {
                 return (
                   <label
                     class="sites-filters__checkbox-label"
-                    key={`status-${status}-${isChecked}`}
+                    key={`status-${status}-${state.version}`}
                   >
                     <input
                       type="checkbox"
@@ -123,7 +126,10 @@ export default class SitesFilters extends Component {
               {cities.map((city) => {
                 const isChecked = state.cities.has(city)
                 return (
-                  <label class="sites-filters__checkbox-label" key={`city-${city}-${isChecked}`}>
+                  <label
+                    class="sites-filters__checkbox-label"
+                    key={`city-${city}-${state.version}`}
+                  >
                     <input
                       type="checkbox"
                       checked={isChecked}

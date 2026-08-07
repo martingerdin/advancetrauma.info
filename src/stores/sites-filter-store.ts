@@ -6,6 +6,7 @@ class SitesFilterStore extends Store {
   batches = new Set<SiteBatch>()
   statuses = new Set<BatchStatus>()
   cities = new Set<string>()
+  version = 0
 
   setSearch(search: string) {
     this.search = search
@@ -17,6 +18,7 @@ class SitesFilterStore extends Store {
     } else {
       this.batches.add(batch)
     }
+    this.version++
     // Trigger update
     this.batches = new Set(this.batches)
   }
@@ -27,6 +29,7 @@ class SitesFilterStore extends Store {
     } else {
       this.statuses.add(status)
     }
+    this.version++
     // Trigger update
     this.statuses = new Set(this.statuses)
   }
@@ -37,6 +40,7 @@ class SitesFilterStore extends Store {
     } else {
       this.cities.add(city)
     }
+    this.version++
     // Trigger update
     this.cities = new Set(this.cities)
   }
@@ -46,6 +50,7 @@ class SitesFilterStore extends Store {
     this.batches = new Set()
     this.statuses = new Set()
     this.cities = new Set()
+    this.version++
   }
 
   hasActiveFilters(): boolean {
