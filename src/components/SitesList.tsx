@@ -98,10 +98,15 @@ export default class SitesList extends Component {
     this.state.searchQuery = ''
     this.state.selectedStates = new Set<string>()
     this.state.selectedBatches = new Set<SiteBatch>()
-    const searchInput = document.querySelector(
+    const searchInput = this.el?.querySelector(
       '.sites-filters__search',
     ) as HTMLInputElement | null
     if (searchInput) searchInput.value = ''
+    this.el
+      ?.querySelectorAll<HTMLInputElement>('.sites-filters__checkbox')
+      .forEach((checkbox) => {
+        checkbox.checked = false
+      })
   }
 
   toggleFilters = () => {
