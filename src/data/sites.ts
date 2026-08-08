@@ -7,6 +7,8 @@ export type BatchStatus = 'upcoming' | 'ongoing' | 'completed' | 'starting' | 's
 type SiteInput = {
   name: string
   city: string
+  /** Indian state / union territory for geographical filtering */
+  state: string
   batch: SiteBatch
   website: string
   location: { lat: number; lng: number }
@@ -57,6 +59,7 @@ const siteInputs: SiteInput[] = [
     name: 'HBT Medical College And Dr. R N Cooper Municipal General Hospital',
     location: { lat: 19.10790971021016, lng: 72.83623768267398 },
     city: 'Mumbai',
+    state: 'Maharashtra',
     batch: '1',
     website: 'https://hbtmc.edu.in/',
     pi: 'Geeta Ghag, Vipul Nandu',
@@ -66,6 +69,7 @@ const siteInputs: SiteInput[] = [
     name: 'IPGME&R and SSKM Hospital',
     location: { lat: 22.540269944753586, lng: 88.34186296554837 },
     city: 'Kolkata',
+    state: 'West Bengal',
     batch: '1',
     website: 'http://www.ipgmer.gov.in/',
     pi: 'Shamita Chatterjee, Maitreyee Mukherjee',
@@ -75,6 +79,7 @@ const siteInputs: SiteInput[] = [
     name: 'Christian Medical College & Hospital',
     location: { lat: 30.911165478936997, lng: 75.86348436577856 },
     city: 'Ludhiana',
+    state: 'Punjab',
     batch: '1',
     website: 'https://www.cmcludhiana.in/',
     pi: 'Parvez Haque, Thejus Varghese',
@@ -84,6 +89,7 @@ const siteInputs: SiteInput[] = [
     name: 'Government Medical College & Hospital',
     location: { lat: 30.692216564214863, lng: 76.7551942229613 },
     city: 'Chandigarh',
+    state: 'Chandigarh',
     batch: '1',
     website: 'https://www.gmch.gov.in/',
     pi: 'Rajeev Sharma',
@@ -93,6 +99,7 @@ const siteInputs: SiteInput[] = [
     name: 'Himalayan Institute of Medical Sciences',
     location: { lat: 30.193327822632433, lng: 78.16497428998137 },
     city: 'Dehradun',
+    state: 'Uttarakhand',
     batch: '1',
     website: 'https://srhu.edu.in/medical-sciences/',
     pi: 'Hemant Nautiyal',
@@ -102,6 +109,7 @@ const siteInputs: SiteInput[] = [
     name: 'Seth G.S. Medical College and King Edward Memorial Hospital',
     location: { lat: 19.002633531934915, lng: 72.84142762699638 },
     city: 'Mumbai',
+    state: 'Maharashtra',
     batch: '2',
     website: 'https://www.kem.edu/',
     pi: 'Monty Khajanchi',
@@ -111,6 +119,7 @@ const siteInputs: SiteInput[] = [
     name: 'Lokmanya Tilak Municipal Medical College and General Hospital',
     location: { lat: 19.036157387791466, lng: 72.85942328082004 },
     city: 'Mumbai',
+    state: 'Maharashtra',
     batch: '2',
     website: 'https://ltmgh.com/',
     pi: 'Vineet Kumar',
@@ -120,6 +129,7 @@ const siteInputs: SiteInput[] = [
     name: 'Holy Family Hospital',
     location: { lat: 28.56218828970658, lng: 77.27511129639481 },
     city: 'New Delhi',
+    state: 'Delhi',
     batch: '2',
     website: 'https://www.hfhdelhi.org/',
     pi: 'Aisvarya Kapoor',
@@ -129,6 +139,7 @@ const siteInputs: SiteInput[] = [
     name: 'Assam Medical College & Hospital',
     location: { lat: 27.483625508772267, lng: 94.94401488101919 },
     city: 'Dibrugarh',
+    state: 'Assam',
     batch: '2',
     website: 'https://amch-dibrugarh.assam.gov.in/',
     pi: 'Jishan Ahmed',
@@ -138,6 +149,7 @@ const siteInputs: SiteInput[] = [
     name: 'Dayanand Medical College & Hospital',
     location: { lat: 30.916655731118574, lng: 75.83081233862086 },
     city: 'Ludhiana',
+    state: 'Punjab',
     batch: '2',
     website: 'https://www.dmch.edu/',
     pi: 'Jaspal Singh',
