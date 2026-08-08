@@ -8,7 +8,7 @@ export default class Team extends Component {
   state = {
     searchQuery: '',
     selectedRoles: new Set<string>(),
-    selectedAffiliation: '',
+    selectedAffiliations: new Set<string>(),
     filtersExpanded: false,
   }
 
@@ -50,8 +50,9 @@ export default class Team extends Component {
           member.roles.some((role) => role && this.state.selectedRoles.has(role)))
 
       const matchesAffiliation =
-        !this.state.selectedAffiliation ||
-        member.affiliation === this.state.selectedAffiliation
+        this.state.selectedAffiliations.size === 0 ||
+        (!!member.affiliation &&
+          this.state.selectedAffiliations.has(member.affiliation))
 
       return matchesSearch && matchesRole && matchesAffiliation
     })
@@ -71,33 +72,31 @@ export default class Team extends Component {
     this.state.selectedRoles = new Set(this.state.selectedRoles)
   }
 
-  handleAffiliationChange = (event: Event) => {
-    const target = event.target as HTMLSelectElement
-    this.state.selectedAffiliation = target.value
+  handleAffiliationToggle = (affiliation: string) => {
+    if (this.state.selectedAffiliations.has(affiliation)) {
+      this.state.selectedAffiliations.delete(affiliation)
+    } else {
+      this.state.selectedAffiliations.add(affiliation)
+    }
+    this.state.selectedAffiliations = new Set(this.state.selectedAffiliations)
   }
 
   handleClearFilters = () => {
     this.state.searchQuery = ''
     this.state.selectedRoles = new Set<string>()
-    this.state.selectedAffiliation = ''
+    this.state.selectedAffiliations = new Set<string>()
     const searchInput = document.querySelector('.team-filters__search') as HTMLInputElement
     if (searchInput) searchInput.value = ''
-    const affiliationSelect = document.querySelector(
-      '.team-filters__affiliation-select'
-    ) as HTMLSelectElement
-    if (affiliationSelect) affiliationSelect.value = ''
   }
 
   toggleFilters = () => {
     this.state.filtersExpanded = !this.state.filtersExpanded
   }
 
-  get hasActiveFilters(): boolean {
-    return (
-      this.state.searchQuery !== '' ||
-      this.state.selectedRoles.size > 0 ||
-      this.state.selectedAffiliation !== ''
-    )
+  get activeFilterCount(): number {
+    let count = this.state.selectedRoles.size + this.state.selectedAffiliations.size
+    if (this.state.searchQuery) count += 1
+    return count
   }
 
   template() {
@@ -121,15 +120,12 @@ export default class Team extends Component {
                 aria-expanded={this.state.filtersExpanded}
               >
                 <span>Filter</span>
-                {this.hasActiveFilters ? (
-                  <span class="team-filter-toggle__badge">{
-                    (this.state.searchQuery ? 1 : 0) +
-                    this.state.selectedRoles.size +
-                    (this.state.selectedAffiliation ? 1 : 0)
-                  }</span>
+                {this.activeFilterCount > 0 ? (
+                  <span class="team-filter-toggle__badge">{this.activeFilterCount}</span>
                 ) : null}
+                <span class="team-filter-toggle__chevron" aria-hidden="true"></span>
               </button>
-              {this.hasActiveFilters ? (
+              {this.activeFilterCount > 0 ? (
                 <button
                   type="button"
                   class="team-filter-toggle__clear"
@@ -142,35 +138,49 @@ export default class Team extends Component {
 
             {this.state.filtersExpanded ? (
               <div class="team-filters">
-                <div class="team-filters__row">
-                  <label class="team-filters__label">
-                    <span class="team-filters__label-text">Search by name</span>
-                    <input
-                      type="text"
-                      class="team-filters__search"
-                      placeholder="Enter a name..."
-                      input={this.handleSearchInput}
-                    />
-                  </label>
-                </div>
+                <label class="team-filters__label">
+                  <span class="team-filters__label-text">Search by name</span>
+                  <input
+                    type="text"
+                    class="team-filters__search"
+                    placeholder="Enter a name…"
+                    input={this.handleSearchInput}
+                  />
+                </label>
 
-                <div class="team-filters__row">
-                  <label class="team-filters__label">
-                    <span class="team-filters__label-text">Filter by affiliation</span>
-                    <select
-                      class="team-filters__affiliation-select"
-                      change={this.handleAffiliationChange}
-                    >
-                      <option value="">All affiliations</option>
-                      {this.availableAffiliations.map((affiliation) => (
-                        <option value={affiliation}>{affiliation}</option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
+                <details class="team-filters__group">
+                  <summary class="team-filters__group-summary">
+                    <span class="team-filters__group-title">Affiliation</span>
+                    {this.state.selectedAffiliations.size > 0 ? (
+                      <span class="team-filter-toggle__badge">
+                        {this.state.selectedAffiliations.size}
+                      </span>
+                    ) : null}
+                  </summary>
+                  <div class="team-filters__checkboxes">
+                    {this.availableAffiliations.map((affiliation) => (
+                      <label class="team-filters__checkbox-label">
+                        <input
+                          type="checkbox"
+                          class="team-filters__checkbox"
+                          checked={this.state.selectedAffiliations.has(affiliation)}
+                          change={() => this.handleAffiliationToggle(affiliation)}
+                        />
+                        <span class="team-filters__checkbox-text">{affiliation}</span>
+                      </label>
+                    ))}
+                  </div>
+                </details>
 
-                <fieldset class="team-filters__fieldset">
-                  <legend class="team-filters__legend">Filter by role</legend>
+                <details class="team-filters__group">
+                  <summary class="team-filters__group-summary">
+                    <span class="team-filters__group-title">Role</span>
+                    {this.state.selectedRoles.size > 0 ? (
+                      <span class="team-filter-toggle__badge">
+                        {this.state.selectedRoles.size}
+                      </span>
+                    ) : null}
+                  </summary>
                   <div class="team-filters__checkboxes">
                     {this.availableRoles.map((role) => (
                       <label class="team-filters__checkbox-label">
@@ -184,7 +194,7 @@ export default class Team extends Component {
                       </label>
                     ))}
                   </div>
-                </fieldset>
+                </details>
               </div>
             ) : null}
 
