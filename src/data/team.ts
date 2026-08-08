@@ -69,7 +69,7 @@ const contributors: TeamMember[] = [
   {
     name: 'Debojit Basak',
     affiliation:
-      'Institute of Post Graduate Medical Education & Research and Seth Sukhlal Karnani Memorial Hospital, Kolkata, India',
+      'The George Institute for Global Health, New Delhi, India',
     roles: [
       'Associate Project Manager',
       'Trial Team member',
