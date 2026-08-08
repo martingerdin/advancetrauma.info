@@ -195,19 +195,29 @@ function addSiteMember(
   byName: Map<string, TeamMember>,
   excludeNames: ReadonlySet<string>,
   name: string,
-  affiliation: string,
   role: string,
+  affiliation?: string,
 ) {
   const key = name.toLowerCase()
   if (excludeNames.has(key)) return
   const existing = byName.get(key)
   if (existing) {
-    if (existing.affiliation && !existing.affiliation.includes(affiliation)) {
+    if (
+      affiliation &&
+      existing.affiliation &&
+      !existing.affiliation.includes(affiliation)
+    ) {
       existing.affiliation = `${existing.affiliation}; ${affiliation}`
+    } else if (affiliation && !existing.affiliation) {
+      existing.affiliation = affiliation
     }
     return
   }
-  byName.set(key, { name, affiliation, roles: [role] })
+  byName.set(key, {
+    name,
+    ...(affiliation ? { affiliation } : {}),
+    roles: [role],
+  })
 }
 
 function siteTeamMembers(excludeNames: ReadonlySet<string>): TeamMember[] {
@@ -215,16 +225,11 @@ function siteTeamMembers(excludeNames: ReadonlySet<string>): TeamMember[] {
   for (const site of participatingSites) {
     const affiliation = `${site.name}, ${site.city}`
     for (const name of splitPeopleNames(site.pi)) {
-      addSiteMember(byName, excludeNames, name, affiliation, 'Site investigator')
+      addSiteMember(byName, excludeNames, name, 'Site investigator', affiliation)
     }
     for (const name of splitPeopleNames(site.coordinators)) {
-      addSiteMember(
-        byName,
-        excludeNames,
-        name,
-        affiliation,
-        'Clinical research coordinator',
-      )
+      // CRCs show trial site via linkedSites; omit affiliation to avoid duplication.
+      addSiteMember(byName, excludeNames, name, 'Clinical research coordinator')
     }
   }
   return [...byName.values()]
