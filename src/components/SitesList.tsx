@@ -11,6 +11,10 @@ const availableStates = Array.from(
   new Set(participatingSites.map((site) => site.state)),
 ).sort()
 
+const availableCities = Array.from(
+  new Set(participatingSites.map((site) => site.city)),
+).sort()
+
 const availableBatches: SiteBatch[] = ['1', '2', '3', '4', '5', '6']
 
 /** Map to child components — Gea cannot safely `.map()` nested inline JSX. */
@@ -18,6 +22,7 @@ export default class SitesList extends Component {
   state = {
     searchQuery: '',
     selectedStates: new Set<string>(),
+    selectedCities: new Set<string>(),
     selectedBatches: new Set<SiteBatch>(),
     filtersExpanded: false,
   }
@@ -27,7 +32,10 @@ export default class SitesList extends Component {
     if (!hasActiveFilters) return siteBatchViews
 
     const search = this.state.searchQuery.trim().toLowerCase()
-    const hasSiteFilters = search !== '' || this.state.selectedStates.size > 0
+    const hasSiteFilters =
+      search !== '' ||
+      this.state.selectedStates.size > 0 ||
+      this.state.selectedCities.size > 0
 
     return siteBatchViews
       .map((batch) => {
@@ -43,6 +51,10 @@ export default class SitesList extends Component {
             this.state.selectedStates.size === 0 ||
             this.state.selectedStates.has(site.state)
 
+          const matchesCity =
+            this.state.selectedCities.size === 0 ||
+            this.state.selectedCities.has(site.city)
+
           const matchesSearch =
             !search ||
             site.name.toLowerCase().includes(search) ||
@@ -51,7 +63,7 @@ export default class SitesList extends Component {
             site.pi.toLowerCase().includes(search) ||
             (site.coordinators?.toLowerCase().includes(search) ?? false)
 
-          return matchesState && matchesSearch
+          return matchesState && matchesCity && matchesSearch
         })
 
         if (sites.length === 0) {
@@ -85,6 +97,15 @@ export default class SitesList extends Component {
     this.state.selectedStates = new Set(this.state.selectedStates)
   }
 
+  handleCityToggle = (city: string) => {
+    if (this.state.selectedCities.has(city)) {
+      this.state.selectedCities.delete(city)
+    } else {
+      this.state.selectedCities.add(city)
+    }
+    this.state.selectedCities = new Set(this.state.selectedCities)
+  }
+
   handleBatchToggle = (batch: SiteBatch) => {
     if (this.state.selectedBatches.has(batch)) {
       this.state.selectedBatches.delete(batch)
@@ -97,6 +118,7 @@ export default class SitesList extends Component {
   handleClearFilters = () => {
     this.state.searchQuery = ''
     this.state.selectedStates = new Set<string>()
+    this.state.selectedCities = new Set<string>()
     this.state.selectedBatches = new Set<SiteBatch>()
     const searchInput = this.el?.querySelector(
       '.sites-filters__search',
@@ -114,7 +136,10 @@ export default class SitesList extends Component {
   }
 
   get activeFilterCount(): number {
-    let count = this.state.selectedStates.size + this.state.selectedBatches.size
+    let count =
+      this.state.selectedStates.size +
+      this.state.selectedCities.size +
+      this.state.selectedBatches.size
     if (this.state.searchQuery) count += 1
     return count
   }
@@ -180,6 +205,30 @@ export default class SitesList extends Component {
                       change={() => this.handleStateToggle(stateName)}
                     />
                     <span class="sites-filters__checkbox-text">{stateName}</span>
+                  </label>
+                ))}
+              </div>
+            </details>
+
+            <details class="sites-filters__group">
+              <summary class="sites-filters__group-summary">
+                <span class="sites-filters__group-title">City</span>
+                {this.state.selectedCities.size > 0 ? (
+                  <span class="sites-filter-toggle__badge">
+                    {this.state.selectedCities.size}
+                  </span>
+                ) : null}
+              </summary>
+              <div class="sites-filters__checkboxes">
+                {availableCities.map((city) => (
+                  <label class="sites-filters__checkbox-label">
+                    <input
+                      type="checkbox"
+                      class="sites-filters__checkbox"
+                      checked={this.state.selectedCities.has(city)}
+                      change={() => this.handleCityToggle(city)}
+                    />
+                    <span class="sites-filters__checkbox-text">{city}</span>
                   </label>
                 ))}
               </div>
