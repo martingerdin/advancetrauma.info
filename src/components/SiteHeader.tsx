@@ -1,11 +1,7 @@
 import { Component } from '@geajs/core'
-import { scrollToSection } from '../lib/scroll-to-section'
+import { footer } from '../data/content'
 import navStore from '../stores/nav-store'
-
-function goToSection(event: Event, id: string) {
-  navStore.close()
-  scrollToSection(event, id)
-}
+import SectionNavLink from './SectionNavLink'
 
 export default class SiteHeader extends Component {
   onAfterRender() {
@@ -53,31 +49,9 @@ export default class SiteHeader extends Component {
 
           <nav id="site-nav" class="site-header__panel" aria-label="Page sections">
             <ul class="site-header__nav">
-              <li>
-                <a href="#about" click={(e: Event) => goToSection(e, 'about')}>
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#resources" click={(e: Event) => goToSection(e, 'resources')}>
-                  Resources
-                </a>
-              </li>
-              <li>
-                <a href="#sites" click={(e: Event) => goToSection(e, 'sites')}>
-                  Sites
-                </a>
-              </li>
-              <li>
-                <a href="#team" click={(e: Event) => goToSection(e, 'team')}>
-                  Team
-                </a>
-              </li>
-              <li>
-                <a href="#contact" click={(e: Event) => goToSection(e, 'contact')}>
-                  Contact
-                </a>
-              </li>
+              {footer.navigate.map((item) => (
+                <SectionNavLink key={item.id} href={item.href} id={item.id} label={item.label} />
+              ))}
             </ul>
           </nav>
         </div>

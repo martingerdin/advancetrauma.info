@@ -1,18 +1,14 @@
 import { participatingSites, type ParticipatingSite } from '../data/sites'
-import { splitPeopleNames } from './people-names'
-
-function nameKey(name: string): string {
-  return name.trim().toLowerCase()
-}
+import { personNameKey } from './people-names'
 
 /** Participating sites where this person is listed as PI or coordinator. */
 export function sitesForMember(name: string): ParticipatingSite[] {
-  const key = nameKey(name)
+  const key = personNameKey(name)
   if (!key) return []
 
   return participatingSites.filter((site) => {
     const people = [...site.investigatorNames, ...site.coordinatorNames]
-    return people.some((person) => nameKey(person) === key)
+    return people.some((person) => personNameKey(person) === key)
   })
 }
 
@@ -26,8 +22,7 @@ export function escapeHtmlAttr(value: string): string {
 }
 
 /** Linked person names as popup buttons (comma-separated). */
-export function linkedPeopleHtml(value: string | undefined, className: string): string {
-  const names = splitPeopleNames(value)
+export function linkedPeopleHtml(names: string[], className: string): string {
   if (names.length === 0) return ''
 
   return names
