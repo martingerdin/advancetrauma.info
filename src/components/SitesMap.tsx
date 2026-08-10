@@ -3,7 +3,6 @@ import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet'
 import { batchColorTokens, participatingSites } from '../data/sites'
 import type { ParticipatingSite } from '../data/sites'
 import { cssVar } from '../lib/css-var'
-import { openTeamMemberCard } from '../lib/focus-card'
 import { buildSitePopupHtml, createSitePopupElement } from '../lib/site-map-popup'
 import sitesMapStore from '../stores/sites-map-store'
 
@@ -23,21 +22,10 @@ const TILE_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png
 const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
-function onPopupClick(event: Event) {
-  const target = event.target
-  if (!(target instanceof Element)) return
-  const button = target.closest<HTMLElement>('[data-member]')
-  if (!button || !button.classList.contains('sites-map-popup__person')) return
-  event.preventDefault()
-  const name = button.getAttribute('data-member')
-  if (name) openTeamMemberCard(name)
-}
-
 export default class SitesMap extends Component {
   private mapInstance: LeafletMap | null = null
   private siteMarkers: SiteMarker[] = []
   private mapInitStarted = false
-  private mapContainer: HTMLElement | null = null
   private readonly focusSite = (name: string) => {
     this.openSite(name)
   }
@@ -62,8 +50,6 @@ export default class SitesMap extends Component {
 
   dispose() {
     sitesMapStore.unregister(this.focusSite)
-    this.mapContainer?.removeEventListener('click', onPopupClick)
-    this.mapContainer = null
     this.mapInstance?.remove()
     this.mapInstance = null
     this.siteMarkers = []
@@ -144,8 +130,6 @@ export default class SitesMap extends Component {
     }
 
     this.mapInstance = map
-    this.mapContainer = container
-    container.addEventListener('click', onPopupClick)
 
     // Leaflet measures the container after paint; fix size once layout settles.
     requestAnimationFrame(() => {

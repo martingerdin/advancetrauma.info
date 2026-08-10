@@ -6,6 +6,7 @@ import {
   siteBatches,
   type ParticipatingSite,
 } from '../data/sites'
+import { openTeamMemberCard } from './focus-card'
 import { linkedPeopleHtml } from './site-team-links'
 
 /** Shared site popup markup for map markers. */
@@ -44,6 +45,16 @@ export function buildSitePopupHtml(site: ParticipatingSite): string {
   `
 }
 
+function onPopupMemberClick(event: Event) {
+  const target = event.target
+  if (!(target instanceof Element)) return
+  const button = target.closest<HTMLElement>('[data-member]')
+  if (!button || !button.classList.contains('sites-map-popup__person')) return
+  event.preventDefault()
+  const name = button.getAttribute('data-member')
+  if (name) openTeamMemberCard(name)
+}
+
 /** Shared popup shell (custom close control + body) for map site popups. */
 export function createSitePopupElement(bodyHtml: string, onClose: () => void): HTMLElement {
   const popup = document.createElement('div')
@@ -59,7 +70,12 @@ export function createSitePopupElement(bodyHtml: string, onClose: () => void): H
     event.stopPropagation()
     onClose()
   })
-  popup.addEventListener('click', (event) => event.stopPropagation())
+  // Handle member links here: stopPropagation must not block them (clicks never
+  // reach the map container listener when stopped on the popup).
+  popup.addEventListener('click', (event) => {
+    onPopupMemberClick(event)
+    event.stopPropagation()
+  })
 
   return popup
 }
