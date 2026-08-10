@@ -50,7 +50,7 @@ export default class SiteHeader extends Component {
           <nav id="site-nav" class="site-header__panel" aria-label="Page sections">
             <ul class="site-header__nav">
               {footer.navigate.map((item) => (
-                <SectionNavLink href={item.href} id={item.id} label={item.label} />
+                <SectionNavLink key={item.id} href={item.href} id={item.id} label={item.label} />
               ))}
             </ul>
           </nav>

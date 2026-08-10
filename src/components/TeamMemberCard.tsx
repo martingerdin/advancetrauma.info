@@ -85,7 +85,7 @@ export default class TeamMemberCard extends Component {
           {member.linkedSites ? (
             <div class="team-card__sites">
               {member.linkedSites.map((site) => (
-                <TeamSiteLink siteName={site.name} siteCity={site.city} />
+                <TeamSiteLink key={site.name} siteName={site.name} siteCity={site.city} />
               ))}
             </div>
           ) : null}

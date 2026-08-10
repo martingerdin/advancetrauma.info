@@ -25,7 +25,7 @@ export default class SitesBatch extends Component {
         {batch.sites.length > 0 ? (
           <div class="site-cards">
             {batch.sites.map((site) => (
-              <SiteCard site={site} />
+              <SiteCard key={site.name} site={site} />
             ))}
           </div>
         ) : null}

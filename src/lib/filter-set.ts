@@ -1,26 +1,16 @@
-/** Toggle membership of a value in a Set and return a new Set (for reactive state). */
-export function toggleInSet<T>(set: Set<T>, value: T): Set<T> {
-  const next = new Set(set)
-  if (next.has(value)) next.delete(value)
-  else next.add(value)
-  return next
+/** Toggle membership of a value in a reactive array (Gea-friendly mutate-in-place). */
+export function toggleInArray<T>(items: T[], value: T) {
+  const index = items.indexOf(value)
+  if (index >= 0) items.splice(index, 1)
+  else items.push(value)
 }
 
-/** Count selected filter chips plus an optional non-empty search query. */
+/** Count selected filter values plus an optional non-empty search query. */
 export function countActiveFilters(
-  selectedSizes: number[],
+  selectedLengths: number[],
   searchQuery: string,
 ): number {
-  let count = selectedSizes.reduce((sum, size) => sum + size, 0)
+  let count = selectedLengths.reduce((sum, length) => sum + length, 0)
   if (searchQuery) count += 1
   return count
-}
-
-/** Reset a search input and all checkboxes inside a filter root element. */
-export function resetFilterControls(root: ParentNode | null | undefined) {
-  const searchInput = root?.querySelector<HTMLInputElement>('.filters__search')
-  if (searchInput) searchInput.value = ''
-  root?.querySelectorAll<HTMLInputElement>('.filters__checkbox').forEach((checkbox) => {
-    checkbox.checked = false
-  })
 }

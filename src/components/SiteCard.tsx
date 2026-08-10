@@ -1,6 +1,6 @@
 import { Component } from '@geajs/core'
 import type { ParticipatingSite } from '../data/sites'
-import { showSiteOnMap } from '../lib/show-site-on-map'
+import sitesMapStore from '../stores/sites-map-store'
 import SitePersonLink from './SitePersonLink'
 
 export default class SiteCard extends Component {
@@ -18,13 +18,13 @@ export default class SiteCard extends Component {
         <div class="site-card__panel">
           <p class="site-card__pi">
             {site.investigatorNames.map((name) => (
-              <SitePersonLink name={name} />
+              <SitePersonLink key={name} name={name} />
             ))}
           </p>
           {site.coordinatorNames.length > 0 ? (
             <p class="site-card__coordinators">
               {site.coordinatorNames.map((name) => (
-                <SitePersonLink name={name} />
+                <SitePersonLink key={name} name={name} />
               ))}
             </p>
           ) : null}
@@ -35,8 +35,10 @@ export default class SiteCard extends Component {
             <button
               type="button"
               class="site-card__map"
-              data-site={site.name}
-              click={showSiteOnMap}
+              click={(event: Event) => {
+                event.preventDefault()
+                sitesMapStore.show(site.name)
+              }}
             >
               Show on map
             </button>
