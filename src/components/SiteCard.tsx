@@ -1,13 +1,7 @@
 import { Component } from '@geajs/core'
 import type { ParticipatingSite } from '../data/sites'
-import sitesMapStore from '../stores/sites-map-store'
+import { showSiteOnMap } from '../lib/show-site-on-map'
 import SitePersonLink from './SitePersonLink'
-
-function showOnMap(event: Event) {
-  event.preventDefault()
-  const name = (event.currentTarget as HTMLElement).getAttribute('data-site')
-  if (name) sitesMapStore.show(name)
-}
 
 export default class SiteCard extends Component {
   declare props: {
@@ -42,7 +36,7 @@ export default class SiteCard extends Component {
               type="button"
               class="site-card__map"
               data-site={site.name}
-              click={showOnMap}
+              click={showSiteOnMap}
             >
               Show on map
             </button>

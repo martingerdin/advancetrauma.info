@@ -2,6 +2,12 @@ import { Component } from '@geajs/core'
 import { team } from '../data/content'
 import { teamGroupViews } from '../data/team'
 import type { TeamMember } from '../data/team'
+import {
+  countActiveFilters,
+  resetFilterControls,
+  toggleInSet,
+} from '../lib/filter-set'
+import FilterCheckbox from './FilterCheckbox'
 import TeamMemberCard from './TeamMemberCard'
 
 export default class Team extends Component {
@@ -64,29 +70,21 @@ export default class Team extends Component {
   }
 
   handleRoleToggle = (role: string) => {
-    if (this.state.selectedRoles.has(role)) {
-      this.state.selectedRoles.delete(role)
-    } else {
-      this.state.selectedRoles.add(role)
-    }
-    this.state.selectedRoles = new Set(this.state.selectedRoles)
+    this.state.selectedRoles = toggleInSet(this.state.selectedRoles, role)
   }
 
   handleAffiliationToggle = (affiliation: string) => {
-    if (this.state.selectedAffiliations.has(affiliation)) {
-      this.state.selectedAffiliations.delete(affiliation)
-    } else {
-      this.state.selectedAffiliations.add(affiliation)
-    }
-    this.state.selectedAffiliations = new Set(this.state.selectedAffiliations)
+    this.state.selectedAffiliations = toggleInSet(
+      this.state.selectedAffiliations,
+      affiliation,
+    )
   }
 
   handleClearFilters = () => {
     this.state.searchQuery = ''
     this.state.selectedRoles = new Set<string>()
     this.state.selectedAffiliations = new Set<string>()
-    const searchInput = document.querySelector('.team-filters__search') as HTMLInputElement
-    if (searchInput) searchInput.value = ''
+    resetFilterControls(this.el)
   }
 
   toggleFilters = () => {
@@ -94,9 +92,10 @@ export default class Team extends Component {
   }
 
   get activeFilterCount(): number {
-    let count = this.state.selectedRoles.size + this.state.selectedAffiliations.size
-    if (this.state.searchQuery) count += 1
-    return count
+    return countActiveFilters(
+      [this.state.selectedRoles.size, this.state.selectedAffiliations.size],
+      this.state.searchQuery,
+    )
   }
 
   template() {
@@ -112,23 +111,23 @@ export default class Team extends Component {
             <p class="section__lead">{team.lead}</p>
           </header>
           <div class="team-main">
-            <div class="team-filter-toggle">
+            <div class="filter-toggle">
               <button
                 type="button"
-                class="team-filter-toggle__btn"
+                class="filter-toggle__btn"
                 click={this.toggleFilters}
                 aria-expanded={this.state.filtersExpanded}
               >
                 <span>Filter</span>
                 {this.activeFilterCount > 0 ? (
-                  <span class="team-filter-toggle__badge">{this.activeFilterCount}</span>
+                  <span class="filter-toggle__badge">{this.activeFilterCount}</span>
                 ) : null}
-                <span class="team-filter-toggle__chevron" aria-hidden="true"></span>
+                <span class="filter-toggle__chevron" aria-hidden="true"></span>
               </button>
               {this.activeFilterCount > 0 ? (
                 <button
                   type="button"
-                  class="team-filter-toggle__clear"
+                  class="filter-toggle__clear"
                   click={this.handleClearFilters}
                 >
                   Clear
@@ -137,61 +136,53 @@ export default class Team extends Component {
             </div>
 
             {this.state.filtersExpanded ? (
-              <div class="team-filters">
-                <label class="team-filters__label">
-                  <span class="team-filters__label-text">Search by name</span>
+              <div class="filters">
+                <label class="filters__label">
+                  <span class="filters__label-text">Search by name</span>
                   <input
                     type="text"
-                    class="team-filters__search"
+                    class="filters__search"
                     placeholder="Enter a name…"
                     input={this.handleSearchInput}
                   />
                 </label>
 
-                <details class="team-filters__group">
-                  <summary class="team-filters__group-summary">
-                    <span class="team-filters__group-title">Affiliation</span>
+                <details class="filters__group">
+                  <summary class="filters__group-summary">
+                    <span class="filters__group-title">Affiliation</span>
                     {this.state.selectedAffiliations.size > 0 ? (
-                      <span class="team-filter-toggle__badge">
+                      <span class="filter-toggle__badge">
                         {this.state.selectedAffiliations.size}
                       </span>
                     ) : null}
                   </summary>
-                  <div class="team-filters__checkboxes">
+                  <div class="filters__checkboxes">
                     {this.availableAffiliations.map((affiliation) => (
-                      <label class="team-filters__checkbox-label">
-                        <input
-                          type="checkbox"
-                          class="team-filters__checkbox"
-                          checked={this.state.selectedAffiliations.has(affiliation)}
-                          change={() => this.handleAffiliationToggle(affiliation)}
-                        />
-                        <span class="team-filters__checkbox-text">{affiliation}</span>
-                      </label>
+                      <FilterCheckbox
+                        label={affiliation}
+                        checked={this.state.selectedAffiliations.has(affiliation)}
+                        onChange={() => this.handleAffiliationToggle(affiliation)}
+                      />
                     ))}
                   </div>
                 </details>
 
-                <details class="team-filters__group">
-                  <summary class="team-filters__group-summary">
-                    <span class="team-filters__group-title">Role</span>
+                <details class="filters__group">
+                  <summary class="filters__group-summary">
+                    <span class="filters__group-title">Role</span>
                     {this.state.selectedRoles.size > 0 ? (
-                      <span class="team-filter-toggle__badge">
+                      <span class="filter-toggle__badge">
                         {this.state.selectedRoles.size}
                       </span>
                     ) : null}
                   </summary>
-                  <div class="team-filters__checkboxes">
+                  <div class="filters__checkboxes">
                     {this.availableRoles.map((role) => (
-                      <label class="team-filters__checkbox-label">
-                        <input
-                          type="checkbox"
-                          class="team-filters__checkbox"
-                          checked={this.state.selectedRoles.has(role)}
-                          change={() => this.handleRoleToggle(role)}
-                        />
-                        <span class="team-filters__checkbox-text">{role}</span>
-                      </label>
+                      <FilterCheckbox
+                        label={role}
+                        checked={this.state.selectedRoles.has(role)}
+                        onChange={() => this.handleRoleToggle(role)}
+                      />
                     ))}
                   </div>
                 </details>
@@ -222,11 +213,11 @@ export default class Team extends Component {
                 ) : null}
               </div>
             ) : (
-              <div class="team-no-results">
+              <div class="no-results">
                 <p>No team members match the selected filters.</p>
                 <button
                   type="button"
-                  class="team-no-results__reset"
+                  class="no-results__reset"
                   click={this.handleClearFilters}
                 >
                   Clear filters

@@ -1,6 +1,6 @@
 import { Component } from '@geajs/core'
 import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet'
-import { batchColorTokens, getBatchStatus, participatingSites, siteBatches } from '../data/sites'
+import { batchColorTokens, participatingSites } from '../data/sites'
 import type { ParticipatingSite } from '../data/sites'
 import { cssVar } from '../lib/css-var'
 import { openTeamMemberCard } from '../lib/focus-card'
@@ -81,61 +81,15 @@ export default class SitesMap extends Component {
     entry.marker.openPopup()
   }
 
-  private statusPill(site: ParticipatingSite): { style: string; text: string } {
-    const batch = siteBatches.find((b) => b.id === site.batch)!
-    const batchStatus = getBatchStatus(batch)
-    const textInverse = cssVar('--text-inverse')
-    const textMuted = cssVar('--text-muted')
-
-    if (batchStatus === 'ongoing') {
-      return {
-        style: `background: ${cssVar('--status-live')}; color: ${textInverse};`,
-        text: 'Including Patients',
-      }
-    }
-    if (batchStatus === 'completed') {
-      return {
-        style: `background: ${cssVar('--border')}; color: ${textMuted};`,
-        text: 'Completed',
-      }
-    }
-    if (batchStatus === 'starting') {
-      return {
-        style: `background: ${cssVar('--brand')}; color: ${textInverse};`,
-        text: 'Starting',
-      }
-    }
-    if (batchStatus === 'screening') {
-      return {
-        style: `background: ${cssVar('--light-blue')}; color: ${cssVar('--brand-deep')};`,
-        text: 'Screening clusters',
-      }
-    }
-    return {
-      style: `background: ${cssVar('--light-blue')}; color: ${cssVar('--brand-deep')};`,
-      text: 'Not Yet Including Patients',
-    }
-  }
-
-  private popupHtmlFor(site: ParticipatingSite): string {
-    const status = this.statusPill(site)
-    return buildSitePopupHtml(site, {
-      brand: cssVar('--brand'),
-      text: cssVar('--text'),
-      textMuted: cssVar('--text-muted'),
-      textInverse: cssVar('--text-inverse'),
-      markerColor: cssVar(batchColorTokens[site.batch]),
-      statusPillStyle: status.style,
-      statusPillText: status.text,
-    })
-  }
-
   private async initMap(container: HTMLElement) {
     const [{ default: L }] = await Promise.all([
       import('leaflet'),
       import('leaflet/dist/leaflet.css'),
     ])
     const textInverse = cssVar('--text-inverse')
+    const markerSize = Number.parseFloat(cssVar('--map-marker-size-px')) || 28
+    const popupWidth = Number.parseFloat(cssVar('--map-popup-width-px')) || 280
+    const mapPad = Number.parseFloat(cssVar('--map-fit-padding-px')) || 16
 
     const map = L.map(container, {
       scrollWheelZoom: false,
@@ -150,21 +104,21 @@ export default class SitesMap extends Component {
 
     const bounds = L.latLngBounds([])
 
-    this.siteMarkers = participatingSites.map((site) => {
+    this.siteMarkers = participatingSites.map((site: ParticipatingSite) => {
       const markerColor = cssVar(batchColorTokens[site.batch])
       const icon = L.divIcon({
         className: 'sites-map__leaflet-marker',
         html: `
-          <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg width="${markerSize}" height="${markerSize}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="16" cy="16" r="12" fill="${markerColor}" stroke="${textInverse}" stroke-width="2"/>
             <circle cx="16" cy="16" r="6" fill="${textInverse}"/>
           </svg>
         `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
-        popupAnchor: [0, -14],
+        iconSize: [markerSize, markerSize],
+        iconAnchor: [markerSize / 2, markerSize / 2],
+        popupAnchor: [0, -(markerSize / 2 - 2)],
       })
-      const popupHtml = this.popupHtmlFor(site)
+      const popupHtml = buildSitePopupHtml(site)
       const marker = L.marker([site.location.lat, site.location.lng], {
         title: site.name,
         icon,
@@ -172,7 +126,7 @@ export default class SitesMap extends Component {
         .bindPopup(
           () => createSitePopupElement(popupHtml, () => marker.closePopup()),
           {
-            maxWidth: 280,
+            maxWidth: popupWidth,
             className: 'sites-map__leaflet-popup',
             closeButton: false,
           },
@@ -184,7 +138,7 @@ export default class SitesMap extends Component {
     })
 
     if (bounds.isValid()) {
-      map.fitBounds(bounds, { padding: [16, 16] })
+      map.fitBounds(bounds, { padding: [mapPad, mapPad] })
     } else {
       map.setView([20.5937, 78.9629], 5)
     }

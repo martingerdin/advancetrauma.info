@@ -1,6 +1,6 @@
 import { Component } from '@geajs/core'
 import { openSiteCard } from '../lib/focus-card'
-import sitesMapStore from '../stores/sites-map-store'
+import { showSiteOnMap } from '../lib/show-site-on-map'
 
 function viewSite(event: Event) {
   event.preventDefault()
@@ -10,10 +10,7 @@ function viewSite(event: Event) {
 }
 
 function showOnMap(event: Event) {
-  event.preventDefault()
-  event.stopPropagation()
-  const name = (event.currentTarget as HTMLElement).getAttribute('data-site')
-  if (name) sitesMapStore.show(name)
+  showSiteOnMap(event, { stopPropagation: true })
 }
 
 /** Actions to open a site card or map popup from a team member card. */

@@ -1,10 +1,17 @@
 import { Component } from '@geajs/core'
 import {
   participatingSites,
+  siteBatches,
   siteBatchViews,
   type SiteBatch,
   type SiteBatchView,
 } from '../data/sites'
+import {
+  countActiveFilters,
+  resetFilterControls,
+  toggleInSet,
+} from '../lib/filter-set'
+import FilterCheckbox from './FilterCheckbox'
 import SitesBatch from './SitesBatch'
 
 const availableStates = Array.from(
@@ -15,7 +22,7 @@ const availableCities = Array.from(
   new Set(participatingSites.map((site) => site.city)),
 ).sort()
 
-const availableBatches: SiteBatch[] = ['1', '2', '3', '4', '5', '6']
+const availableBatches: SiteBatch[] = siteBatches.map((batch) => batch.id)
 
 /** Map to child components — Gea cannot safely `.map()` nested inline JSX. */
 export default class SitesList extends Component {
@@ -89,30 +96,15 @@ export default class SitesList extends Component {
   }
 
   handleStateToggle = (stateName: string) => {
-    if (this.state.selectedStates.has(stateName)) {
-      this.state.selectedStates.delete(stateName)
-    } else {
-      this.state.selectedStates.add(stateName)
-    }
-    this.state.selectedStates = new Set(this.state.selectedStates)
+    this.state.selectedStates = toggleInSet(this.state.selectedStates, stateName)
   }
 
   handleCityToggle = (city: string) => {
-    if (this.state.selectedCities.has(city)) {
-      this.state.selectedCities.delete(city)
-    } else {
-      this.state.selectedCities.add(city)
-    }
-    this.state.selectedCities = new Set(this.state.selectedCities)
+    this.state.selectedCities = toggleInSet(this.state.selectedCities, city)
   }
 
   handleBatchToggle = (batch: SiteBatch) => {
-    if (this.state.selectedBatches.has(batch)) {
-      this.state.selectedBatches.delete(batch)
-    } else {
-      this.state.selectedBatches.add(batch)
-    }
-    this.state.selectedBatches = new Set(this.state.selectedBatches)
+    this.state.selectedBatches = toggleInSet(this.state.selectedBatches, batch)
   }
 
   handleClearFilters = () => {
@@ -120,15 +112,7 @@ export default class SitesList extends Component {
     this.state.selectedStates = new Set<string>()
     this.state.selectedCities = new Set<string>()
     this.state.selectedBatches = new Set<SiteBatch>()
-    const searchInput = this.el?.querySelector(
-      '.sites-filters__search',
-    ) as HTMLInputElement | null
-    if (searchInput) searchInput.value = ''
-    this.el
-      ?.querySelectorAll<HTMLInputElement>('.sites-filters__checkbox')
-      .forEach((checkbox) => {
-        checkbox.checked = false
-      })
+    resetFilterControls(this.el)
   }
 
   toggleFilters = () => {
@@ -136,12 +120,14 @@ export default class SitesList extends Component {
   }
 
   get activeFilterCount(): number {
-    let count =
-      this.state.selectedStates.size +
-      this.state.selectedCities.size +
-      this.state.selectedBatches.size
-    if (this.state.searchQuery) count += 1
-    return count
+    return countActiveFilters(
+      [
+        this.state.selectedStates.size,
+        this.state.selectedCities.size,
+        this.state.selectedBatches.size,
+      ],
+      this.state.searchQuery,
+    )
   }
 
   template() {
@@ -150,23 +136,23 @@ export default class SitesList extends Component {
 
     return (
       <div class="sites-list">
-        <div class="sites-filter-toggle">
+        <div class="filter-toggle">
           <button
             type="button"
-            class="sites-filter-toggle__btn"
+            class="filter-toggle__btn"
             click={this.toggleFilters}
             aria-expanded={this.state.filtersExpanded}
           >
             <span>Filter</span>
             {this.activeFilterCount > 0 ? (
-              <span class="sites-filter-toggle__badge">{this.activeFilterCount}</span>
+              <span class="filter-toggle__badge">{this.activeFilterCount}</span>
             ) : null}
-            <span class="sites-filter-toggle__chevron" aria-hidden="true"></span>
+            <span class="filter-toggle__chevron" aria-hidden="true"></span>
           </button>
           {this.activeFilterCount > 0 ? (
             <button
               type="button"
-              class="sites-filter-toggle__clear"
+              class="filter-toggle__clear"
               click={this.handleClearFilters}
             >
               Clear
@@ -175,85 +161,73 @@ export default class SitesList extends Component {
         </div>
 
         {this.state.filtersExpanded ? (
-          <div class="sites-filters">
-            <label class="sites-filters__label">
-              <span class="sites-filters__label-text">Search by name</span>
+          <div class="filters">
+            <label class="filters__label">
+              <span class="filters__label-text">Search by name</span>
               <input
                 type="text"
-                class="sites-filters__search"
+                class="filters__search"
                 placeholder="Enter a site or city…"
                 input={this.handleSearchInput}
               />
             </label>
 
-            <details class="sites-filters__group">
-              <summary class="sites-filters__group-summary">
-                <span class="sites-filters__group-title">State</span>
+            <details class="filters__group">
+              <summary class="filters__group-summary">
+                <span class="filters__group-title">State</span>
                 {this.state.selectedStates.size > 0 ? (
-                  <span class="sites-filter-toggle__badge">
+                  <span class="filter-toggle__badge">
                     {this.state.selectedStates.size}
                   </span>
                 ) : null}
               </summary>
-              <div class="sites-filters__checkboxes">
+              <div class="filters__checkboxes">
                 {availableStates.map((stateName) => (
-                  <label class="sites-filters__checkbox-label">
-                    <input
-                      type="checkbox"
-                      class="sites-filters__checkbox"
-                      checked={this.state.selectedStates.has(stateName)}
-                      change={() => this.handleStateToggle(stateName)}
-                    />
-                    <span class="sites-filters__checkbox-text">{stateName}</span>
-                  </label>
+                  <FilterCheckbox
+                    label={stateName}
+                    checked={this.state.selectedStates.has(stateName)}
+                    onChange={() => this.handleStateToggle(stateName)}
+                  />
                 ))}
               </div>
             </details>
 
-            <details class="sites-filters__group">
-              <summary class="sites-filters__group-summary">
-                <span class="sites-filters__group-title">City</span>
+            <details class="filters__group">
+              <summary class="filters__group-summary">
+                <span class="filters__group-title">City</span>
                 {this.state.selectedCities.size > 0 ? (
-                  <span class="sites-filter-toggle__badge">
+                  <span class="filter-toggle__badge">
                     {this.state.selectedCities.size}
                   </span>
                 ) : null}
               </summary>
-              <div class="sites-filters__checkboxes">
+              <div class="filters__checkboxes">
                 {availableCities.map((city) => (
-                  <label class="sites-filters__checkbox-label">
-                    <input
-                      type="checkbox"
-                      class="sites-filters__checkbox"
-                      checked={this.state.selectedCities.has(city)}
-                      change={() => this.handleCityToggle(city)}
-                    />
-                    <span class="sites-filters__checkbox-text">{city}</span>
-                  </label>
+                  <FilterCheckbox
+                    label={city}
+                    checked={this.state.selectedCities.has(city)}
+                    onChange={() => this.handleCityToggle(city)}
+                  />
                 ))}
               </div>
             </details>
 
-            <details class="sites-filters__group">
-              <summary class="sites-filters__group-summary">
-                <span class="sites-filters__group-title">Batch</span>
+            <details class="filters__group">
+              <summary class="filters__group-summary">
+                <span class="filters__group-title">Batch</span>
                 {this.state.selectedBatches.size > 0 ? (
-                  <span class="sites-filter-toggle__badge">
+                  <span class="filter-toggle__badge">
                     {this.state.selectedBatches.size}
                   </span>
                 ) : null}
               </summary>
-              <div class="sites-filters__checkboxes">
+              <div class="filters__checkboxes">
                 {availableBatches.map((batch) => (
-                  <label class="sites-filters__checkbox-label">
-                    <input
-                      type="checkbox"
-                      class="sites-filters__checkbox"
-                      checked={this.state.selectedBatches.has(batch)}
-                      change={() => this.handleBatchToggle(batch)}
-                    />
-                    <span class="sites-filters__checkbox-text">Batch {batch}</span>
-                  </label>
+                  <FilterCheckbox
+                    label={'Batch ' + batch}
+                    checked={this.state.selectedBatches.has(batch)}
+                    onChange={() => this.handleBatchToggle(batch)}
+                  />
                 ))}
               </div>
             </details>
@@ -267,11 +241,11 @@ export default class SitesList extends Component {
             ))}
           </div>
         ) : (
-          <div class="sites-no-results">
+          <div class="no-results">
             <p>No sites match the selected filters.</p>
             <button
               type="button"
-              class="sites-no-results__reset"
+              class="no-results__reset"
               click={this.handleClearFilters}
             >
               Clear filters
