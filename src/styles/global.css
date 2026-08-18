@@ -357,7 +357,12 @@ body.nav-open {
 .hero__glow--highlight {
   top: 2%;
   left: 4%;
-  background: radial-gradient(circle at center, var(--hero-glow-highlight) 0%, transparent 70%);
+  background: radial-gradient(
+    circle at center,
+    var(--hero-glow-highlight) 0%,
+    var(--hero-glow-highlight) 22%,
+    transparent 62%
+  );
   animation: hero-glow-drift-a var(--duration-ambient) var(--ease-ambient) infinite
     alternate;
 }
@@ -367,7 +372,12 @@ body.nav-open {
   right: 2%;
   width: var(--hero-glow-size-alt);
   height: var(--hero-glow-size-alt);
-  background: radial-gradient(circle at center, var(--hero-glow-cool) 0%, transparent 68%);
+  background: radial-gradient(
+    circle at center,
+    var(--hero-glow-cool) 0%,
+    var(--hero-glow-cool) 20%,
+    transparent 60%
+  );
   animation: hero-glow-drift-b var(--duration-ambient-alt) var(--ease-ambient) infinite
     alternate;
 }
@@ -375,7 +385,12 @@ body.nav-open {
 .hero__glow--shade {
   right: 10%;
   bottom: -8%;
-  background: radial-gradient(circle at center, var(--hero-glow-shade) 0%, transparent 72%);
+  background: radial-gradient(
+    circle at center,
+    var(--hero-glow-shade) 0%,
+    var(--hero-glow-shade) 24%,
+    transparent 64%
+  );
   animation: hero-glow-drift-a var(--duration-ambient-alt) var(--ease-ambient) infinite
     alternate-reverse;
 }
