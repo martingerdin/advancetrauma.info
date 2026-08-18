@@ -345,28 +345,43 @@ body.nav-open {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  contain: paint;
 }
 
 .hero__atmosphere::before,
 .hero__atmosphere::after {
   content: "";
   position: absolute;
-  inset: -40%;
+  inset: -30%;
 }
 
 .hero__atmosphere::before {
   background:
-    radial-gradient(ellipse 42% 38% at 28% 22%, var(--hero-glow-highlight), transparent 72%),
-    radial-gradient(ellipse 36% 32% at 78% 18%, var(--hero-glow-cool), transparent 70%);
+    radial-gradient(
+      ellipse 36% 32% at 30% 28%,
+      var(--hero-glow-highlight),
+      rgb(from var(--hero-glow-highlight) r g b / 0) 68%
+    ),
+    radial-gradient(
+      ellipse 30% 28% at 76% 24%,
+      var(--hero-glow-cool),
+      rgb(from var(--hero-glow-cool) r g b / 0) 66%
+    );
   animation: hero-glow-drift-a var(--duration-ambient) var(--ease-ambient) infinite
     alternate;
 }
 
 .hero__atmosphere::after {
   background:
-    radial-gradient(ellipse 48% 42% at 82% 86%, var(--hero-glow-shade), transparent 72%),
-    radial-gradient(ellipse 32% 28% at 16% 78%, var(--hero-glow-cool), transparent 68%);
+    radial-gradient(
+      ellipse 40% 36% at 78% 80%,
+      var(--hero-glow-shade),
+      rgb(from var(--hero-glow-shade) r g b / 0) 70%
+    ),
+    radial-gradient(
+      ellipse 28% 26% at 20% 74%,
+      var(--hero-glow-cool),
+      rgb(from var(--hero-glow-cool) r g b / 0) 64%
+    );
   animation: hero-glow-drift-b var(--duration-ambient-alt) var(--ease-ambient) infinite
     alternate;
 }
