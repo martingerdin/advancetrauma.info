@@ -351,20 +351,20 @@ body.nav-open {
 .hero__atmosphere::after {
   content: "";
   position: absolute;
-  inset: -30%;
+  inset: -20%;
 }
 
 .hero__atmosphere::before {
   background:
     radial-gradient(
-      ellipse 36% 32% at 30% 28%,
+      ellipse 22% 30% at 40% 42%,
       var(--hero-glow-highlight),
-      rgb(from var(--hero-glow-highlight) r g b / 0) 68%
+      rgb(from var(--hero-glow-highlight) r g b / 0) 72%
     ),
     radial-gradient(
-      ellipse 30% 28% at 76% 24%,
+      ellipse 20% 26% at 78% 36%,
       var(--hero-glow-cool),
-      rgb(from var(--hero-glow-cool) r g b / 0) 66%
+      rgb(from var(--hero-glow-cool) r g b / 0) 70%
     );
   animation: hero-glow-drift-a var(--duration-ambient) var(--ease-ambient) infinite
     alternate;
@@ -373,14 +373,14 @@ body.nav-open {
 .hero__atmosphere::after {
   background:
     radial-gradient(
-      ellipse 40% 36% at 78% 80%,
+      ellipse 24% 32% at 74% 78%,
       var(--hero-glow-shade),
-      rgb(from var(--hero-glow-shade) r g b / 0) 70%
+      rgb(from var(--hero-glow-shade) r g b / 0) 74%
     ),
     radial-gradient(
-      ellipse 28% 26% at 20% 74%,
+      ellipse 18% 24% at 26% 72%,
       var(--hero-glow-cool),
-      rgb(from var(--hero-glow-cool) r g b / 0) 64%
+      rgb(from var(--hero-glow-cool) r g b / 0) 70%
     );
   animation: hero-glow-drift-b var(--duration-ambient-alt) var(--ease-ambient) infinite
     alternate;
@@ -613,19 +613,19 @@ body.nav-open {
 
 @keyframes hero-glow-drift-a {
   from {
-    transform: translate3d(-5%, -4%, 0) rotate(-8deg) scale(1.04);
+    transform: translate3d(-6%, -5%, 0) rotate(-10deg) scale(1.04);
   }
   to {
-    transform: translate3d(6%, 5%, 0) rotate(7deg) scale(1.12);
+    transform: translate3d(7%, 6%, 0) rotate(9deg) scale(1.14);
   }
 }
 
 @keyframes hero-glow-drift-b {
   from {
-    transform: translate3d(4%, 3%, 0) rotate(6deg) scale(1.08);
+    transform: translate3d(5%, 4%, 0) rotate(8deg) scale(1.1);
   }
   to {
-    transform: translate3d(-6%, -5%, 0) rotate(-7deg) scale(1);
+    transform: translate3d(-7%, -6%, 0) rotate(-9deg) scale(1);
   }
 }
 
