@@ -1390,7 +1390,8 @@ body.nav-open {
   flex-shrink: 0;
   width: var(--font-size-sm);
   height: var(--font-size-sm);
-  color: var(--orcid);
+  /* Official ORCID green (#A6CE39) is in the SVG; do not recolor. */
+  display: block;
 }
 
 .team-card__profile-link {
