@@ -343,56 +343,11 @@ body.nav-open {
   position: absolute;
   inset: 0;
   z-index: 0;
-  overflow: hidden;
   pointer-events: none;
-}
-
-.hero__glow {
-  position: absolute;
-  width: var(--hero-glow-size);
-  height: var(--hero-glow-size);
-  border-radius: 50%;
-}
-
-.hero__glow--highlight {
-  top: 2%;
-  left: 4%;
-  background: radial-gradient(
-    circle at center,
-    var(--hero-glow-highlight) 0%,
-    var(--hero-glow-highlight) 22%,
-    transparent 62%
-  );
-  animation: hero-glow-drift-a var(--duration-ambient) var(--ease-ambient) infinite
-    alternate;
-}
-
-.hero__glow--cool {
-  top: 6%;
-  right: 2%;
-  width: var(--hero-glow-size-alt);
-  height: var(--hero-glow-size-alt);
-  background: radial-gradient(
-    circle at center,
-    var(--hero-glow-cool) 0%,
-    var(--hero-glow-cool) 20%,
-    transparent 60%
-  );
-  animation: hero-glow-drift-b var(--duration-ambient-alt) var(--ease-ambient) infinite
-    alternate;
-}
-
-.hero__glow--shade {
-  right: 10%;
-  bottom: -8%;
-  background: radial-gradient(
-    circle at center,
-    var(--hero-glow-shade) 0%,
-    var(--hero-glow-shade) 24%,
-    transparent 64%
-  );
-  animation: hero-glow-drift-a var(--duration-ambient-alt) var(--ease-ambient) infinite
-    alternate-reverse;
+  /* Plus pattern: Steve Schoger, heropatterns.com, CC BY 4.0 */
+  background-image: url("/hero-plus.svg");
+  background-size: var(--hero-pattern-size);
+  animation: hero-pattern-shift var(--duration-ambient) linear infinite;
 }
 
 .hero__inner {
@@ -620,26 +575,14 @@ body.nav-open {
   }
 }
 
-@keyframes hero-glow-drift-a {
-  from {
-    transform: translate3d(-6%, -5%, 0) rotate(-10deg) scale(1.04);
-  }
+@keyframes hero-pattern-shift {
   to {
-    transform: translate3d(7%, 6%, 0) rotate(9deg) scale(1.14);
-  }
-}
-
-@keyframes hero-glow-drift-b {
-  from {
-    transform: translate3d(5%, 4%, 0) rotate(8deg) scale(1.1);
-  }
-  to {
-    transform: translate3d(-7%, -6%, 0) rotate(-9deg) scale(1);
+    background-position: var(--hero-pattern-size) var(--hero-pattern-size);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__glow {
+  .hero__atmosphere {
     animation: none;
   }
 }

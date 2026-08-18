@@ -34,9 +34,6 @@
   --on-brand-fill: color-mix(in srgb, var(--text-inverse) 10%, transparent);
   --on-brand-highlight: color-mix(in srgb, var(--text-inverse) 16%, transparent);
   --on-brand-shade: color-mix(in srgb, black 12%, transparent);
-  --hero-glow-highlight: color-mix(in srgb, var(--text-inverse) 58%, var(--brand));
-  --hero-glow-cool: color-mix(in srgb, var(--light-blue) 88%, var(--brand));
-  --hero-glow-shade: color-mix(in srgb, var(--ink) 50%, var(--brand-deep));
 
   /* ── Semantic chrome ─────────────────────────────────────── */
   --header-bg: color-mix(in srgb, var(--brand-deep) 94%, transparent);
@@ -96,8 +93,7 @@
   --content-width: 44rem;
   --section-width: 72rem;
   --hero-copy-width: 32rem;
-  --hero-glow-size: min(32rem, 62vw);
-  --hero-glow-size-alt: min(26rem, 52vw);
+  --hero-pattern-size: 3.75rem;
   --form-width: 28rem;
   --header-height: 4rem;
   --nav-panel-max-height: 24rem;
@@ -130,11 +126,9 @@
   --duration-fast: 200ms;
   --duration-normal: 250ms;
   --duration-slow: 700ms;
-  --duration-ambient: 7s;
-  --duration-ambient-alt: 10s;
+  --duration-ambient: 16s;
   --ease-default: ease;
   --ease-out: ease-out;
-  --ease-ambient: ease-in-out;
 
   /* ── Elevation / stacking ────────────────────────────────── */
   --z-header: 20;
