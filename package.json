@@ -11,7 +11,8 @@
   "dependencies": {
     "@geajs/core": "^1.0.0",
     "@mux/mux-player": "^3.13.2",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "lottie-web": "^5.13.0"
   },
   "devDependencies": {
     "@geajs/vite-plugin": "^1.0.0",

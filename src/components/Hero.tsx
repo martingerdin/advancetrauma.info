@@ -1,13 +1,14 @@
 import { Component } from '@geajs/core'
 import { hero } from '../data/content'
 import { scrollToSection } from '../lib/scroll-to-section'
+import HeroAtmosphere from './HeroAtmosphere'
 import HeroVideo, { hasHeroVideo, playHeroVideo } from './HeroVideo'
 
 export default class Hero extends Component {
   template() {
     return (
       <section class="hero" aria-label="Introduction">
-        <div class="hero__atmosphere" aria-hidden="true"></div>
+        <HeroAtmosphere />
         <div class="hero__inner">
           <div class="hero__copy">
             <p class="hero__eyebrow">{hero.eyebrow}</p>

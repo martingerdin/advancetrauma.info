@@ -343,11 +343,14 @@ body.nav-open {
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
   pointer-events: none;
-  /* Plus pattern: Steve Schoger, heropatterns.com, CC BY 4.0 */
-  background-image: url("/hero-plus.svg");
-  background-size: var(--hero-pattern-size);
-  animation: hero-pattern-shift var(--duration-ambient) linear infinite;
+}
+
+.hero__atmosphere svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .hero__inner {
@@ -575,17 +578,6 @@ body.nav-open {
   }
 }
 
-@keyframes hero-pattern-shift {
-  to {
-    background-position: var(--hero-pattern-size) var(--hero-pattern-size);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__atmosphere {
-    animation: none;
-  }
-}
 
 .cta {
   display: inline-flex;
