@@ -347,43 +347,37 @@ body.nav-open {
   pointer-events: none;
 }
 
-.hero__atmosphere::before,
-.hero__atmosphere::after {
-  content: "";
+.hero__glow {
   position: absolute;
-  inset: -20%;
+  width: var(--hero-glow-size);
+  height: var(--hero-glow-size);
+  border-radius: 50%;
 }
 
-.hero__atmosphere::before {
-  background:
-    radial-gradient(
-      ellipse 22% 30% at 40% 42%,
-      var(--hero-glow-highlight),
-      rgb(from var(--hero-glow-highlight) r g b / 0) 72%
-    ),
-    radial-gradient(
-      ellipse 20% 26% at 78% 36%,
-      var(--hero-glow-cool),
-      rgb(from var(--hero-glow-cool) r g b / 0) 70%
-    );
+.hero__glow--highlight {
+  top: 2%;
+  left: 4%;
+  background: radial-gradient(circle at center, var(--hero-glow-highlight) 0%, transparent 70%);
   animation: hero-glow-drift-a var(--duration-ambient) var(--ease-ambient) infinite
     alternate;
 }
 
-.hero__atmosphere::after {
-  background:
-    radial-gradient(
-      ellipse 24% 32% at 74% 78%,
-      var(--hero-glow-shade),
-      rgb(from var(--hero-glow-shade) r g b / 0) 74%
-    ),
-    radial-gradient(
-      ellipse 18% 24% at 26% 72%,
-      var(--hero-glow-cool),
-      rgb(from var(--hero-glow-cool) r g b / 0) 70%
-    );
+.hero__glow--cool {
+  top: 6%;
+  right: 2%;
+  width: var(--hero-glow-size-alt);
+  height: var(--hero-glow-size-alt);
+  background: radial-gradient(circle at center, var(--hero-glow-cool) 0%, transparent 68%);
   animation: hero-glow-drift-b var(--duration-ambient-alt) var(--ease-ambient) infinite
     alternate;
+}
+
+.hero__glow--shade {
+  right: 10%;
+  bottom: -8%;
+  background: radial-gradient(circle at center, var(--hero-glow-shade) 0%, transparent 72%);
+  animation: hero-glow-drift-a var(--duration-ambient-alt) var(--ease-ambient) infinite
+    alternate-reverse;
 }
 
 .hero__inner {
@@ -630,8 +624,7 @@ body.nav-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__atmosphere::before,
-  .hero__atmosphere::after {
+  .hero__glow {
     animation: none;
   }
 }

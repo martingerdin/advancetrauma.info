@@ -96,6 +96,8 @@
   --content-width: 44rem;
   --section-width: 72rem;
   --hero-copy-width: 32rem;
+  --hero-glow-size: min(32rem, 62vw);
+  --hero-glow-size-alt: min(26rem, 52vw);
   --form-width: 28rem;
   --header-height: 4rem;
   --nav-panel-max-height: 24rem;
