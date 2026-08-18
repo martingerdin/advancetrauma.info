@@ -7,6 +7,7 @@ export default class Hero extends Component {
   template() {
     return (
       <section class="hero" aria-label="Introduction">
+        <div class="hero__atmosphere" aria-hidden="true"></div>
         <div class="hero__inner">
           <div class="hero__copy">
             <p class="hero__eyebrow">{hero.eyebrow}</p>

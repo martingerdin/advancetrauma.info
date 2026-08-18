@@ -327,20 +327,57 @@ body.nav-open {
 }
 
 .hero {
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   text-align: center;
   padding: clamp(var(--space-lg), 5vw, var(--space-xl)) var(--page-pad-right)
     clamp(3rem, 6vw, 4.5rem) var(--page-pad-left);
-  background:
-    radial-gradient(ellipse at 18% 0%, var(--on-brand-highlight), transparent 48%),
-    radial-gradient(ellipse at 88% 100%, var(--on-brand-shade), transparent 42%),
-    linear-gradient(165deg, var(--brand) 0%, var(--brand-deep) 100%);
+  background: linear-gradient(165deg, var(--brand) 0%, var(--brand-deep) 100%);
   color: var(--text-inverse);
 }
 
+.hero__atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+}
+
+.hero__atmosphere::before,
+.hero__atmosphere::after {
+  content: "";
+  position: absolute;
+  width: var(--hero-glow-size);
+  height: var(--hero-glow-size);
+  border-radius: 50%;
+}
+
+.hero__atmosphere::before {
+  top: -28%;
+  left: -12%;
+  background: radial-gradient(circle at center, var(--hero-glow-highlight), transparent 68%);
+  animation: hero-glow-drift-a var(--duration-ambient) var(--ease-ambient) infinite
+    alternate;
+}
+
+.hero__atmosphere::after {
+  right: -16%;
+  bottom: -34%;
+  width: var(--hero-glow-size-alt);
+  height: var(--hero-glow-size-alt);
+  background: radial-gradient(circle at center, var(--hero-glow-shade), transparent 70%);
+  animation: hero-glow-drift-b var(--duration-ambient-alt) var(--ease-ambient) infinite
+    alternate;
+}
+
 .hero__inner {
+  position: relative;
+  z-index: 1;
   width: min(100%, var(--section-width));
   display: flex;
   flex-direction: column;
@@ -560,6 +597,31 @@ body.nav-open {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes hero-glow-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(14%, 12%, 0) scale(1.14);
+  }
+}
+
+@keyframes hero-glow-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  to {
+    transform: translate3d(-16%, -10%, 0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__atmosphere::before,
+  .hero__atmosphere::after {
+    animation: none;
   }
 }
 
