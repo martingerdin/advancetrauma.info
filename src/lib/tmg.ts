@@ -33,6 +33,8 @@ type WebsiteManifest = {
 export type WebsiteFile = {
   path: string
   role?: string
+  /** Display label for the file list; falls back to a humanized role or filename. */
+  name?: string
 }
 
 export type MeetingSummary = {
@@ -148,6 +150,23 @@ export async function openWebPresentation(asset: MeetingAsset): Promise<void> {
   window.setTimeout(() => URL.revokeObjectURL(url), 60_000)
 }
 
+function humanizeFileLabel(value: string): string {
+  return value
+    .replace(/[-_]+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+}
+
+function assetLabel(file: WebsiteFile, pathName: string): string {
+  if (file.name?.trim()) return file.name.trim()
+
+  const role = (file.role || '').trim().toLowerCase()
+  if (role === 'presentation-pdf' || role === 'presentation-web') return 'Presentation'
+  if (role === 'content' || role === 'content-pdf') return 'Notes'
+  if (file.role?.trim()) return humanizeFileLabel(file.role)
+  return humanizeFileLabel(pathName.replace(/\.[^.]+$/, ''))
+}
+
 function fileName(path: string): string {
   return path.split('/').pop() ?? path
 }
@@ -186,7 +205,8 @@ function parseWebsiteFiles(files: unknown): WebsiteFile[] {
       if (!path) return []
 
       const role = 'role' in file && typeof file.role === 'string' ? file.role.trim() : ''
-      return [{ path, role: role || undefined }]
+      const name = 'name' in file && typeof file.name === 'string' ? file.name.trim() : ''
+      return [{ path, role: role || undefined, name: name || undefined }]
     }
 
     return []
@@ -300,7 +320,7 @@ export async function fetchMeetingDetail(meeting: MeetingSummary): Promise<Meeti
     return [
       {
         name,
-        label: file.role ? file.role.replace(/[-_]+/g, ' ') : name.replace(/[-_]+/g, ' '),
+        label: assetLabel(file, name),
         kind: assetKind(name),
         role: file.role,
         downloadUrl: githubFileUrl(blob.path, 'raw'),

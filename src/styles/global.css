@@ -1860,6 +1860,9 @@ body.nav-open {
   list-style: none;
   display: flex;
   flex-direction: column;
+}
+
+.tmg-meeting-list__items {
   gap: var(--space-xs);
 }
 
@@ -1990,20 +1993,39 @@ body.nav-open {
   border-top: 1px solid var(--border);
 }
 
+.tmg-meeting-files__list {
+  gap: var(--space-2xs);
+}
+
 .tmg-meeting-files__link {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  align-items: baseline;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: var(--brand);
   text-decoration: none;
 }
 
-.tmg-meeting-files__kind {
-  font-size: var(--font-size-2xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--text-muted);
+.tmg-meeting-files__link span {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-color: color-mix(in srgb, var(--brand) 35%, transparent);
+}
+
+.tmg-meeting-files__link:hover {
+  color: var(--brand-deep);
+}
+
+.tmg-meeting-files__link:hover span {
+  text-decoration-color: currentColor;
+}
+
+.tmg-meeting-files__icon {
+  flex-shrink: 0;
+  width: var(--font-size-base);
+  height: var(--font-size-base);
 }
 
 .not-found {
