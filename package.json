@@ -6,12 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "hash:tmg-password": "node scripts/generate-tmg-password-hash.mjs"
   },
   "dependencies": {
     "@geajs/core": "^1.0.0",
     "@mux/mux-player": "^3.13.2",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "marked": "^18.0.10"
   },
   "devDependencies": {
     "@geajs/vite-plugin": "^1.0.0",
