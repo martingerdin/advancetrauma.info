@@ -36,12 +36,16 @@ class TmgStore extends Store {
     return Boolean(import.meta.env.VITE_TMG_PASSWORD_HASH)
   }
 
+  hydrateAuth() {
+    if (this.authInitialized) return
+
+    this.authInitialized = true
+    this.authenticated =
+      typeof window !== 'undefined' && window.sessionStorage.getItem(SESSION_KEY) === 'true'
+  }
+
   initialize() {
-    if (!this.authInitialized) {
-      this.authInitialized = true
-      this.authenticated =
-        typeof window !== 'undefined' && window.sessionStorage.getItem(SESSION_KEY) === 'true'
-    }
+    this.hydrateAuth()
 
     if (this.authenticated && this.indexStatus === 'idle') {
       void this.loadMeetings()
@@ -136,4 +140,7 @@ class TmgStore extends Store {
   }
 }
 
-export default new TmgStore()
+const tmgStore = new TmgStore()
+tmgStore.hydrateAuth()
+
+export default tmgStore

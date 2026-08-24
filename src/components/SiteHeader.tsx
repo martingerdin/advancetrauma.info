@@ -1,6 +1,7 @@
 import { Component } from '@geajs/core'
 import { footer } from '../data/content'
 import navStore from '../stores/nav-store'
+import PortalNav from './PortalNav'
 import SectionNavLink from './SectionNavLink'
 
 export default class SiteHeader extends Component {
@@ -52,11 +53,7 @@ export default class SiteHeader extends Component {
               {footer.navigate.map((item) => (
                 <SectionNavLink key={item.id} href={item.href} id={item.id} label={item.label} />
               ))}
-              <li>
-                <a href="/tmg" click={() => navStore.close()}>
-                  TMG
-                </a>
-              </li>
+              <PortalNav />
             </ul>
           </nav>
         </div>

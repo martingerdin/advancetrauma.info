@@ -14,19 +14,12 @@ export default class TMG extends Component {
       <section class="section section--muted">
         <div class="section__inner tmg">
           <div class="tmg__intro">
-            <div>
-              <p class="tmg__eyebrow">Members Area</p>
-              <h1 class="section__heading">Trial Management Group</h1>
-              <p class="section__lead">
-                View recent meeting updates pulled from the public ADVANCE TRAUMA meeting
-                repository.
-              </p>
-            </div>
-            {tmgStore.authenticated ? (
-              <button class="cta cta--ghost" type="button" click={() => tmgStore.logout()}>
-                Sign out
-              </button>
-            ) : null}
+            <p class="tmg__eyebrow">Members Area</p>
+            <h1 class="section__heading">Trial Management Group</h1>
+            <p class="section__lead">
+              View recent meeting updates pulled from the public ADVANCE TRAUMA meeting
+              repository.
+            </p>
           </div>
 
           {!tmgStore.authenticated ? (
