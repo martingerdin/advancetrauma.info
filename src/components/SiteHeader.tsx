@@ -1,7 +1,9 @@
 import { Component } from '@geajs/core'
 import { footer } from '../data/content'
+import { portals } from '../data/portals'
 import navStore from '../stores/nav-store'
-import PortalNav from './PortalNav'
+import HeaderSignOut from './HeaderSignOut'
+import PortalNavLink from './PortalNavLink'
 import SectionNavLink from './SectionNavLink'
 
 export default class SiteHeader extends Component {
@@ -53,7 +55,15 @@ export default class SiteHeader extends Component {
               {footer.navigate.map((item) => (
                 <SectionNavLink key={item.id} href={item.href} id={item.id} label={item.label} />
               ))}
-              <PortalNav />
+              {portals.map((portal, index) => (
+                <PortalNavLink
+                  key={portal.id}
+                  href={portal.href}
+                  label={portal.label}
+                  divided={index === 0}
+                />
+              ))}
+              <HeaderSignOut />
             </ul>
           </nav>
         </div>

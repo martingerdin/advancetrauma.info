@@ -35,8 +35,17 @@ Prefer reactive `string[]` over `Set` so Gea’s array mutation tracking applies
 
 ## Function vs class components
 
-- **Function** — stateless presentational UI (`ResourceCard`, `FilterCheckbox`, `SectionNavLink`)
-- **Class** — local UI state, lifecycle (`onAfterRender` / `dispose`), or non-trivial methods
+Gea’s compiler picks the call style from the **parent**:
+
+- Reactive class parents (e.g. `SiteHeader`) mount mapped children with `new Child()` → child must be a **class** (`SectionNavLink`, `PortalNavLink`, `TeamMemberCard`)
+- Static class parents (e.g. `MeetingList`) often call children as `Child(props, d)` → child must be a **function** (`MeetingListItem`, `MeetingAssetLink`, `FilterCheckbox`)
+- Function parents (e.g. `TeamGroupSection`) use `mount(Child, …)` → child can be a class
+
+Prefer mapping portal/nav leaves **directly in `SiteHeader`** (same pattern as `SectionNavLink`) rather than nesting a second keyed list inside a static wrapper.
+
+Also use a **class** for local UI state or lifecycle (`onAfterRender` / `dispose`).
+
+Mismatch symptoms: `Class constructor X cannot be invoked without 'new'`, or `Cannot read properties of undefined (reading 'child')`.
 
 ## Always pass `key` in `.map()`
 
