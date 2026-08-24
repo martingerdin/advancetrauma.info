@@ -1,7 +1,8 @@
 import { Component } from '@geajs/core'
-import type { MeetingDetail } from '../../lib/tmg'
+import type { MeetingAsset, MeetingDetail } from '../../lib/tmg'
 import MeetingAssetLink from './MeetingAssetLink'
 import MeetingHtml from './MeetingHtml'
+import MeetingPresentationLink from './MeetingPresentationLink'
 
 /** Selected TMG meeting heading, rendered notes, and listed files. */
 export default class MeetingDetailView extends Component {
@@ -9,8 +10,19 @@ export default class MeetingDetailView extends Component {
     detail: MeetingDetail
   }
 
+  /** HMR may re-render against a detail object loaded before `presentations` existed. */
+  get presentations(): MeetingAsset[] {
+    return this.props.detail.presentations ?? []
+  }
+
+  get assets(): MeetingAsset[] {
+    return this.props.detail.assets ?? []
+  }
+
   get emptyFilesMessage(): string {
-    if (this.props.detail.renderedFileName || this.props.detail.assets.length > 0) return ''
+    if (this.props.detail.renderedFileName || this.presentations.length > 0 || this.assets.length > 0) {
+      return ''
+    }
     return 'No website files from this meeting are available yet.'
   }
 
@@ -32,13 +44,19 @@ export default class MeetingDetailView extends Component {
           </a>
         </div>
 
-        {detail.renderedFileName ? <MeetingHtml key={detail.id} markup={detail.html} /> : null}
+        {this.presentations.length > 0 ? (
+          <div class="tmg-meeting-presentations">
+            {this.presentations.map((presentation) => (
+              <MeetingPresentationLink key={presentation.downloadUrl} presentation={presentation} />
+            ))}
+          </div>
+        ) : null}
 
-        {detail.assets.length > 0 ? (
+        {this.assets.length > 0 ? (
           <div class="tmg-meeting-files">
             <h3 class="tmg-meeting-files__title">Meeting files</h3>
             <ul class="tmg-meeting-files__list">
-              {detail.assets.map((asset) => (
+              {this.assets.map((asset) => (
                 <MeetingAssetLink key={asset.downloadUrl} asset={asset} />
               ))}
             </ul>
@@ -48,6 +66,8 @@ export default class MeetingDetailView extends Component {
         {this.emptyFilesMessage ? (
           <p class="tmg-meeting-content__status">{this.emptyFilesMessage}</p>
         ) : null}
+
+        {detail.renderedFileName ? <MeetingHtml key={detail.id} markup={detail.html} /> : null}
       </section>
     )
   }

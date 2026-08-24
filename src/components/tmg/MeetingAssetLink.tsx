@@ -1,10 +1,13 @@
 import type { MeetingAsset } from '../../lib/tmg'
 
 function assetKindLabel(asset: MeetingAsset): string {
+  const role = (asset.role || '').trim().toLowerCase()
+  if (role === 'presentation-pdf') return 'Presentation'
   if (asset.role) {
     return asset.role.replace(/[-_]+/g, ' ')
   }
   if (asset.kind === 'markdown') return 'Markdown'
+  if (asset.kind === 'html') return 'HTML'
   if (asset.kind === 'pdf') return 'PDF'
   if (asset.kind === 'docx') return 'Word'
   if (asset.kind === 'pptx') return 'Slides'

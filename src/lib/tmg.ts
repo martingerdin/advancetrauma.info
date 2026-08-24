@@ -46,7 +46,7 @@ export type MeetingSummary = {
 export type MeetingAsset = {
   name: string
   label: string
-  kind: 'markdown' | 'pdf' | 'docx' | 'pptx' | 'other'
+  kind: 'markdown' | 'html' | 'pdf' | 'docx' | 'pptx' | 'other'
   role?: string
   downloadUrl: string
   repoUrl: string
@@ -60,6 +60,8 @@ export type MeetingDetail = {
   html: string
   renderedFileName: string | null
   renderedSourceUrl: string | null
+  /** HTML presentations opened via “View presentation” (not listed as downloads). */
+  presentations: MeetingAsset[]
   assets: MeetingAsset[]
 }
 
@@ -84,10 +86,66 @@ function extension(name: string): string {
 function assetKind(name: string): MeetingAsset['kind'] {
   const ext = extension(name)
   if (ext === 'md' || ext === 'qmd' || ext === 'markdown') return 'markdown'
+  if (ext === 'html' || ext === 'htm') return 'html'
   if (ext === 'pdf') return 'pdf'
   if (ext === 'doc' || ext === 'docx') return 'docx'
   if (ext === 'ppt' || ext === 'pptx') return 'pptx'
   return 'other'
+}
+
+function roleKey(role: string | undefined): string {
+  return (role || '').trim().toLowerCase()
+}
+
+/** HTML decks listed as presentation-web (or presentation*.html). */
+export function isWebPresentation(asset: Pick<MeetingAsset, 'name' | 'kind' | 'role'>): boolean {
+  const role = roleKey(asset.role)
+  if (role === 'presentation-pdf') return false
+  if (role === 'presentation-web') return true
+  return asset.kind === 'html' && (role.includes('presentation') || /^presentation\./i.test(asset.name))
+}
+
+/** HTTPS directory URL so Reveal can resolve `new URL("…", document.baseURI)` (blob: bases throw). */
+function presentationBaseHref(rawUrl: string): string {
+  const match = rawUrl.match(
+    /^https:\/\/raw\.githubusercontent\.com\/([^/]+)\/([^/]+)\/[^/]+\/(.+)\/[^/]+$/,
+  )
+  if (!match) return 'https://cdn.jsdelivr.net/'
+
+  const [, owner, repo, dir] = match
+  return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${dir}/`
+}
+
+function withPresentationBase(html: string, baseHref: string): string {
+  const tag = `<base href="${baseHref}">`
+  if (/<head[^>]*>/i.test(html)) {
+    return html.replace(/<head[^>]*>/i, (open) => `${open}${tag}`)
+  }
+  return `${tag}${html}`
+}
+
+/**
+ * Open a self-contained HTML presentation in a new tab.
+ * GitHub raw serves .html as text/plain, so we fetch and open a text/html blob.
+ * A `<base href>` is injected because Reveal resolves plugin paths with
+ * `new URL(…, document.baseURI)`, which throws for blob: documents.
+ */
+export async function openWebPresentation(asset: MeetingAsset): Promise<void> {
+  const response = await fetch(asset.downloadUrl)
+  if (!response.ok) {
+    throw new Error(`Unable to load presentation (${response.status}).`)
+  }
+
+  const html = withPresentationBase(await response.text(), presentationBaseHref(asset.downloadUrl))
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const opened = window.open(url, '_blank', 'noopener,noreferrer')
+  if (!opened) {
+    URL.revokeObjectURL(url)
+    throw new Error('Pop-up blocked. Allow pop-ups to view the presentation.')
+  }
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000)
 }
 
 function fileName(path: string): string {
@@ -252,7 +310,10 @@ export async function fetchMeetingDetail(meeting: MeetingSummary): Promise<Meeti
   })
 
   const contentAsset = listedAssets.find((asset) => isInlineContentFile(asset.name))
-  const assets = listedAssets.filter((asset) => !isInlineContentFile(asset.name))
+  const presentations = listedAssets.filter((asset) => isWebPresentation(asset))
+  const assets = listedAssets.filter(
+    (asset) => !isInlineContentFile(asset.name) && !isWebPresentation(asset),
+  )
 
   if (!contentAsset) {
     return {
@@ -263,6 +324,7 @@ export async function fetchMeetingDetail(meeting: MeetingSummary): Promise<Meeti
       html: '',
       renderedFileName: null,
       renderedSourceUrl: null,
+      presentations,
       assets,
     }
   }
@@ -278,6 +340,7 @@ export async function fetchMeetingDetail(meeting: MeetingSummary): Promise<Meeti
     html,
     renderedFileName: contentAsset.name,
     renderedSourceUrl: contentAsset.repoUrl,
+    presentations,
     assets,
   }
 }

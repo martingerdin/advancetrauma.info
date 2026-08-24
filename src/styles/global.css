@@ -1920,6 +1920,13 @@ body.nav-open {
   gap: var(--space-sm);
 }
 
+.tmg-meeting-content:has(.tmg-meeting-presentations) .tmg-meeting-content__body,
+.tmg-meeting-content:has(.tmg-meeting-files) .tmg-meeting-content__body {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+}
+
 .tmg-meeting-content__body h1,
 .tmg-meeting-content__body h2,
 .tmg-meeting-content__body h3,
@@ -1965,6 +1972,16 @@ body.nav-open {
 .tmg-meeting-content__body hr {
   border: 0;
   border-top: 1px solid var(--border);
+}
+
+.tmg-meeting-presentations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tmg-meeting-presentations__button {
+  margin: 0;
 }
 
 .tmg-meeting-files {
