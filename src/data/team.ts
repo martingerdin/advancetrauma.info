@@ -1,4 +1,4 @@
-import { splitPeopleNames } from '../lib/people-names'
+import { personNameKey } from '../lib/people-names'
 import { sitesForMember } from '../lib/site-team-links'
 import { participatingSites } from './sites'
 
@@ -198,7 +198,7 @@ function addSiteMember(
   role: string,
   affiliation?: string,
 ) {
-  const key = name.toLowerCase()
+  const key = personNameKey(name)
   if (excludeNames.has(key)) return
   const existing = byName.get(key)
   if (existing) {
@@ -224,10 +224,10 @@ function siteTeamMembers(excludeNames: ReadonlySet<string>): TeamMember[] {
   const byName = new Map<string, TeamMember>()
   for (const site of participatingSites) {
     const affiliation = `${site.name}, ${site.city}`
-    for (const name of splitPeopleNames(site.pi)) {
+    for (const name of site.investigatorNames) {
       addSiteMember(byName, excludeNames, name, 'Site investigator', affiliation)
     }
-    for (const name of splitPeopleNames(site.coordinators)) {
+    for (const name of site.coordinatorNames) {
       // CRCs show trial site via linkedSites; omit affiliation to avoid duplication.
       addSiteMember(byName, excludeNames, name, 'Clinical research coordinator')
     }
@@ -240,7 +240,7 @@ function sortByName(members: TeamMember[]): TeamMember[] {
 }
 
 const contributorNames = new Set(
-  contributors.map((member) => member.name.toLowerCase()),
+  contributors.map((member) => personNameKey(member.name)),
 )
 
 export const teamGroups: TeamGroup[] = [

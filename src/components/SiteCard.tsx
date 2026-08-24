@@ -3,12 +3,6 @@ import type { ParticipatingSite } from '../data/sites'
 import sitesMapStore from '../stores/sites-map-store'
 import SitePersonLink from './SitePersonLink'
 
-function showOnMap(event: Event) {
-  event.preventDefault()
-  const name = (event.currentTarget as HTMLElement).getAttribute('data-site')
-  if (name) sitesMapStore.show(name)
-}
-
 export default class SiteCard extends Component {
   declare props: {
     site: ParticipatingSite
@@ -24,13 +18,13 @@ export default class SiteCard extends Component {
         <div class="site-card__panel">
           <p class="site-card__pi">
             {site.investigatorNames.map((name) => (
-              <SitePersonLink name={name} />
+              <SitePersonLink key={name} name={name} />
             ))}
           </p>
           {site.coordinatorNames.length > 0 ? (
             <p class="site-card__coordinators">
               {site.coordinatorNames.map((name) => (
-                <SitePersonLink name={name} />
+                <SitePersonLink key={name} name={name} />
               ))}
             </p>
           ) : null}
@@ -41,8 +35,10 @@ export default class SiteCard extends Component {
             <button
               type="button"
               class="site-card__map"
-              data-site={site.name}
-              click={showOnMap}
+              click={(event: Event) => {
+                event.preventDefault()
+                sitesMapStore.show(site.name)
+              }}
             >
               Show on map
             </button>

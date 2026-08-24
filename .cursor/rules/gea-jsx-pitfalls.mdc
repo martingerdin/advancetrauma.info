@@ -1,68 +1,71 @@
 ---
-description: Avoid Gea JSX patterns that break the compiler (el0/el1 ReferenceErrors)
+description: Gea JSX conventions and compiler pitfalls for this codebase
 globs: src/**/*.{tsx,jsx}
 alwaysApply: false
 ---
 
-# Gea template pitfalls
+# Gea template conventions
 
-Gea's JSX compiler has known bugs with several patterns. They show up at runtime as `Uncaught ReferenceError: el0 is not defined` (or `el1`, `first`, etc.).
+Follow Gea’s “just JavaScript” model: class fields for local UI state, stores for shared state, getters for derived values, and shared object/array props that children mutate in place. Prefer function components for presentational leaves.
 
-## Do not `.map()` over nested JSX
+## Props: mutate shared objects/arrays (no callback wiring)
 
-Mapping to a single text node or simple element is usually fine. Mapping to an element **with children**, fragments, or conditionals often generates broken list code.
-
-```tsx
-// BAD — nested markup inside map (Resources cards, site rows with multiple children)
-{items.map((item) => (
-  <a href={item.href}>
-    <h3>{item.label}</h3>
-    <p>{item.description}</p>
-  </a>
-))}
-
-// GOOD — extract a child Component and map to that (TeamMemberCard, SiteCard)
-{items.map((item) => (
-  <ItemCard item={item} />
-))}
-
-// ALSO GOOD — unroll fixed lists, or map only a single leaf text/element
-<a href={items[0].href}>
-  <h3>{items[0].label}</h3>
-  <p>{items[0].description}</p>
-</a>
-```
-
-Safe map example (paragraphs of text only):
+Objects and arrays passed as props are the parent’s reactive proxy. Children should mutate them directly (`push` / `splice`) instead of lifting state with `checked` + `onChange` callbacks.
 
 ```tsx
-{about.paragraphs.map((paragraph) => (
-  <p>{paragraph}</p>
-))}
+// BAD — React-style callback wiring for a shared selection
+<FilterCheckbox checked={selected.includes(city)} onChange={() => toggle(city)} />
+
+// GOOD — pass the reactive array; child mutates it
+<FilterCheckbox label={city} selected={this.selectedCities} />
 ```
 
-## Do not use locals declared inside `template()`
-
-The compiler does not keep `const` / destructuring from the `template()` body in the generated render path.
+## Class fields, not nested `state = {}`
 
 ```tsx
 // BAD
+state = { searchQuery: '', selected: new Set() }
+
+// GOOD
+searchQuery = ''
+selected: string[] = []
+```
+
+Prefer reactive `string[]` over `Set` so Gea’s array mutation tracking applies.
+
+## Function vs class components
+
+- **Function** — stateless presentational UI (`ResourceCard`, `FilterCheckbox`, `SectionNavLink`)
+- **Class** — local UI state, lifecycle (`onAfterRender` / `dispose`), or non-trivial methods
+
+## Always pass `key` in `.map()`
+
+```tsx
+{items.map((item) => (
+  <ItemCard key={item.id} item={item} />
+))}
+```
+
+Mapping to a child component (with a single root) is the safe pattern for nested markup. Prefer that over unrolling fixed lists when the data already lives in an array.
+
+## Avoid fragile template locals
+
+Prefer getters / `this.props` / template parameter destructuring over `const` locals that capture external data inside `template()`:
+
+```tsx
+// RISKY — some compiler paths drop template-local bindings
 template() {
   const [first] = about.partners
   return <a href={first.href}>{first.name}</a>
 }
 
-// GOOD — reference imported/module data directly in JSX
+// GOOD — reference module data or getters directly
 template() {
   return <a href={about.partners[0].href}>{about.partners[0].name}</a>
 }
 ```
 
-Derive arrays **outside** the class if you need `Object.entries` / `.map` prep:
-
-```tsx
-const details = Object.entries(hero.details).map(([label, value]) => ({ label, value }))
-```
+Derive prep arrays **outside** the class when needed (`Object.entries(…).map(…)`).
 
 ## Avoid mixed static text + `{expr}` in one text node
 
@@ -74,6 +77,6 @@ const details = Object.entries(hero.details).map(([label, value]) => ({ label, v
 <span class="sites-list__city">{site.city}</span>
 ```
 
-## Prefer no fragments in lists
+## Prefer no fragments as `.map()` item roots
 
-`<>...</>` inside `.map()` has triggered the same `elN is not defined` failures. Unroll or use a single parent element per item.
+`<>...</>` inside `.map()` has triggered `elN is not defined` failures. Use a single parent element per item.
