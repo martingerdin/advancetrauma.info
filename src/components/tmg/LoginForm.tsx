@@ -1,46 +1,30 @@
 import { Component } from '@geajs/core'
+import tmgStore from '../../stores/tmg-store'
 
 export default class LoginForm extends Component {
-  declare props: {
-    configured: boolean
-    password: string
-    errorMessage: string
-    onInput: (event: Event) => void
-    onSubmit: (event: Event) => void
-  }
-
-  template({ configured, password, errorMessage, onInput, onSubmit }: this['props']) {
+  template() {
     return (
-      <form class="tmg-login" submit={onSubmit}>
-        <label class="tmg-login__label">
-          <span class="tmg-login__label-text">TMG password</span>
-          <input
-            class="tmg-login__input"
-            type="password"
-            name="password"
-            autocomplete="current-password"
-            placeholder="Enter password"
-            value={password}
-            input={onInput}
-            disabled={!configured}
-            required
-          />
-        </label>
-        <button class="cta" type="submit" disabled={!configured}>
-          Access TMG updates
-        </button>
-        {!configured ? (
-          <p class="tmg-login__status tmg-login__status--error">
-            TMG access is not configured yet.
-          </p>
-        ) : errorMessage ? (
-          <p class="tmg-login__status tmg-login__status--error">{errorMessage}</p>
-        ) : (
-          <p class="tmg-login__status">
-            Enter the shared password to view the latest TMG meeting materials.
-          </p>
-        )}
-      </form>
+      <div class="tmg__login-card">
+        <form class="contact-form" submit={(event: Event) => tmgStore.submitPassword(event)}>
+          <label>
+            TMG password
+            <input
+              type="password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Enter password"
+              value={tmgStore.password}
+              input={(event: Event) => tmgStore.setPassword((event.target as HTMLInputElement).value)}
+              disabled={!tmgStore.configured}
+              required
+            />
+          </label>
+          <button class="cta" type="submit" disabled={!tmgStore.configured}>
+            Access TMG updates
+          </button>
+          <p class={tmgStore.loginStatusClass}>{tmgStore.loginStatusMessage}</p>
+        </form>
+      </div>
     )
   }
 }

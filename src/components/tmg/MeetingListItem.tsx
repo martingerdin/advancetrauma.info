@@ -1,24 +1,21 @@
-import { Component } from '@geajs/core'
 import type { MeetingSummary } from '../../lib/tmg'
+import tmgStore from '../../stores/tmg-store'
 
-export default class MeetingListItem extends Component {
-  declare props: {
-    meeting: MeetingSummary
-    selected: boolean
-    onSelect: () => void
-  }
-
-  template({ meeting, selected, onSelect }: this['props']) {
-    return (
-      <li>
-        <button
-          type="button"
-          class={selected ? 'tmg-meeting-list__item tmg-meeting-list__item--active' : 'tmg-meeting-list__item'}
-          click={onSelect}
-        >
-          {meeting.dateLabel}
-        </button>
-      </li>
-    )
-  }
+/** One meeting in the TMG sidebar list. */
+export default function MeetingListItem({ meeting }: { meeting: MeetingSummary }) {
+  return (
+    <li>
+      <button
+        type="button"
+        class={
+          tmgStore.selectedMeetingId === meeting.id
+            ? 'tmg-meeting-list__item tmg-meeting-list__item--active'
+            : 'tmg-meeting-list__item'
+        }
+        click={() => tmgStore.selectMeeting(meeting.id)}
+      >
+        {meeting.dateLabel}
+      </button>
+    </li>
+  )
 }

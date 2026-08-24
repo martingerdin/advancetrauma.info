@@ -36,6 +36,35 @@ class TmgStore extends Store {
     return Boolean(import.meta.env.VITE_TMG_PASSWORD_HASH)
   }
 
+  get loginStatusMessage(): string {
+    if (!this.configured) return 'TMG access is not configured yet.'
+    if (this.loginError) return this.loginError
+    return 'Enter the shared password to view the latest TMG meeting materials.'
+  }
+
+  get loginStatusClass(): string {
+    if (!this.configured || this.loginError) {
+      return 'contact-form__status contact-form__status--error'
+    }
+    return 'contact-form__status'
+  }
+
+  get meetingsMessage(): string {
+    if (this.indexStatus === 'idle' || this.indexStatus === 'loading') return 'Loading meetings…'
+    if (this.indexStatus === 'error') {
+      return this.detailError || 'Unable to load TMG meetings from GitHub.'
+    }
+    if (this.indexStatus === 'ready' && this.meetings.length === 0) return 'No meetings found.'
+    return ''
+  }
+
+  get meetingsMessageClass(): string {
+    if (this.indexStatus === 'error') {
+      return 'tmg-meeting-list__status tmg-meeting-list__status--error'
+    }
+    return 'tmg-meeting-list__status'
+  }
+
   hydrateAuth() {
     if (this.authInitialized) return
 

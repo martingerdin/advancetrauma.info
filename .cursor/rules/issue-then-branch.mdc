@@ -1,0 +1,24 @@
+---
+description: Create a GitHub issue before feature work, then a matching feature branch
+alwaysApply: true
+---
+
+# Issue first, then feature branch
+
+Before starting feature work, UI/UX changes, new pages or areas, or non-trivial refactors:
+
+1. Create a GitHub issue with `gh issue create` that states the problem and intended outcome.
+2. Create and check out a feature branch named for that issue, then do the work on it.
+
+```text
+# GOOD
+gh issue create --title "Align TMG nav and move sign out into header" --body "..."
+git checkout -b 76-align-tmg-nav-and-sign-out
+
+# BAD
+Start editing on main (or an unrelated branch) with no issue
+```
+
+Branch name: `<issue-number>-<short-kebab-title>`.
+
+Do not create an issue for one-line typos, copy nits, or work the user already tied to an existing issue or branch. If they name an issue, use that issue and branch from it.

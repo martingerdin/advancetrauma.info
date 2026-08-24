@@ -13,41 +13,22 @@ export default class TMG extends Component {
     return (
       <section class="section section--muted">
         <div class="section__inner tmg">
-          <div class="tmg__intro">
-            <p class="tmg__eyebrow">Members Area</p>
+          <header class="section__intro">
+            <p class="section__eyebrow">Members Area</p>
             <h1 class="section__heading">Trial Management Group</h1>
             <p class="section__lead">
               View recent meeting updates pulled from the public ADVANCE TRAUMA meeting
               repository.
             </p>
-          </div>
+          </header>
 
-          {!tmgStore.authenticated ? (
-            <div class="tmg__login-card">
-              <LoginForm
-                configured={tmgStore.configured}
-                password={tmgStore.password}
-                errorMessage={tmgStore.loginError}
-                onInput={(event: Event) =>
-                  tmgStore.setPassword((event.target as HTMLInputElement).value)
-                }
-                onSubmit={(event: Event) => tmgStore.submitPassword(event)}
-              />
+          {tmgStore.authenticated ? (
+            <div class="tmg__layout">
+              <MeetingList />
+              <MeetingContent />
             </div>
           ) : (
-            <div class="tmg__layout">
-              <MeetingList
-                meetings={tmgStore.meetings}
-                selectedMeetingId={tmgStore.selectedMeetingId}
-                loading={tmgStore.indexStatus === 'loading'}
-                onSelect={(id: string) => tmgStore.selectMeeting(id)}
-              />
-              <MeetingContent
-                detail={tmgStore.selectedMeeting}
-                loading={tmgStore.detailStatus === 'loading'}
-                errorMessage={tmgStore.detailError}
-              />
-            </div>
+            <LoginForm />
           )}
         </div>
       </section>
