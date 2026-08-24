@@ -17,8 +17,7 @@ export default class TMG extends Component {
             <p class="section__eyebrow">Members Area</p>
             <h1 class="section__heading">Trial Management Group</h1>
             <p class="section__lead">
-              View recent meeting updates pulled from the public ADVANCE TRAUMA meeting
-              repository.
+              View trial updates for the Trial Management Group.
             </p>
           </header>
 
