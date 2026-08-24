@@ -18,6 +18,8 @@ export default class ContactForm extends Component {
             type="text"
             name="name"
             required
+            maxLength={120}
+            autoComplete="name"
             value={contactStore.name}
             input={(e: Event) => contactStore.setName((e.target as HTMLInputElement).value)}
           />
@@ -28,6 +30,8 @@ export default class ContactForm extends Component {
             type="email"
             name="email"
             required
+            maxLength={254}
+            autoComplete="email"
             value={contactStore.email}
             input={(e: Event) => contactStore.setEmail((e.target as HTMLInputElement).value)}
           />
@@ -37,8 +41,20 @@ export default class ContactForm extends Component {
           <textarea
             name="message"
             required
+            maxLength={5000}
             value={contactStore.message}
             input={(e: Event) => contactStore.setMessage((e.target as HTMLTextAreaElement).value)}
+          />
+        </label>
+        <label class="contact-form__honeypot" aria-hidden="true">
+          Website
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={contactStore.website}
+            input={(e: Event) => contactStore.setWebsite((e.target as HTMLInputElement).value)}
           />
         </label>
         <button class="cta" type="submit" disabled={contactStore.status === 'submitting'}>

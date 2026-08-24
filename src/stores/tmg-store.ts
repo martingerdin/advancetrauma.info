@@ -8,7 +8,8 @@ import {
 
 type LoadStatus = 'idle' | 'loading' | 'ready' | 'error'
 
-const SESSION_KEY = 'advance-trauma-tmg-authenticated'
+/** Session proof must equal the configured password hash (not a forgeable "true" flag). */
+const SESSION_KEY = 'advance-trauma-tmg-session'
 
 async function sha256Hex(value: string): Promise<string> {
   const encoded = new TextEncoder().encode(value)
@@ -16,6 +17,24 @@ async function sha256Hex(value: string): Promise<string> {
   return Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('')
+}
+
+/** Constant-time string compare to avoid leaking hash length/prefix via early exit. */
+function timingSafeEqual(left: string, right: string): boolean {
+  const length = Math.max(left.length, right.length)
+  let mismatch = left.length === right.length ? 0 : 1
+
+  for (let index = 0; index < length; index += 1) {
+    const a = left.charCodeAt(index) || 0
+    const b = right.charCodeAt(index) || 0
+    mismatch |= a ^ b
+  }
+
+  return mismatch === 0
+}
+
+function expectedPasswordHash(): string {
+  return (import.meta.env.VITE_TMG_PASSWORD_HASH ?? '').trim().toLowerCase()
 }
 
 class TmgStore extends Store {
@@ -33,7 +52,7 @@ class TmgStore extends Store {
   detailError = ''
 
   get configured(): boolean {
-    return Boolean(import.meta.env.VITE_TMG_PASSWORD_HASH)
+    return Boolean(expectedPasswordHash())
   }
 
   get loginStatusMessage(): string {
@@ -65,12 +84,28 @@ class TmgStore extends Store {
     return 'tmg-meeting-list__status'
   }
 
+  private readSessionProof(): string {
+    if (typeof window === 'undefined') return ''
+    return window.sessionStorage.getItem(SESSION_KEY) ?? ''
+  }
+
+  private hasValidSession(): boolean {
+    const expected = expectedPasswordHash()
+    if (!expected) return false
+    return timingSafeEqual(this.readSessionProof(), expected)
+  }
+
   hydrateAuth() {
     if (this.authInitialized) return
 
     this.authInitialized = true
-    this.authenticated =
-      typeof window !== 'undefined' && window.sessionStorage.getItem(SESSION_KEY) === 'true'
+    this.authenticated = this.hasValidSession()
+
+    // Drop legacy forgeable "true" flags and any other invalid proof.
+    if (!this.authenticated && typeof window !== 'undefined') {
+      window.sessionStorage.removeItem(SESSION_KEY)
+      window.sessionStorage.removeItem('advance-trauma-tmg-authenticated')
+    }
   }
 
   initialize() {
@@ -89,15 +124,15 @@ class TmgStore extends Store {
   async submitPassword(event: Event) {
     event.preventDefault()
 
-    if (!this.configured) {
+    const expectedHash = expectedPasswordHash()
+    if (!expectedHash) {
       this.loginError = 'TMG access is not configured yet.'
       return
     }
 
-    const expectedHash = import.meta.env.VITE_TMG_PASSWORD_HASH.trim().toLowerCase()
     const actualHash = await sha256Hex(this.password)
 
-    if (actualHash !== expectedHash) {
+    if (!timingSafeEqual(actualHash, expectedHash)) {
       this.loginError = 'Incorrect password.'
       return
     }
@@ -105,7 +140,7 @@ class TmgStore extends Store {
     this.password = ''
     this.loginError = ''
     this.authenticated = true
-    window.sessionStorage.setItem(SESSION_KEY, 'true')
+    window.sessionStorage.setItem(SESSION_KEY, expectedHash)
     await this.loadMeetings()
   }
 
@@ -114,11 +149,21 @@ class TmgStore extends Store {
     this.password = ''
     this.loginError = ''
     this.detailError = ''
+    this.meetings = []
+    this.selectedMeetingId = ''
+    this.selectedMeeting = null
+    this.indexStatus = 'idle'
+    this.detailStatus = 'idle'
     window.sessionStorage.removeItem(SESSION_KEY)
+    window.sessionStorage.removeItem('advance-trauma-tmg-authenticated')
   }
 
   async loadMeetings() {
     if (this.indexStatus === 'loading') return
+    if (!this.hasValidSession()) {
+      this.logout()
+      return
+    }
 
     this.indexStatus = 'loading'
     this.detailError = ''
@@ -154,6 +199,10 @@ class TmgStore extends Store {
   async loadSelectedMeeting() {
     const meeting = this.meetings.find((item) => item.id === this.selectedMeetingId)
     if (!meeting) return
+    if (!this.hasValidSession()) {
+      this.logout()
+      return
+    }
 
     this.detailStatus = 'loading'
     this.detailError = ''

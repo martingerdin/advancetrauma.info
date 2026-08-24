@@ -13,7 +13,7 @@ Fill in `.env`:
 
 - `VITE_WEB3FORMS_ACCESS_KEY` — [Web3Forms](https://web3forms.com) access key
 - `VITE_MUX_PLAYBACK_ID` — [Mux](https://www.mux.com) public playback ID for the hero video (optional; omit to keep the centered hero without video)
-- `VITE_TMG_PASSWORD_HASH` — SHA-256 hex digest of the shared TMG area password. Generate it with `pnpm hash:tmg-password` (pass the password as an argument, or omit it to be prompted). Set the same value in Vercel for production. This only gates the `/tmg` page; meeting files remain public on GitHub.
+- `VITE_TMG_PASSWORD_HASH` — SHA-256 hex digest of the shared TMG area password. Generate it with `pnpm hash:tmg-password` (pass the password as an argument, or omit it to be prompted). Set the same value in Vercel for production. This is a **client-side soft gate** for `/tmg` only: the hash ships in the browser bundle, and meeting files remain public on GitHub. Do not treat it as protection for confidential documents.
 
 The TMG page lists meetings from [`meetings/trial-management-group`](https://github.com/martingerdin/advance-trauma-trial/tree/main/meetings/trial-management-group). Only folders with a `website.json` appear, and only files named in that file’s `files` array are shown. A listed `content.md` is rendered on the page rather than shown as a download.
 

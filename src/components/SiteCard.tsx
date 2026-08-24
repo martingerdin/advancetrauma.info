@@ -1,11 +1,16 @@
 import { Component } from '@geajs/core'
 import type { ParticipatingSite } from '../data/sites'
+import { safeHttpUrl } from '../lib/escape-html'
 import sitesMapStore from '../stores/sites-map-store'
 import SitePersonLink from './SitePersonLink'
 
 export default class SiteCard extends Component {
   declare props: {
     site: ParticipatingSite
+  }
+
+  get websiteHref(): string | null {
+    return safeHttpUrl(this.props.site.website)
   }
 
   template({ site }: this['props']) {
@@ -29,9 +34,11 @@ export default class SiteCard extends Component {
             </p>
           ) : null}
           <div class="site-card__actions">
-            <a href={site.website} target="_blank" rel="noopener noreferrer">
-              Visit website
-            </a>
+            {this.websiteHref ? (
+              <a href={this.websiteHref} target="_blank" rel="noopener noreferrer">
+                Visit website
+              </a>
+            ) : null}
             <button
               type="button"
               class="site-card__map"
