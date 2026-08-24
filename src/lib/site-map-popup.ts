@@ -8,6 +8,7 @@ import {
 } from '../data/sites'
 import { escapeHtml, safeHttpUrl } from './escape-html'
 import { openTeamMemberCard } from './focus-card'
+import { sanitizePopupHtml } from './sanitize-html'
 import { linkedPeopleHtml } from './site-team-links'
 
 /** Shared site popup markup for map markers. */
@@ -65,10 +66,10 @@ export function createSitePopupElement(bodyHtml: string, onClose: () => void): H
   const popup = document.createElement('div')
   popup.className = 'sites-map__popup'
   popup.setAttribute('role', 'dialog')
-  popup.innerHTML = `
+  popup.innerHTML = sanitizePopupHtml(`
     <button type="button" class="sites-map__popup-close" aria-label="Close">×</button>
     ${bodyHtml}
-  `
+  `)
 
   const closeBtn = popup.querySelector('.sites-map__popup-close')
   closeBtn?.addEventListener('click', (event) => {
