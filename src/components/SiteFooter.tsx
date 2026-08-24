@@ -1,7 +1,9 @@
 import { Component } from '@geajs/core'
 import { footer } from '../data/content'
+import { portals } from '../data/portals'
 import { siteRevision } from '../lib/site-revision'
 import FooterCredit from './FooterCredit'
+import FooterPortalLink from './FooterPortalLink'
 import FooterResourceLink from './FooterResourceLink'
 import FooterSourceLink from './FooterSourceLink'
 import FooterUpdatedLink from './FooterUpdatedLink'
@@ -25,6 +27,9 @@ export default class SiteFooter extends Component {
               <ul class="site-footer__list">
                 {footer.navigate.map((item) => (
                   <SectionNavLink key={item.id} href={item.href} id={item.id} label={item.label} />
+                ))}
+                {portals.map((portal) => (
+                  <FooterPortalLink key={portal.id} href={portal.href} label={portal.label} />
                 ))}
               </ul>
             </nav>
