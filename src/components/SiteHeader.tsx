@@ -1,10 +1,12 @@
 import { Component } from '@geajs/core'
 import { footer } from '../data/content'
 import { portals } from '../data/portals'
+import heroVisibilityStore from '../stores/hero-visibility-store'
 import navStore from '../stores/nav-store'
 import HeaderSignOut from './HeaderSignOut'
 import PortalNavLink from './PortalNavLink'
 import SectionNavLink from './SectionNavLink'
+import TrialProgress from './TrialProgress'
 
 export default class SiteHeader extends Component {
   onAfterRender() {
@@ -34,6 +36,8 @@ export default class SiteHeader extends Component {
           <a class="site-header__brand" href="/" click={() => navStore.close()}>
             <span>ADVANCE TRAUMA</span>
           </a>
+
+          {heroVisibilityStore.inView ? null : <TrialProgress variant="header" />}
 
           <button
             type="button"
