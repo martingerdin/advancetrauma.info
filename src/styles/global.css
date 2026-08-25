@@ -490,7 +490,7 @@ body.nav-open {
 }
 
 .trial-progress--hero {
-  max-width: min(100%, 36rem);
+  max-width: 100%;
   margin: 0 auto;
   padding: var(--space-s) var(--space-sm);
   border: 1px solid var(--on-brand-border-strong);
