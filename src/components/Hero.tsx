@@ -36,6 +36,9 @@ export default class Hero extends Component {
                 </a>
               ) : null}
             </div>
+          </div>
+          {hasHeroVideo ? <HeroVideo /> : null}
+          <div class="hero__meta">
             <dl class="hero__details">
               <div class="hero__detail">
                 <dt>{hero.details[0].label}</dt>
@@ -55,7 +58,6 @@ export default class Hero extends Component {
             </dl>
             <TrialProgress variant="hero" />
           </div>
-          {hasHeroVideo ? <HeroVideo /> : null}
         </div>
       </section>
     )

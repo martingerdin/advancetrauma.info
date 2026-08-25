@@ -1,4 +1,5 @@
 import { Component } from '@geajs/core'
+import { hero } from '../data/content'
 import { getTrialProgressSnapshot } from '../lib/trial-progress'
 
 type TrialProgressVariant = 'hero' | 'header'
@@ -22,6 +23,7 @@ export default class TrialProgress extends Component<{
   template() {
     const variant = this.props.variant ?? 'hero'
     const { percent, includedPatientsLabel, statusLabel } = this.snapshot
+    const title = hero.details[3].label
 
     if (variant === 'header') {
       return (
@@ -50,21 +52,24 @@ export default class TrialProgress extends Component<{
         class="trial-progress trial-progress--hero"
         aria-label={`Trial progress: ${percent}%, ${includedPatientsLabel} patients included, ${statusLabel}`}
       >
-        <span class="status-pill status-pill--live">{statusLabel}</span>
-        <div
-          class="trial-progress__bar"
-          role="progressbar"
-          aria-valuenow={String(percent)}
-          aria-valuemin="0"
-          aria-valuemax="100"
-          aria-label="Trial progress"
-        >
-          <div class="trial-progress__bar-fill" />
+        <p class="trial-progress__title">{title}</p>
+        <div class="trial-progress__row">
+          <span class="status-pill status-pill--live">{statusLabel}</span>
+          <div
+            class="trial-progress__bar"
+            role="progressbar"
+            aria-valuenow={String(percent)}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Trial progress"
+          >
+            <div class="trial-progress__bar-fill" />
+          </div>
+          <p class="trial-progress__meta">
+            <span class="trial-progress__percent">{percent}%</span>
+            <span class="trial-progress__patients">{includedPatientsLabel} patients</span>
+          </p>
         </div>
-        <p class="trial-progress__meta">
-          <span class="trial-progress__percent">{percent}%</span>
-          <span class="trial-progress__patients">{includedPatientsLabel} patients</span>
-        </p>
       </div>
     )
   }
