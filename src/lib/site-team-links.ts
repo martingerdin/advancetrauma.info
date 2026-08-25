@@ -1,4 +1,5 @@
 import { participatingSites, type ParticipatingSite } from '../data/sites'
+import { escapeHtml } from './escape-html'
 import { personNameKey } from './people-names'
 
 /** Participating sites where this person is listed as PI or coordinator. */
@@ -12,22 +13,13 @@ export function sitesForMember(name: string): ParticipatingSite[] {
   })
 }
 
-/** Escape a value for use in an HTML attribute / text node. */
-export function escapeHtmlAttr(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
-
 /** Linked person names as popup buttons (comma-separated). */
 export function linkedPeopleHtml(names: string[], className: string): string {
   if (names.length === 0) return ''
 
   return names
     .map((name) => {
-      const safe = escapeHtmlAttr(name)
+      const safe = escapeHtml(name)
       return `<button type="button" class="${className}" data-member="${safe}">${safe}</button>`
     })
     .join('<span class="sites-map-popup__sep">, </span>')

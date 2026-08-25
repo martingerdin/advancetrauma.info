@@ -6,7 +6,9 @@ import {
   siteBatches,
   type ParticipatingSite,
 } from '../data/sites'
+import { escapeHtml, safeHttpUrl } from './escape-html'
 import { openTeamMemberCard } from './focus-card'
+import { sanitizePopupHtml } from './sanitize-html'
 import { linkedPeopleHtml } from './site-team-links'
 
 /** Shared site popup markup for map markers. */
@@ -21,13 +23,19 @@ export function buildSitePopupHtml(site: ParticipatingSite): string {
         ${linkedPeopleHtml(site.coordinatorNames, 'sites-map-popup__person')}
       </p>`
       : ''
+  const websiteHref = safeHttpUrl(site.website)
+  const websiteLink = websiteHref
+    ? `<a class="sites-map-popup__link" href="${escapeHtml(websiteHref)}" target="_blank" rel="noopener noreferrer">
+        Visit website
+      </a>`
+    : ''
 
   return `
     <div class="sites-map-popup__body">
-      <h3 class="sites-map-popup__title">${site.name}</h3>
+      <h3 class="sites-map-popup__title">${escapeHtml(site.name)}</h3>
       <div class="sites-map-popup__pills">
-        <span class="sites-map-popup__pill sites-map-popup__pill--batch" style="background: var(${batchColorTokens[site.batch]});">Batch ${site.batch}</span>
-        <span class="${batchStatusPillClass[status]}">${batchStatusLabels[status]}</span>
+        <span class="sites-map-popup__pill sites-map-popup__pill--batch" style="background: var(${batchColorTokens[site.batch]});">Batch ${escapeHtml(site.batch)}</span>
+        <span class="${batchStatusPillClass[status]}">${escapeHtml(batchStatusLabels[status])}</span>
       </div>
       <p class="sites-map-popup__row">
         <span class="sites-map-popup__label">Investigator</span>
@@ -36,11 +44,9 @@ export function buildSitePopupHtml(site: ParticipatingSite): string {
       ${coordinators}
       <p class="sites-map-popup__row">
         <span class="sites-map-popup__label">Location</span>
-        ${site.city}
+        ${escapeHtml(site.city)}
       </p>
-      <a class="sites-map-popup__link" href="${site.website}" target="_blank" rel="noopener noreferrer">
-        Visit website
-      </a>
+      ${websiteLink}
     </div>
   `
 }
@@ -60,10 +66,10 @@ export function createSitePopupElement(bodyHtml: string, onClose: () => void): H
   const popup = document.createElement('div')
   popup.className = 'sites-map__popup'
   popup.setAttribute('role', 'dialog')
-  popup.innerHTML = `
+  popup.innerHTML = sanitizePopupHtml(`
     <button type="button" class="sites-map__popup-close" aria-label="Close">×</button>
     ${bodyHtml}
-  `
+  `)
 
   const closeBtn = popup.querySelector('.sites-map__popup-close')
   closeBtn?.addEventListener('click', (event) => {

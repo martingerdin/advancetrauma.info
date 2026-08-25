@@ -1,10 +1,14 @@
 import { marked } from 'marked'
+import { escapeHtml } from './escape-html'
+import { sanitizeMeetingHtml } from './sanitize-html'
 
 const GITHUB_OWNER = 'martingerdin'
 const GITHUB_REPO = 'advance-trauma-trial'
 const GITHUB_TREE_API = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/trees/main?recursive=1`
 const TMG_PREFIX = 'meetings/trial-management-group/'
 const WEBSITE_MANIFEST = 'website.json'
+/** Cap remote Markdown size before parsing to limit client-side DoS. */
+const MAX_CONTENT_BYTES = 512_000
 
 const dateFormatter = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
@@ -225,7 +229,16 @@ function stripFrontmatter(source: string): string {
 function normalizeQuartoMarkdown(source: string): string {
   return stripFrontmatter(source)
     .replace(/\{\.[^}\n]+\}/g, '')
-    .replace(/\^([^^\n]+)\^/g, '<sup>$1</sup>')
+    .replace(/\^([^^\n]+)\^/g, (_match, text: string) => `<sup>${escapeHtml(text)}</sup>`)
+}
+
+/** Reject path segments that could escape the meeting folder. */
+function isSafeRelativePath(path: string): boolean {
+  if (!path || path.startsWith('/') || path.includes('\\') || path.includes('\0')) {
+    return false
+  }
+
+  return !path.split('/').some((segment) => !segment || segment === '.' || segment === '..')
 }
 
 async function fetchJson<T>(url: string): Promise<T> {
@@ -272,7 +285,12 @@ function getGitTree(): Promise<GitTreeResponse> {
 
 function resolveListedFile(meetingId: string, listedPath: string, blobs: GitTreeEntry[]): GitTreeEntry | undefined {
   const relativePath = listedPath.replace(/^\.\//, '')
-  const fullPath = `${TMG_PREFIX}${meetingId}/${relativePath}`
+  if (!isSafeRelativePath(relativePath)) return undefined
+
+  const meetingRoot = `${TMG_PREFIX}${meetingId}/`
+  const fullPath = `${meetingRoot}${relativePath}`
+  if (!fullPath.startsWith(meetingRoot)) return undefined
+
   return blobs.find((entry) => entry.path === fullPath)
 }
 
@@ -350,7 +368,12 @@ export async function fetchMeetingDetail(meeting: MeetingSummary): Promise<Meeti
   }
 
   const source = await fetchText(contentAsset.downloadUrl)
-  const html = String(marked.parse(normalizeQuartoMarkdown(source)))
+  if (new TextEncoder().encode(source).byteLength > MAX_CONTENT_BYTES) {
+    throw new Error('Meeting notes are too large to render safely.')
+  }
+
+  const rendered = String(marked.parse(normalizeQuartoMarkdown(source), { async: false }))
+  const html = sanitizeMeetingHtml(rendered)
 
   return {
     id: meeting.id,
