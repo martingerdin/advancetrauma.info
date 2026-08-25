@@ -657,7 +657,7 @@ body.nav-open {
 .hero:has(.hero__video) .hero__inner {
   display: grid;
   grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.5fr);
-  align-items: center;
+  align-items: start;
   gap: clamp(var(--space-md), 3vw, var(--space-xl));
 }
 
@@ -666,19 +666,27 @@ body.nav-open {
   width: auto;
   max-width: none;
   min-width: 0;
+  gap: 0;
+}
+
+.hero:has(.hero__video) .hero__eyebrow {
+  margin-bottom: var(--space-2xs);
 }
 
 .hero:has(.hero__video) .hero__tagline {
   font-size: var(--font-size-hero-split);
   max-width: 15em;
+  margin-bottom: var(--space-md);
 }
 
 .hero:has(.hero__video) .hero__actions {
   justify-content: flex-start;
+  margin-bottom: var(--space-md);
 }
 
 .hero:has(.hero__video) .hero__details {
   justify-content: start;
+  margin-bottom: var(--space-sm);
 }
 
 .hero:has(.hero__video) .hero__detail {
