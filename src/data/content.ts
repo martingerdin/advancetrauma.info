@@ -93,11 +93,11 @@ export const footer = {
   tagline: 'The clinical trial to determine if ATLS® improves patient outcomes.',
   navigateTitle: 'On this page',
   navigate: [
-    { label: 'About', href: '#about', id: 'about' },
-    { label: 'Resources', href: '#resources', id: 'resources' },
-    { label: 'Sites', href: '#sites', id: 'sites' },
-    { label: 'Team', href: '#team', id: 'team' },
-    { label: 'Contact', href: '#contact', id: 'contact' },
+    { label: 'About', href: '/#about', id: 'about' },
+    { label: 'Resources', href: '/#resources', id: 'resources' },
+    { label: 'Sites', href: '/#sites', id: 'sites' },
+    { label: 'Team', href: '/#team', id: 'team' },
+    { label: 'Contact', href: '/#contact', id: 'contact' },
   ],
   resourcesTitle: 'Resources',
   resources: [
