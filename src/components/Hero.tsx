@@ -52,13 +52,8 @@ export default class Hero extends Component {
                   <span class="hero__detail-note">{hero.details[2].note}</span>
                 </dd>
               </div>
-              <div class="hero__detail hero__detail--status">
-                <dt>{hero.details[3].label}</dt>
-                <dd>
-                  <TrialProgress variant="hero" />
-                </dd>
-              </div>
             </dl>
+            <TrialProgress variant="hero" />
           </div>
           {hasHeroVideo ? <HeroVideo /> : null}
         </div>

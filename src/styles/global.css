@@ -432,12 +432,12 @@ body.nav-open {
 
 .hero__details {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, auto));
+  grid-template-columns: repeat(3, minmax(0, auto));
   justify-content: center;
   align-items: start;
   column-gap: 0;
   row-gap: var(--space-sm);
-  margin: 0;
+  margin: 0 0 var(--space-md);
   width: 100%;
 }
 
@@ -482,47 +482,34 @@ body.nav-open {
   color: var(--text-on-brand-subtle);
 }
 
-.hero__detail--status dd {
-  color: inherit;
-}
-
 .trial-progress {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
+  align-items: center;
+  gap: var(--space-s);
   width: 100%;
 }
 
 .trial-progress--hero {
-  min-width: min(100%, 14rem);
-  text-align: left;
-}
-
-.trial-progress__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-s);
-}
-
-.trial-progress__percent {
-  font-family: var(--font-body);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-on-brand-subtle);
+  max-width: min(100%, 36rem);
+  margin: 0 auto;
+  padding: var(--space-s) var(--space-sm);
+  border: 1px solid var(--on-brand-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--on-brand-fill);
 }
 
 .trial-progress__bar {
-  width: 100%;
-  height: var(--space-2xs);
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--space-xs);
   border-radius: var(--radius-pill);
   overflow: hidden;
-  background: var(--on-brand-border-strong);
-  border: 1px solid var(--on-brand-border-emphasis);
+  background: var(--on-brand-track);
 }
 
 .trial-progress__bar-fill {
+  width: 0;
+  max-width: 100%;
   height: 100%;
   border-radius: inherit;
   background: var(--status-live);
@@ -531,31 +518,31 @@ body.nav-open {
 
 .trial-progress__meta {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-2xs) var(--space-s);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-3xs);
   margin: 0;
+  flex-shrink: 0;
   font-family: var(--font-body);
   font-size: var(--font-size-sm);
   line-height: var(--leading-snug);
   color: var(--text-on-brand-subtle);
+  white-space: nowrap;
 }
 
 .trial-progress__patients {
-  font-weight: 500;
-  color: var(--text-on-brand-soft);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-on-brand-faint);
 }
 
 .trial-progress__periods {
   font-variant-numeric: tabular-nums;
+  font-size: var(--font-size-2xs);
 }
 
 .trial-progress--header {
   flex: 1 1 auto;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-s);
   min-width: 0;
   max-width: 20rem;
   margin: 0 var(--space-sm);
@@ -564,6 +551,7 @@ body.nav-open {
 .trial-progress--header .trial-progress__bar {
   flex: 1 1 auto;
   min-width: 4rem;
+  height: var(--space-2xs);
 }
 
 .trial-progress__count {
@@ -690,6 +678,11 @@ body.nav-open {
 
 .hero:has(.hero__video) .hero__detail {
   text-align: left;
+}
+
+.hero:has(.hero__video) .trial-progress--hero {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 @keyframes hero-in {
@@ -2157,7 +2150,7 @@ body.nav-open {
   }
 
   .hero__details {
-    grid-template-columns: repeat(2, minmax(0, auto));
+    grid-template-columns: repeat(3, minmax(0, auto));
     column-gap: var(--space-lg);
     row-gap: var(--space-md);
   }
@@ -2166,12 +2159,6 @@ body.nav-open {
   .hero__detail:first-child {
     padding: 0;
     border-left: none;
-  }
-
-  .hero__detail--status {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: min(100%, 18rem);
   }
 }
 
@@ -2214,6 +2201,11 @@ body.nav-open {
   .hero:has(.hero__video) .hero__detail {
     text-align: center;
   }
+
+  .hero:has(.hero__video) .trial-progress--hero {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 @media (max-width: 800px) {
@@ -2233,6 +2225,21 @@ body.nav-open {
 }
 
 @media (max-width: 720px) {
+  .trial-progress--hero {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .trial-progress--hero .trial-progress__bar {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .trial-progress--hero .trial-progress__meta {
+    align-items: center;
+  }
+
   .site-header {
     height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
   }

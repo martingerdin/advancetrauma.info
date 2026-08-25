@@ -10,6 +10,15 @@ export default class TrialProgress extends Component<{
     return getTrialProgressSnapshot()
   }
 
+  private applyFillWidth() {
+    const fill = this.el?.querySelector('.trial-progress__bar-fill') as HTMLElement | null
+    if (fill) fill.style.width = `${this.snapshot.percent}%`
+  }
+
+  onAfterRender() {
+    this.applyFillWidth()
+  }
+
   template() {
     const variant = this.props.variant ?? 'hero'
     const {
@@ -34,7 +43,7 @@ export default class TrialProgress extends Component<{
             aria-valuemax="100"
             aria-label="Trial progress"
           >
-            <div class="trial-progress__bar-fill" style={`width: ${percent}%`} />
+            <div class="trial-progress__bar-fill" />
           </div>
           <span class="trial-progress__count">{includedPatientsLabel}</span>
           <span class="status-pill status-pill--live status-pill--compact">{statusLabel}</span>
@@ -43,11 +52,11 @@ export default class TrialProgress extends Component<{
     }
 
     return (
-      <div class="trial-progress trial-progress--hero">
-        <div class="trial-progress__top">
-          <span class="status-pill status-pill--live">{statusLabel}</span>
-          <span class="trial-progress__percent">{percent}%</span>
-        </div>
+      <div
+        class="trial-progress trial-progress--hero"
+        aria-label={`Trial progress: ${percent}%, ${includedPatientsLabel} patients included, ${statusLabel}`}
+      >
+        <span class="status-pill status-pill--live">{statusLabel}</span>
         <div
           class="trial-progress__bar"
           role="progressbar"
@@ -56,12 +65,12 @@ export default class TrialProgress extends Component<{
           aria-valuemax="100"
           aria-label="Trial progress"
         >
-          <div class="trial-progress__bar-fill" style={`width: ${percent}%`} />
+          <div class="trial-progress__bar-fill" />
         </div>
         <p class="trial-progress__meta">
-          <span class="trial-progress__patients">{includedPatientsLabel} patients included</span>
+          <span class="trial-progress__patients">{includedPatientsLabel} patients</span>
           <span class="trial-progress__periods">
-            {completedPeriods} / {totalPeriods} periods
+            {percent}% · {completedPeriods}/{totalPeriods} periods
           </span>
         </p>
       </div>
