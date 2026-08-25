@@ -1,7 +1,7 @@
 import { Component } from '@geajs/core'
 import type { AnimationItem } from 'lottie-web'
 
-const lottieReady = import('lottie-web/build/player/lottie_light')
+const lottieReady = import('lottie-web/build/player/lottie_light.js')
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
