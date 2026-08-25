@@ -524,21 +524,25 @@ body.nav-open {
   margin: 0;
   flex-shrink: 0;
   font-family: var(--font-body);
-  font-size: var(--font-size-sm);
   line-height: var(--leading-snug);
-  color: var(--text-on-brand-subtle);
   white-space: nowrap;
 }
 
-.trial-progress__patients {
+.trial-progress__percent {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--text-on-brand-faint);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-on-brand);
+  line-height: var(--leading-snug);
 }
 
-.trial-progress__periods {
-  font-variant-numeric: tabular-nums;
+.trial-progress__patients {
   font-size: var(--font-size-2xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-on-brand-subtle);
 }
 
 .trial-progress--header {
@@ -652,15 +656,17 @@ body.nav-open {
 
 .hero:has(.hero__video) .hero__inner {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr);
-  align-items: center;
-  gap: clamp(var(--space-lg), 4vw, var(--space-xl));
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  align-items: stretch;
+  gap: clamp(var(--space-md), 3vw, var(--space-xl));
 }
 
 .hero:has(.hero__video) .hero__copy {
   align-items: flex-start;
+  justify-content: center;
   width: auto;
-  max-width: var(--hero-copy-width);
+  max-width: none;
+  min-width: 0;
 }
 
 .hero:has(.hero__video) .hero__tagline {
@@ -683,6 +689,14 @@ body.nav-open {
 .hero:has(.hero__video) .trial-progress--hero {
   margin-left: 0;
   margin-right: 0;
+}
+
+.hero:has(.hero__video) .hero__video {
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
 }
 
 @keyframes hero-in {
@@ -2205,6 +2219,11 @@ body.nav-open {
   .hero:has(.hero__video) .trial-progress--hero {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .hero:has(.hero__video) .hero__video {
+    aspect-ratio: 16 / 9;
+    height: auto;
   }
 }
 

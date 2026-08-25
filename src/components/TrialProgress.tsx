@@ -21,13 +21,7 @@ export default class TrialProgress extends Component<{
 
   template() {
     const variant = this.props.variant ?? 'hero'
-    const {
-      percent,
-      includedPatientsLabel,
-      completedPeriods,
-      totalPeriods,
-      statusLabel,
-    } = this.snapshot
+    const { percent, includedPatientsLabel, statusLabel } = this.snapshot
 
     if (variant === 'header') {
       return (
@@ -68,10 +62,8 @@ export default class TrialProgress extends Component<{
           <div class="trial-progress__bar-fill" />
         </div>
         <p class="trial-progress__meta">
+          <span class="trial-progress__percent">{percent}%</span>
           <span class="trial-progress__patients">{includedPatientsLabel} patients</span>
-          <span class="trial-progress__periods">
-            {percent}% · {completedPeriods}/{totalPeriods} periods
-          </span>
         </p>
       </div>
     )
