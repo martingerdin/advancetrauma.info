@@ -1,9 +1,20 @@
 import { Component } from '@geajs/core'
 import { hero } from '../data/content'
 import { scrollToSection } from '../lib/scroll-to-section'
+import heroVisibilityStore from '../stores/hero-visibility-store'
 import HeroVideo, { hasHeroVideo, playHeroVideo } from './HeroVideo'
+import TrialProgress from './TrialProgress'
 
 export default class Hero extends Component {
+  onAfterRender() {
+    if (this.el) heroVisibilityStore.watch(this.el)
+  }
+
+  dispose() {
+    heroVisibilityStore.disconnect()
+    super.dispose()
+  }
+
   template() {
     return (
       <section class="hero" aria-label="Introduction">
@@ -41,13 +52,8 @@ export default class Hero extends Component {
                   <span class="hero__detail-note">{hero.details[2].note}</span>
                 </dd>
               </div>
-              <div class="hero__detail hero__detail--live">
-                <dt>{hero.details[3].label}</dt>
-                <dd>
-                  <span class="status-pill status-pill--live">{hero.details[3].value}</span>
-                </dd>
-              </div>
             </dl>
+            <TrialProgress variant="hero" />
           </div>
           {hasHeroVideo ? <HeroVideo /> : null}
         </div>
