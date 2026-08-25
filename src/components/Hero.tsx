@@ -19,45 +19,47 @@ export default class Hero extends Component {
     return (
       <section class="hero" aria-label="Introduction">
         <div class="hero__inner">
-          <div class="hero__copy">
-            <p class="hero__eyebrow">{hero.eyebrow}</p>
-            <h1 class="hero__tagline">{hero.tagline}</h1>
-            <div class="hero__actions">
-              <a
-                class="cta"
-                href="#about"
-                click={(e: Event) => scrollToSection(e, 'about')}
-              >
-                {hero.cta}
-              </a>
-              {hasHeroVideo ? (
-                <a class="cta cta--ghost" href="#hero-video" click={playHeroVideo}>
-                  {hero.ctaSecondary}
+          <div class="hero__main">
+            <div class="hero__copy">
+              <p class="hero__eyebrow">{hero.eyebrow}</p>
+              <h1 class="hero__tagline">{hero.tagline}</h1>
+              <div class="hero__actions">
+                <a
+                  class="cta"
+                  href="#about"
+                  click={(e: Event) => scrollToSection(e, 'about')}
+                >
+                  {hero.cta}
                 </a>
-              ) : null}
+                {hasHeroVideo ? (
+                  <a class="cta cta--ghost" href="#hero-video" click={playHeroVideo}>
+                    {hero.ctaSecondary}
+                  </a>
+                ) : null}
+              </div>
+            </div>
+            <div class="hero__meta">
+              <dl class="hero__details">
+                <div class="hero__detail">
+                  <dt>{hero.details[0].label}</dt>
+                  <dd>{hero.details[0].value}</dd>
+                </div>
+                <div class="hero__detail">
+                  <dt>{hero.details[1].label}</dt>
+                  <dd>{hero.details[1].value}</dd>
+                </div>
+                <div class="hero__detail">
+                  <dt>{hero.details[2].label}</dt>
+                  <dd>
+                    <span class="hero__detail-value">{hero.details[2].value}</span>
+                    <span class="hero__detail-note">{hero.details[2].note}</span>
+                  </dd>
+                </div>
+              </dl>
+              <TrialProgress variant="hero" />
             </div>
           </div>
           {hasHeroVideo ? <HeroVideo /> : null}
-          <div class="hero__meta">
-            <dl class="hero__details">
-              <div class="hero__detail">
-                <dt>{hero.details[0].label}</dt>
-                <dd>{hero.details[0].value}</dd>
-              </div>
-              <div class="hero__detail">
-                <dt>{hero.details[1].label}</dt>
-                <dd>{hero.details[1].value}</dd>
-              </div>
-              <div class="hero__detail">
-                <dt>{hero.details[2].label}</dt>
-                <dd>
-                  <span class="hero__detail-value">{hero.details[2].value}</span>
-                  <span class="hero__detail-note">{hero.details[2].note}</span>
-                </dd>
-              </div>
-            </dl>
-            <TrialProgress variant="hero" />
-          </div>
         </div>
       </section>
     )
