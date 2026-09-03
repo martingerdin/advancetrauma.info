@@ -22,5 +22,7 @@
       ]
     }
   ],
-  "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/((?!assets/|presentations/).*)", "destination": "/index.html" }
+  ]
 }
