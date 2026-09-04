@@ -30,9 +30,9 @@ export const hero = {
 
 export const about = {
   title: 'About',
-  lead: 'ADVANCE TRAUMA is a major clinical study testing whether ATLS® training for doctors improves outcomes for people with serious injuries.',
+  lead: 'ADVANCE TRAUMA is a major clinical study testing whether Advanced Trauma Life Support® (ATLS®) training for doctors improves outcomes for people with serious injuries.',
   paragraphs: [
-    'ADVANCE TRAUMA is a batched stepped-wedge cluster randomised trial in India, comparing ATLS® training with standard care on outcomes in adult trauma patients. ATLS® is the most established and widely used training programme to help doctors quickly recognise and treat life-threatening injuries, but there is currently no strong evidence that it improves patients’ outcomes.',
+    'ADVANCE TRAUMA is a batched stepped-wedge cluster randomised trial in India, comparing ATLS® training with standard care on outcomes in adult trauma patients. Advanced Trauma Life Support® (ATLS®) is the most established and widely used training programme to help doctors quickly recognise and treat life-threatening injuries, but there is currently no strong evidence that it improves patients’ outcomes.',
     'The trial is taking place in multiple hospitals in India. All hospitals begin by caring for patients as usual. Over time, doctors in each hospital undergo ATLS® training, and outcomes before and after are compared. This step-by-step approach allows every hospital to take part while helping us assess whether the training leads to better outcomes.',
   ],
   partners: [
@@ -109,4 +109,6 @@ export const footer = {
   sourceHref: links.github,
   creditPrefix: 'An international collaboration led by',
   partners: about.partners,
+  trademarkNotice:
+    'Advanced Trauma Life Support® and ATLS® are proprietary trademarks and service marks owned by the American College of Surgeons.',
 }

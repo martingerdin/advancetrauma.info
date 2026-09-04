@@ -325,6 +325,15 @@ body.nav-open {
   gap: var(--space-sm);
 }
 
+.site-footer__trademark {
+  margin: 0;
+  max-width: var(--content-width);
+  font-size: var(--font-size-2xs);
+  font-weight: 300;
+  line-height: var(--leading-snug);
+  color: var(--text-on-brand-subtle);
+}
+
 .site-footer__credit {
   margin: 0;
   max-width: var(--content-width);

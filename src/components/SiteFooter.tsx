@@ -47,6 +47,7 @@ export default class SiteFooter extends Component {
 
         <div class="site-footer__bar">
           <FooterCredit />
+          <p class="site-footer__trademark">{footer.trademarkNotice}</p>
           <div class="site-footer__meta">
             {siteRevision.available ? <FooterUpdatedLink /> : null}
             <FooterSourceLink />
