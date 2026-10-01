@@ -12,18 +12,18 @@ type SiteMarker = {
 }
 
 /**
- * Esri World Light Gray Canvas — free light basemap without an API key.
- * CARTO Positron now watermarks tiles with "API KEY REQUIRED" unless a key is
- * supplied. Avoids Google Maps cookies/API keys; tile requests still send the
- * visitor IP to the tile host (disclose in a privacy policy if needed). OSMF’s
- * public tile servers discourage heavy production use, so we do not point
- * Leaflet at tile.openstreetmap.org.
+ * Esri World Street Map — free basemap without an API key. CARTO Positron now
+ * watermarks tiles with "API KEY REQUIRED" unless a key is supplied. Avoids
+ * Google Maps cookies/API keys; tile requests still send the visitor IP to the
+ * tile host (disclose in a privacy policy if needed). OSMF’s public tile
+ * servers discourage heavy production use, so we do not point Leaflet at
+ * tile.openstreetmap.org.
  * ArcGIS tile paths use {z}/{y}/{x} (y before x), unlike OSM-style URLs.
  */
 const TILE_URL =
-  'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
 const TILE_ATTRIBUTION =
-  'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, DeLorme, NAVTEQ'
+  'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, DeLorme, NAVTEQ, TomTom'
 
 export default class SitesMap extends Component {
   private mapInstance: LeafletMap | null = null
