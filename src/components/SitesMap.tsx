@@ -12,15 +12,18 @@ type SiteMarker = {
 }
 
 /**
- * CARTO Positron tiles (OSM data) — free for low-traffic public sites with
- * attribution. Avoids Google Maps cookies/API keys; tile requests still send
- * the visitor IP to the tile host (disclose in a privacy policy if needed).
- * OSMF’s public tile servers discourage heavy production use, so we do not
- * point Leaflet at tile.openstreetmap.org.
+ * Esri World Light Gray Canvas — free light basemap without an API key.
+ * CARTO Positron now watermarks tiles with "API KEY REQUIRED" unless a key is
+ * supplied. Avoids Google Maps cookies/API keys; tile requests still send the
+ * visitor IP to the tile host (disclose in a privacy policy if needed). OSMF’s
+ * public tile servers discourage heavy production use, so we do not point
+ * Leaflet at tile.openstreetmap.org.
+ * ArcGIS tile paths use {z}/{y}/{x} (y before x), unlike OSM-style URLs.
  */
-const TILE_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+const TILE_URL =
+  'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'
 const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, DeLorme, NAVTEQ'
 
 export default class SitesMap extends Component {
   private mapInstance: LeafletMap | null = null
@@ -84,8 +87,7 @@ export default class SitesMap extends Component {
 
     L.tileLayer(TILE_URL, {
       attribution: TILE_ATTRIBUTION,
-      subdomains: 'abcd',
-      maxZoom: 20,
+      maxZoom: 16,
     }).addTo(map)
 
     const bounds = L.latLngBounds([])

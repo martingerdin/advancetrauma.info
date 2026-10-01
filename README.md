@@ -17,7 +17,7 @@ Fill in `.env`:
 
 The TMG page lists meetings from [`meetings/trial-management-group`](https://github.com/martingerdin/advance-trauma-trial/tree/main/meetings/trial-management-group). Only folders with a `website.json` appear, and only files named in that file’s `files` array are shown. A listed `content.md` is rendered on the page rather than shown as a download. HTML files with role `presentation-web` get a **View presentation** button; other listed files appear as downloads. Optional `name` on a file entry is used as the download label.
 
-The participating-sites map uses [Leaflet](https://leafletjs.com/) with [CARTO Positron](https://carto.com/basemaps/) tiles (OpenStreetMap data). No map API key is required. Tile requests send the visitor’s IP to the tile host; they do not load Google Maps or typically set tracking cookies, so a cookie banner is not needed for the map alone.
+The participating-sites map uses [Leaflet](https://leafletjs.com/) with [Esri World Light Gray Canvas](https://www.arcgis.com/home/item.html?id=8b3d38c06171464ab0a1873218e6679b) tiles. No map API key is required. Tile requests send the visitor’s IP to the tile host; they do not load Google Maps or typically set tracking cookies, so a cookie banner is not needed for the map alone.
 
 Upload the subtitled 1080p master to Mux (Free plan is enough for one low-traffic asset). Do not put large video files in `public/` or commit them — `*.mp4` is gitignored.
 
