@@ -1,5 +1,4 @@
 import {
-  batchColorTokens,
   batchStatusLabels,
   batchStatusPillClass,
   getBatchStatus,
@@ -30,11 +29,12 @@ export function buildSitePopupHtml(site: ParticipatingSite): string {
       </a>`
     : ''
 
+  // Batch color via CSS class (not inline style): sanitizePopupHtml forbids `style`.
   return `
     <div class="sites-map-popup__body">
       <h3 class="sites-map-popup__title">${escapeHtml(site.name)}</h3>
       <div class="sites-map-popup__pills">
-        <span class="sites-map-popup__pill sites-map-popup__pill--batch" style="background: var(${batchColorTokens[site.batch]});">Batch ${escapeHtml(site.batch)}</span>
+        <span class="sites-map-popup__pill sites-map-popup__pill--batch sites-map-popup__pill--batch-${escapeHtml(site.batch)}">Batch ${escapeHtml(site.batch)}</span>
         <span class="${batchStatusPillClass[status]}">${escapeHtml(batchStatusLabels[status])}</span>
       </div>
       <p class="sites-map-popup__row">

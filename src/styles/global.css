@@ -933,6 +933,30 @@ body.nav-open {
   color: var(--text-inverse);
 }
 
+.sites-map-popup__pill--batch-1 {
+  background: var(--brand);
+}
+
+.sites-map-popup__pill--batch-2 {
+  background: var(--accent);
+}
+
+.sites-map-popup__pill--batch-3 {
+  background: var(--brand-deep);
+}
+
+.sites-map-popup__pill--batch-4 {
+  background: var(--accent-hover);
+}
+
+.sites-map-popup__pill--batch-5 {
+  background: var(--brand-darker);
+}
+
+.sites-map-popup__pill--batch-6 {
+  background: var(--ink);
+}
+
 .sites-map-popup__pills .status-pill {
   font-size: var(--font-size-2xs);
   padding: var(--space-3xs) var(--space-2xs);
